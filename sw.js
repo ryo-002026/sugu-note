@@ -1,4 +1,6 @@
-const CACHE = 'sugu-shell-v3';
+'use strict';
+
+const CACHE = 'sugu-shell-v4';
 
 const ASSETS = [
   './',
@@ -20,8 +22,10 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(k => k.startsWith('sugu-shell-') && k !== CACHE)
-          .map(k => caches.delete(k))
+          .filter(key =>
+            key.startsWith('sugu-shell-') && key !== CACHE
+          )
+          .map(key => caches.delete(key))
       )
     ).then(() => self.clients.claim())
   );
@@ -29,34 +33,43 @@ self.addEventListener('activate', event => {
 
 function openDB() {
   return new Promise((resolve, reject) => {
-    const r = indexedDB.open('mimi-sync-db', 2);
+    const request = indexedDB.open('mimi-sync-db', 2);
 
-    r.onupgradeneeded = () => {
-      const d = r.result;
-      if (!d.objectStoreNames.contains('notes')) {
-        d.createObjectStore('notes', { keyPath: 'id' });
+    request.onupgradeneeded = () => {
+      const db = request.result;
+
+      if (!db.objectStoreNames.contains('notes')) {
+        db.createObjectStore('notes', { keyPath: 'id' });
       }
-      if (!d.objectStoreNames.contains('syncMeta')) {
-        d.createObjectStore('syncMeta', { keyPath: 'key' });
+
+      if (!db.objectStoreNames.contains('syncMeta')) {
+        db.createObjectStore('syncMeta', { keyPath: 'key' });
       }
     };
 
-    r.onsuccess = () => resolve(r.result);
-    r.onerror = () => reject(r.error);
-    r.onblocked = () => reject(Error('Database blocked'));
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+    request.onblocked = () =>
+      reject(new Error('データベースが使用中です'));
   });
 }
 
 async function receiveShare(request) {
+  let db;
+
   try {
     const form = await request.formData();
-    const title = String(form.get('title') || '');
+
+    const title = String(form.get('title') || '').trim();
     const text = String(form.get('text') || '');
     const url = String(form.get('url') || '');
 
-    const body = [text, url]
-      .filter((x, i, a) => x && a.indexOf(x) === i)
-      .join('\n');
+    const parts = [];
+
+    if (text) parts.push(text);
+    if (url && !text.includes(url)) parts.push(url);
+
+    const body = parts.join('\n');
 
     if (!title && !body) {
       return Response.redirect(
@@ -74,42 +87,56 @@ async function receiveShare(request) {
       ear: false,
       createdAt: now,
       updatedAt: now,
-      lastOpenedAt: now,
       deleted: false
     };
 
-    const db = await openDB();
+    db = await openDB();
 
     await new Promise((resolve, reject) => {
-      const tx = db.transaction('notes', 'readwrite');
-      tx.objectStore('notes').put(note);
-      tx.oncomplete = resolve;
+      const tx = db.transaction(
+        ['notes', 'syncMeta'],
+        'readwrite'
+      );
+
+      tx.objectStore('notes').add(note);
+
+      tx.objectStore('syncMeta').put({
+        key: 'sugu-pending-share',
+        value: note.id
+      });
+
+      tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
       tx.onabort = () => reject(tx.error);
     });
 
     db.close();
+    db = null;
 
-    const clients = await self.clients.matchAll({
+    const windows = await self.clients.matchAll({
       type: 'window',
       includeUncontrolled: true
     });
 
-    for (const c of clients) {
-      c.postMessage({
+    for (const client of windows) {
+      client.postMessage({
         type: 'SUGU_SHARED',
         id: note.id
       });
     }
 
-    // 共有された本文はURLに含めない。
     return Response.redirect(
       new URL('./index.html?shared=1', self.registration.scope).href,
       303
     );
-  } catch (e) {
+
+  } catch (error) {
+    console.error('SUGU share:', error);
+
+    if (db) db.close();
+
     return new Response(
-      '共有メモを保存できませんでした。SUGUを開いて保存領域を確認してください。',
+      '共有メモを保存できませんでした。SUGUの保存領域を確認してください。',
       {
         status: 500,
         headers: {
@@ -126,7 +153,11 @@ self.addEventListener('fetch', event => {
 
   if (url.origin !== self.location.origin) return;
 
-  if (request.method === 'POST' && url.pathname.endsWith('/share')) {
+  if (
+    request.method === 'POST' &&
+    url.pathname ===
+      new URL('./share', self.registration.scope).pathname
+  ) {
     event.respondWith(receiveShare(request));
     return;
   }
@@ -139,22 +170,29 @@ self.addEventListener('fetch', event => {
         .then(response => {
           if (response.ok) {
             const copy = response.clone();
+
             event.waitUntil(
-              caches.open(CACHE).then(c =>
-                c.put('./index.html', copy)
+              caches.open(CACHE).then(cache =>
+                cache.put('./index.html', copy)
               )
             );
           }
+
           return response;
         })
-        .catch(async () =>
-          (await caches.match('./index.html')) || Response.error()
-        )
+        .catch(async () => {
+          return (
+            await caches.match('./index.html')
+          ) || Response.error();
+        })
     );
+
     return;
   }
 
   event.respondWith(
-    caches.match(request).then(cached => cached || fetch(request))
+    caches.match(request).then(cached =>
+      cached || fetch(request)
+    )
   );
 });
