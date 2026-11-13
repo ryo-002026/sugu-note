@@ -9,201 +9,619 @@
 <link rel="icon" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <title>SUGU</title>
+
 <style>
-:root{
+:root {
   font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-  color:#26332d;background:#f8f9f6;
-  --green:#27735a;--line:#e2e7e1
+  color:#26332d;
+  background:#f8f9f6;
+  --green:#27735a;
+  --line:#e2e7e1;
+  --muted:#718077;
 }
-*{box-sizing:border-box}
-body{margin:0}
-button,input,textarea{font:inherit}
-button{border:0;background:transparent;color:inherit;cursor:pointer}
-button:focus-visible,input:focus-visible,textarea:focus-visible{
-  outline:2px solid var(--green)
+
+* {box-sizing:border-box}
+
+html,body {
+  margin:0;
+  width:100%;
+  height:100%;
 }
-.app{display:grid;grid-template-columns:320px minmax(0,1fr);height:100dvh}
-.side{
-  background:white;border-right:1px solid var(--line);
-  display:flex;flex-direction:column;min-height:0
+
+button,input,textarea {font:inherit}
+
+button {
+  border:0;
+  background:transparent;
+  color:inherit;
+  cursor:pointer;
 }
-.toolbar{
-  min-height:56px;display:flex;align-items:center;gap:6px;
-  padding:6px 10px;border-bottom:1px solid var(--line);flex-shrink:0
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline:2px solid var(--green);
+  outline-offset:2px;
 }
-.brand{font-weight:750;flex:1;padding-left:6px}
-.btn{min-width:40px;height:40px;border-radius:10px;font-size:20px}
-.btn:hover{background:#e7f3ec}
-.search{
-  margin:12px;border:1px solid var(--line);border-radius:10px;
-  padding:11px;background:#fafbf9;width:calc(100% - 24px)
+
+.hide {display:none!important}
+
+.app {
+  display:grid;
+  grid-template-columns:320px minmax(0,1fr);
+  height:100dvh;
+  overflow:hidden;
 }
-.filters{display:flex;gap:6px;padding:0 12px 10px}
-.chip{font-size:13px;padding:8px 12px;border-radius:20px;color:#66766e}
-.chip.active{background:#e7f3ec;color:var(--green)}
-.count{padding:0 15px 8px;color:#718077;font-size:12px}
-.list{overflow:auto;flex:1;min-height:0}
-.side-bottom{
+
+.side {
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  background:white;
+  border-right:1px solid var(--line);
+}
+
+.toolbar {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-height:56px;
+  padding:6px 10px;
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+}
+
+.brand {
+  flex:1;
+  padding-left:6px;
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+.btn {
+  display:grid;
+  place-items:center;
+  min-width:40px;
+  height:40px;
+  border-radius:10px;
+  font-size:20px;
+}
+
+.btn:hover {background:#e7f3ec}
+
+.status {
+  font-size:12px;
+  color:var(--muted);
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.spacer {flex:1}
+
+.syncbar {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:8px 12px;
+  background:#f1f6f1;
+  border-bottom:1px solid var(--line);
+  font-size:12px;
+}
+
+.syncbar span {
+  flex:1;
+  min-width:80px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.syncbtn {
+  padding:7px 9px;
+  border:1px solid #d4e2d7;
+  border-radius:8px;
+  background:white;
+  font-size:12px;
+}
+
+.search {
+  width:calc(100% - 24px);
+  margin:12px;
+  padding:11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fafbf9;
+}
+
+.filters {
+  display:flex;
+  gap:6px;
+  padding:0 12px 10px;
+}
+
+.chip {
+  padding:8px 12px;
+  border-radius:20px;
+  color:#66766e;
+  font-size:13px;
+}
+
+.chip.active {
+  background:#e7f3ec;
+  color:var(--green);
+}
+
+.count {
+  padding:0 15px 8px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.list {
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+
+.item {
+  position:relative;
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+
+.item:hover {background:#f5f8f5}
+.item.active {background:#e7f3ec}
+
+.item strong {
+  display:block;
+  padding-right:48px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:14px;
+}
+
+.item p {
+  margin:5px 0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.item small {
+  color:#85918b;
+  font-size:11px;
+}
+
+.favorite-toggle {
+  position:absolute;
+  top:7px;
+  right:8px;
+  display:grid;
+  place-items:center;
+  width:36px;
+  height:36px;
+  border-radius:9px;
+  color:#b9c5bb;
+  font-size:22px;
+}
+
+.favorite-toggle:hover {
+  color:#d19b30;
+  background:#fff8e8;
+}
+
+.favorite-toggle.is-favorite {
+  color:#d6a139;
+}
+
+.ghost-card {
+  background:#f2ecfa;
+  border-left:4px solid #9473bd;
+}
+
+.ghost-card:hover {background:#ece2f8}
+
+.ghost-card strong {
+  color:#654b86;
+}
+
+.ghost-card p {
+  color:#765f94;
+  white-space:normal;
+  line-height:1.5;
+}
+
+.ghost-close {
+  position:absolute;
+  top:7px;
+  right:7px;
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  color:#806b9a;
+  font-size:20px;
+}
+
+.more-button {
+  width:100%;
+  padding:15px;
+  color:var(--green);
+  font-size:13px;
+}
+
+.side-bottom {
+  display:flex;
+  align-items:stretch;
+  gap:8px;
   padding:10px 12px calc(10px + env(safe-area-inset-bottom));
-  border-top:1px solid var(--line);background:white;flex-shrink:0
+  border-top:1px solid var(--line);
+  background:white;
+  flex-shrink:0;
 }
-.create-button{
-  width:100%;padding:13px;border-radius:12px;
-  background:#e7f3ec;color:var(--green);
-  font-weight:750;text-align:center
+
+.bottom-icon {
+  display:grid;
+  place-items:center;
+  width:44px;
+  min-width:44px;
+  min-height:48px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  color:#60756a;
+  font-size:21px;
 }
-.paste-button{width:100%;padding:8px;font-size:12px;color:#66766e}
-.ghost-card{background:#f1ebfa;border-left:4px solid #9473bd}
-.ghost-card p{color:#725c8e}
-.copy-mark{
-  position:absolute;right:36px;top:13px;
-  font-size:12px;color:#658775
+
+.bottom-icon:hover {background:#f1f6f1}
+
+.create-button {
+  flex:1;
+  min-width:0;
+  min-height:48px;
+  padding:11px 6px;
+  border-radius:12px;
+  background:var(--green);
+  color:white;
+  font-weight:750;
+  white-space:nowrap;
 }
-.more-button{
-  display:block;width:100%;padding:14px;color:var(--green)
+
+.create-button:hover {background:#1c5c47}
+
+.editor {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:0;
 }
-.link-preview{
-  padding:6px 0;font-size:13px;overflow-wrap:anywhere
+
+.edit {
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  min-height:0;
+  width:100%;
+  max-width:920px;
+  margin:auto;
+  padding:20px 28px;
 }
-.link-preview a{color:var(--green)}
-.stats-box{white-space:pre-line;line-height:1.9}
-.item{
-  padding:14px 16px;border-bottom:1px solid var(--line);
-  cursor:pointer;position:relative
+
+#title {
+  width:100%;
+  padding:12px 0;
+  border:0;
+  outline:0;
+  background:none;
+  font-size:22px;
+  font-weight:700;
 }
-.item.active{background:#e7f3ec}
-.item strong{
-  display:block;font-size:14px;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap
+
+#body {
+  flex:1;
+  min-height:0;
+  width:100%;
+  padding:8px 0 24px;
+  border:0;
+  outline:0;
+  resize:none;
+  background:none;
+  font-size:16px;
+  line-height:1.75;
 }
-.item p{
-  font-size:12px;color:#718077;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap;margin:5px 0
+
+.link-preview {
+  flex-shrink:0;
+  max-height:120px;
+  overflow-y:auto;
+  padding:8px 0;
+  border-top:1px solid var(--line);
+  font-size:13px;
 }
-.item small{color:#85918b}
-.earmark{
-  position:absolute;right:10px;top:12px;color:var(--green)
+
+.link-preview:empty {
+  display:none;
 }
-.editor{
-  display:flex;flex-direction:column;min-width:0;min-height:0
+
+.link-preview-label {
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
+  font-size:11px;
 }
-.status{font-size:12px;color:#728077}
-.spacer{flex:1}
-.edit{
-  display:flex;flex-direction:column;flex:1;min-height:0;
-  width:100%;max-width:920px;margin:auto;padding:20px 28px
+
+.link-preview a {
+  display:block;
+  padding:5px 0;
+  color:var(--green);
+  overflow-wrap:anywhere;
+  text-decoration:underline;
 }
-#title{
-  font-weight:700;font-size:22px;border:0;outline:0;
-  background:none;padding:12px 0
+
+.copy-success {
+  color:var(--green);
+  background:#e7f3ec;
 }
-#body{
-  border:0;outline:0;resize:none;background:none;flex:1;
-  min-height:0;line-height:1.75;font-size:16px;padding:8px 0 24px
+
+.empty-editor {
+  flex:1;
+  display:grid;
+  place-items:center;
+  color:#9aa69e;
+  font-size:14px;
 }
-.mobile{display:none}
-.hide{display:none!important}
-.overlay{
-  position:fixed;inset:0;background:#0008;display:grid;
-  place-items:center;padding:18px;z-index:30
+
+.overlay {
+  position:fixed;
+  inset:0;
+  z-index:30;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:#0008;
 }
-.modal{
-  background:white;border-radius:16px;padding:22px;
-  width:min(480px,100%);max-height:90dvh;overflow:auto
+
+.modal {
+  width:min(480px,100%);
+  max-height:90dvh;
+  overflow:auto;
+  padding:22px;
+  border-radius:16px;
+  background:white;
 }
-.modal h2{font-size:18px;margin:0 0 10px}
-.modal p{white-space:pre-line;line-height:1.7;font-size:14px}
-.actions{
-  display:flex;justify-content:flex-end;gap:10px;
-  margin-top:20px;flex-wrap:wrap
+
+.modal h2 {
+  margin:0 0 10px;
+  font-size:18px;
 }
-.action{padding:10px 15px;border-radius:9px;background:#edf0ec}
-.action.primary{background:var(--green);color:white}
-.syncbar{
-  display:flex;align-items:center;gap:8px;padding:7px 12px;
-  background:#f1f6f1;border-bottom:1px solid var(--line);
-  font-size:12px;flex-wrap:wrap
+
+.modal p {
+  white-space:pre-line;
+  line-height:1.7;
+  font-size:14px;
 }
-.syncbar span{
-  flex:1;min-width:80px;overflow:hidden;text-overflow:ellipsis
+
+.actions {
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
 }
-.syncbtn{
-  background:white;border:1px solid #d4e2d7;border-radius:8px;
-  padding:7px 10px;font-size:12px
+
+.action {
+  padding:10px 15px;
+  border-radius:9px;
+  background:#edf0ec;
 }
-.syncbtn:hover{background:#e3f1e7}
-@media(max-width:700px){
-  .app{display:block}
-  .side{
-    position:fixed;inset:0;z-index:10;
-    transform:translateX(-100%);transition:transform .12s ease
+
+.action.primary {
+  background:var(--green);
+  color:white;
+}
+
+.mobile {display:none}
+
+@media(max-width:700px) {
+  .app {
+    display:block;
   }
-  .side.open{transform:translateX(0)}
-  .editor{height:100dvh}
-  .mobile{display:inline-block}
-  .edit{padding:10px 18px}
-  #title{font-size:20px}
-  #body{font-size:16px}
+
+  .side {
+    position:fixed;
+    inset:0;
+    z-index:10;
+    transform:translateX(-100%);
+    transition:transform .12s ease;
+  }
+
+  .side.open {
+    transform:translateX(0);
+  }
+
+  .editor {
+    height:100dvh;
+  }
+
+  .mobile {
+    display:grid;
+  }
+
+  .edit {
+    padding:10px 18px;
+  }
+
+  #title {font-size:20px}
+  #body {font-size:16px}
+
+  .toolbar {
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .btn {
+    min-width:36px;
+    width:36px;
+  }
+}
+
+@media(min-width:701px) {
+  .favorite-toggle:not(.is-favorite) {
+    opacity:.48;
+  }
+
+  .item:hover .favorite-toggle {
+    opacity:1;
+  }
 }
 </style>
 </head>
+
 <body>
 <div class="app">
+
   <aside id="side" class="side">
     <header class="toolbar">
-      <button id="closeList" class="btn mobile" aria-label="一覧を閉じる">‹</button>
+      <button id="closeList" class="btn mobile"
+        title="一覧を閉じる" aria-label="一覧を閉じる">‹</button>
+
       <div class="brand">SUGU</div>
-      <button id="import" class="btn" title="バックアップを取り込む">⇩</button>
-      <button id="export" class="btn" title="JSONバックアップを保存">⇧</button>
+
+      <button id="import" class="btn"
+        title="バックアップを取り込む">⇩</button>
+
+      <button id="export" class="btn"
+        title="JSONバックアップを保存">⇧</button>
     </header>
+
     <div class="syncbar">
       <span id="account">ログインしていません</span>
-      <button id="login" class="syncbtn">Googleログイン</button>
-      <button id="logout" class="syncbtn hide">ログアウト</button>
-      <button id="startSync" class="syncbtn hide">同期を開始</button>
+
+      <button id="login" class="syncbtn">
+        Googleログイン
+      </button>
+
+      <button id="logout" class="syncbtn hide">
+        ログアウト
+      </button>
+
+      <button id="startSync" class="syncbtn hide">
+        同期を開始
+      </button>
     </div>
-    <input id="search" class="search"
-      placeholder="メモを検索" aria-label="メモを検索">
+
+    <input
+      id="search"
+      class="search"
+      placeholder="メモを検索"
+      aria-label="メモを検索"
+    >
+
     <div class="filters">
-      <button class="chip active" data-filter="all">すべて</button>
-      <button class="chip" data-filter="ear">★ お気に入り</button>
+      <button class="chip active" data-filter="all">
+        すべて
+      </button>
+
+      <button class="chip" data-filter="ear">
+        ★ お気に入り
+      </button>
     </div>
+
     <div id="count" class="count"></div>
+
     <div id="list" class="list"></div>
+
     <div class="side-bottom">
-      <button id="sideNew" class="create-button">＋ すぐメモ</button>
-      <button id="paste" class="paste-button">▣ コピーした文章からメモ</button>
-      <button id="stats" class="paste-button">どうでもいい記録</button>
+      <button
+        id="paste"
+        class="bottom-icon"
+        title="コピーした文章からメモ"
+        aria-label="コピーした文章からメモ"
+      >▣</button>
+
+      <button id="sideNew" class="create-button">
+        ＋ すぐメモ
+      </button>
+
+      <button
+        id="stats"
+        class="bottom-icon"
+        title="どうでもいい記録"
+        aria-label="どうでもいい記録"
+      >▥</button>
     </div>
   </aside>
+
   <main class="editor">
     <header class="toolbar">
-      <button id="openList" class="btn mobile" title="メモ一覧">☰</button>
-      <span id="status" class="status">読み込み中</span>
+      <button id="openList" class="btn mobile"
+        title="メモ一覧" aria-label="メモ一覧">‹</button>
+
+      <span id="status" class="status">
+        読み込み中
+      </span>
+
       <div class="spacer"></div>
-      <button id="syncMenu" class="btn" title="Googleログイン・同期">☁</button>
-      <button id="new" class="btn" title="新規メモ">＋</button>
-      <button id="copy" class="btn" title="本文をコピー">▢</button>
-      <button id="ear" class="btn" title="お気に入り">☆</button>
-      <button id="remove" class="btn" title="メモ削除">⌫</button>
+
+      <button id="syncMenu" class="btn"
+        title="Googleログイン・同期">☁</button>
+
+      <button id="new" class="btn"
+        title="新規メモ">＋</button>
+
+      <button id="copy" class="btn"
+        title="本文をコピー">□</button>
+
+      <button id="ear" class="btn"
+        title="お気に入り">☆</button>
+
+      <button id="remove" class="btn"
+        title="メモ削除">⌫</button>
     </header>
-    <div class="edit">
-      <input id="title" placeholder="タイトル"
-        autocomplete="off" aria-label="タイトル">
-      <textarea id="body" placeholder="メモを書く…"
-        aria-label="メモ本文" spellcheck="false"></textarea>
+
+    <div id="editArea" class="edit">
+      <input
+        id="title"
+        placeholder="タイトル"
+        autocomplete="off"
+        aria-label="タイトル"
+      >
+
+      <textarea
+        id="body"
+        placeholder="メモを書く…"
+        aria-label="メモ本文"
+        spellcheck="false"
+      ></textarea>
+
       <div id="links" class="link-preview"></div>
+    </div>
+
+    <div id="emptyEditor" class="empty-editor hide">
+      一覧からメモを選んでください
     </div>
   </main>
 </div>
-<input id="file" type="file"
-  accept=".json,application/json" class="hide">
+
+<input
+  id="file"
+  type="file"
+  accept=".json,application/json"
+  class="hide"
+>
+
 <div id="dialogs"></div>
 
 <script type="module">
 'use strict';
 
 const $ = id => document.getElementById(id);
+
 const DB = 'mimi-sync-db';
 const TABLE = 'notes';
 const META = 'syncMeta';
@@ -225,78 +643,11 @@ let filter = 'all';
 let queue = Promise.resolve();
 let failed = false;
 let version = 0;
+
 let visibleLimit = 10;
-let currentList = [];
 let screen = 'list';
+let copiedId = null;
 let ghostDismissedDay = '';
-
-const dayKey = () => new Date().toLocaleDateString('sv-SE');
-const COPY_KEY = 'sugu-copied-v1';
-
-let copied = {};
-
-try {
-  copied = JSON.parse(localStorage.getItem(COPY_KEY) || '{}');
-} catch(e) {}
-
-try {
-  ghostDismissedDay =
-    localStorage.getItem('sugu-ghost-dismiss') || '';
-} catch(e) {}
-
-function markCopied(n) {
-  copied[n.id] = n.updatedAt;
-  try {
-    localStorage.setItem(COPY_KEY, JSON.stringify(copied));
-  } catch(e) {}
-  render();
-}
-
-function isCopied(n) {
-  return copied[n.id] === n.updatedAt;
-}
-
-function setScreen(next) {
-  screen = next;
-  try {
-    localStorage.setItem('sugu-screen', next);
-  } catch(e) {}
-
-  if (matchMedia('(max-width:700px)').matches) {
-    $('side').classList.toggle('open', next === 'list');
-  }
-}
-
-function updateLinks() {
-  const root = $('links');
-  root.replaceChildren();
-
-  const value = $('body').value;
-  const urls = [
-    ...new Set(value.match(/https?:\/\/[^\s<>"']+/g) || [])
-  ].slice(0,20);
-
-  if (!urls.length) return;
-
-  const caption = document.createElement('small');
-  caption.textContent = '本文中のリンク';
-  root.append(caption);
-
-  for (const u of urls) {
-    try {
-      const parsed = new URL(u);
-      if (!['http:','https:'].includes(parsed.protocol)) continue;
-
-      const a = document.createElement('a');
-      a.href = parsed.href;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.textContent = u;
-      a.style.display = 'block';
-      root.append(a);
-    } catch(e) {}
-  }
-}
 
 let firebase = null;
 let auth = null;
@@ -312,6 +663,55 @@ let syncError = '';
 
 const iso = () => new Date().toISOString();
 
+function localGet(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch(e) {
+    return null;
+  }
+}
+
+function localSet(key,value) {
+  try {
+    localStorage.setItem(key,String(value));
+  } catch(e) {}
+}
+
+function localRemove(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch(e) {}
+}
+
+function dayKey() {
+  const d = new Date();
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,'0'),
+    String(d.getDate()).padStart(2,'0')
+  ].join('-');
+}
+
+function dateValue(s) {
+  if (typeof s === 'number') {
+    return s < 1e11 ? s*1000 : s;
+  }
+
+  if (!s) return 0;
+
+  const v = String(s);
+  const numeric = Number(v);
+
+  if (/^\d{10,13}$/.test(v)) {
+    return numeric < 1e11 ? numeric*1000 : numeric;
+  }
+
+  const d = Date.parse(v) ||
+    Date.parse(v.replace(' ','T'));
+
+  return Number.isFinite(d) ? d : 0;
+}
+
 function openDB() {
   return new Promise((ok,no) => {
     const r = indexedDB.open(DB,2);
@@ -320,16 +720,22 @@ function openDB() {
       const database = r.result;
 
       if (!database.objectStoreNames.contains(TABLE)) {
-        database.createObjectStore(TABLE,{keyPath:'id'});
+        database.createObjectStore(
+          TABLE,{keyPath:'id'}
+        );
       }
 
       if (!database.objectStoreNames.contains(META)) {
-        database.createObjectStore(META,{keyPath:'key'});
+        database.createObjectStore(
+          META,{keyPath:'key'}
+        );
       }
     };
 
     r.onsuccess = () => ok(r.result);
     r.onerror = () => no(r.error);
+    r.onblocked = () =>
+      no(Error('他のタブがデータベースを使用中です'));
   });
 }
 
@@ -356,9 +762,12 @@ function getMeta(key) {
 function setMeta(key,value) {
   return new Promise((ok,no) => {
     const tx = db.transaction(META,'readwrite');
+
     tx.objectStore(META).put({key,value});
-    tx.oncomplete = ok;
+
+    tx.oncomplete = () => ok();
     tx.onerror = () => no(tx.error);
+    tx.onabort = () => no(tx.error);
   });
 }
 
@@ -367,10 +776,15 @@ function transaction(items,removeId) {
     const tx = db.transaction(TABLE,'readwrite');
     const store = tx.objectStore(TABLE);
 
-    for (const n of items) store.put({...n});
-    if (removeId) store.delete(removeId);
+    for (const n of items) {
+      store.put({...n});
+    }
 
-    tx.oncomplete = ok;
+    if (removeId) {
+      store.delete(removeId);
+    }
+
+    tx.oncomplete = () => ok();
     tx.onerror = () => no(tx.error);
     tx.onabort = () => no(tx.error);
   });
@@ -388,171 +802,384 @@ function enqueue(job) {
   return task;
 }
 
-function dateValue(s) {
-  if (typeof s === 'number') return s < 1e11 ? s*1000 : s;
-  if (!s) return 0;
-
-  const v = String(s);
-  const numeric = Number(v);
-
-  if (/^\d{10,13}$/.test(v)) {
-    return numeric < 1e11 ? numeric*1000 : numeric;
-  }
-
-  const d = Date.parse(v) || Date.parse(v.replace(' ','T'));
-  return Number.isFinite(d) ? d : 0;
-}
-
 function sorted() {
   return [...notes]
     .filter(n => !n.deleted)
     .sort((a,b) =>
-      dateValue(b.updatedAt)-dateValue(a.updatedAt)
+      dateValue(b.updatedAt) -
+      dateValue(a.updatedAt)
     );
 }
 
 function current() {
-  return notes.find(n => n.id === selected && !n.deleted);
+  return notes.find(n =>
+    n.id === selected && !n.deleted
+  );
 }
 
 function label(n) {
-  return n.title || n.body.split('\n').find(Boolean) || '無題';
+  return n.title ||
+    n.body.split('\n').find(Boolean) ||
+    '無題';
 }
 
-function ghostCandidate(list) {
-  if (ghostDismissedDay === dayKey() || !list.length) {
-    return null;
+function resetCopy() {
+  copiedId = null;
+  $('copy').textContent = '□';
+  $('copy').classList.remove('copy-success');
+  $('copy').title = '本文をコピー';
+}
+
+function updateCopy() {
+  const done = copiedId && copiedId === selected;
+
+  $('copy').textContent = done ? '✓' : '□';
+  $('copy').classList.toggle('copy-success',!!done);
+  $('copy').title = done
+    ? 'コピー済み'
+    : '本文をコピー';
+}
+
+function showScreen(next) {
+  if (screen !== next) {
+    resetCopy();
   }
 
-  const cutoff = Date.now() - 30*86400000;
-  const candidates = list.filter(n =>
-    dateValue(
-      n.lastOpenedAt || n.createdAt || n.updatedAt
-    ) < cutoff
+  screen = next;
+  localSet('sugu-screen',next);
+
+  if (matchMedia('(max-width:700px)').matches) {
+    $('side').classList.toggle(
+      'open',next === 'list'
+    );
+  }
+}
+
+function openEditorHistory() {
+  const state = history.state;
+
+  if (!state || state.sugu !== 'edit') {
+    history.pushState(
+      {sugu:'edit'},
+      '',
+      location.href
+    );
+  }
+
+  showScreen('edit');
+}
+
+function goList() {
+  if (
+    matchMedia('(max-width:700px)').matches &&
+    history.state?.sugu === 'edit'
+  ) {
+    history.back();
+    return;
+  }
+
+  showScreen('list');
+}
+
+function restoreHistory() {
+  const previous =
+    localGet('sugu-screen') || 'list';
+
+  history.replaceState(
+    {sugu:'list'},
+    '',
+    location.href
   );
+
+  showScreen('list');
+
+  if (
+    previous === 'edit' &&
+    current()
+  ) {
+    openEditorHistory();
+  }
+}
+
+function updateEditor() {
+  const n = current();
+  const exists = !!n;
+
+  $('editArea').classList.toggle('hide',!exists);
+  $('emptyEditor').classList.toggle('hide',exists);
+
+  for (const id of ['copy','ear','remove']) {
+    $(id).disabled = !exists;
+    $(id).style.opacity = exists ? '1' : '.35';
+  }
+
+  if (!exists) {
+    $('title').value = '';
+    $('body').value = '';
+    $('ear').textContent = '☆';
+    $('links').replaceChildren();
+    resetCopy();
+    return;
+  }
+
+  $('title').value = n.title;
+  $('body').value = n.body;
+  $('ear').textContent = n.ear ? '★' : '☆';
+
+  updateCopy();
+  updateLinks();
+}
+
+function updateLinks() {
+  const root = $('links');
+  root.replaceChildren();
+
+  const body = $('body').value;
+
+  // URL認識はメモを開いたとき・編集欄を離れたときだけ。
+  const matches =
+    body.match(/https?:\/\/[^\s<>"'「」]+/g) || [];
+
+  const urls = [...new Set(matches)].slice(0,20);
+
+  if (!urls.length) return;
+
+  const caption = document.createElement('span');
+  caption.className = 'link-preview-label';
+  caption.textContent = '本文中のリンク';
+
+  root.append(caption);
+
+  for (const raw of urls) {
+    const clean = raw.replace(/[.,。、）)\]】]+$/g,'');
+
+    try {
+      const url = new URL(clean);
+
+      if (
+        url.protocol !== 'https:' &&
+        url.protocol !== 'http:'
+      ) continue;
+
+      const a = document.createElement('a');
+      a.href = url.href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = clean;
+      a.title = 'リンクを開く';
+
+      root.append(a);
+    } catch(e) {}
+  }
+}
+
+function getViewMap() {
+  try {
+    return JSON.parse(
+      localStorage.getItem('sugu-viewed-v1') || '{}'
+    );
+  } catch(e) {
+    return {};
+  }
+}
+
+function recordView(id) {
+  // 閲覧履歴は端末内だけで管理。
+  // Firestoreには書き込まない。
+  const map = getViewMap();
+
+  map[id] = Date.now();
+
+  const entries = Object.entries(map);
+
+  if (entries.length > 1000) {
+    entries.sort((a,b) => b[1]-a[1]);
+
+    const reduced = Object.fromEntries(
+      entries.slice(0,1000)
+    );
+
+    localSet(
+      'sugu-viewed-v1',
+      JSON.stringify(reduced)
+    );
+  } else {
+    localSet(
+      'sugu-viewed-v1',
+      JSON.stringify(map)
+    );
+  }
+}
+
+function ghostCandidate(visible) {
+  if (
+    ghostDismissedDay === dayKey() ||
+    visible.length === 0
+  ) return null;
+
+  const cutoff = Date.now() - 30*86400000;
+  const viewed = getViewMap();
+
+  const candidates = visible.filter(n => {
+    const last = viewed[n.id] ||
+      dateValue(n.lastOpenedAt) ||
+      dateValue(n.createdAt) ||
+      dateValue(n.updatedAt);
+
+    return last > 0 && last < cutoff;
+  });
 
   if (!candidates.length) return null;
 
-  const index =
-    Math.floor(Date.now()/86400000) % candidates.length;
+  const today = Math.floor(Date.now()/86400000);
+  const index = today % candidates.length;
 
   return candidates[index];
+}
+
+function makeGhostCard(n) {
+  const viewed = getViewMap();
+
+  const last = viewed[n.id] ||
+    dateValue(n.lastOpenedAt) ||
+    dateValue(n.createdAt) ||
+    dateValue(n.updatedAt);
+
+  const days = Math.floor(
+    (Date.now()-last)/86400000
+  );
+
+  const card = document.createElement('div');
+  card.className = 'item ghost-card';
+  card.dataset.id = n.id;
+
+  const title = document.createElement('strong');
+  title.textContent = '👻 メモの亡霊';
+
+  const name = document.createElement('p');
+  name.textContent = label(n);
+
+  const message = document.createElement('p');
+
+  const messages = [
+    `「${days}日ぶりですね。こちらはずっとここにいました。」`,
+    '「私のこと、覚えていますか。私は覚えています。」',
+    '「そろそろ『あとで』の期限を教えていただけませんか？」'
+  ];
+
+  message.textContent =
+    messages[Math.floor(Date.now()/86400000)%messages.length];
+
+  const close = document.createElement('button');
+  close.className = 'ghost-close';
+  close.textContent = '×';
+  close.title = '今日は表示しない';
+
+  close.onclick = e => {
+    e.stopPropagation();
+
+    ghostDismissedDay = dayKey();
+
+    localSet(
+      'sugu-ghost-dismiss',
+      ghostDismissedDay
+    );
+
+    render();
+  };
+
+  card.append(title,name,message,close);
+
+  return card;
+}
+
+function makeItem(n) {
+  const item = document.createElement('div');
+
+  item.className =
+    'item' +
+    (n.id === selected ? ' active' : '');
+
+  item.dataset.id = n.id;
+
+  const name = document.createElement('strong');
+  name.textContent = label(n);
+
+  const preview = document.createElement('p');
+  preview.textContent =
+    n.body.replace(/\s+/g,' ').slice(0,120);
+
+  const time = document.createElement('small');
+  time.textContent =
+    String(n.updatedAt || '').slice(0,19);
+
+  const star = document.createElement('button');
+  star.className =
+    'favorite-toggle' +
+    (n.ear ? ' is-favorite' : '');
+
+  star.textContent = n.ear ? '★' : '☆';
+  star.title = n.ear
+    ? 'お気に入りを解除'
+    : 'お気に入りに追加';
+
+  star.setAttribute(
+    'aria-label',
+    star.title
+  );
+
+  star.onclick = e => {
+    e.stopPropagation();
+    toggleFavoriteById(n.id);
+  };
+
+  item.append(name,preview,time,star);
+
+  return item;
 }
 
 function render() {
   const q = $('search').value.toLocaleLowerCase();
   const visible = sorted();
 
-  currentList = visible.filter(n =>
+  const list = visible.filter(n =>
     (filter === 'all' || n.ear) &&
-    (n.title+'\n'+n.body).toLocaleLowerCase().includes(q)
+    (n.title+'\n'+n.body)
+      .toLocaleLowerCase().includes(q)
   );
 
   $('count').textContent =
-    `${currentList.length}件 / 全${visible.length}件`;
+    `${list.length}件 / 全${visible.length}件`;
 
   const root = $('list');
   root.replaceChildren();
 
-  const shown = currentList.slice(0,visibleLimit);
   const ghost =
-    !q && filter === 'all' ? ghostCandidate(visible) : null;
+    !q && filter === 'all'
+      ? ghostCandidate(visible)
+      : null;
+
+  // 亡霊は一覧4番目の特別カード。
+  // 同じメモを通常カードとして重複表示しない。
+  const regular = ghost
+    ? list.filter(n => n.id !== ghost.id)
+    : list;
+
+  const shown = regular.slice(0,visibleLimit);
 
   shown.forEach((n,i) => {
     if (i === 3 && ghost) {
-      const card = document.createElement('div');
-      card.className = 'item ghost-card';
-      card.dataset.id = ghost.id;
-
-      const title = document.createElement('strong');
-      title.textContent =
-        '👻 メモの亡霊：' + label(ghost);
-
-      const subtitle = document.createElement('p');
-      const days = Math.max(
-        30,
-        Math.floor(
-          (Date.now()-dateValue(
-            ghost.lastOpenedAt ||
-            ghost.createdAt ||
-            ghost.updatedAt
-          )) / 86400000
-        )
-      );
-
-      subtitle.textContent =
-        `「${days}日ぶりですね。こちらはずっとここにいました。」`;
-
-      const dismiss = document.createElement('button');
-      dismiss.textContent = '×';
-      dismiss.title = '今日は表示しない';
-      dismiss.style.cssText =
-        'position:absolute;right:10px;top:10px;font-size:18px';
-
-      dismiss.onclick = e => {
-        e.stopPropagation();
-        ghostDismissedDay = dayKey();
-
-        try {
-          localStorage.setItem(
-            'sugu-ghost-dismiss',
-            ghostDismissedDay
-          );
-        } catch(err) {}
-
-        render();
-      };
-
-      card.append(title,subtitle,dismiss);
-      root.append(card);
+      root.append(makeGhostCard(ghost));
     }
 
-    const item = document.createElement('div');
-    item.className =
-      'item' + (n.id === selected ? ' active' : '');
-    item.dataset.id = n.id;
-
-    const name = document.createElement('strong');
-    name.textContent = label(n);
-
-    const preview = document.createElement('p');
-    preview.textContent =
-      n.body.replace(/\s+/g,' ').slice(0,120);
-
-    const time = document.createElement('small');
-    time.textContent =
-      String(n.updatedAt || '').slice(0,19);
-
-    item.append(name,preview,time);
-
-    if (n.ear) {
-      const ear = document.createElement('span');
-      ear.className = 'earmark';
-      ear.textContent = '★';
-      item.append(ear);
-    }
-
-    if (isCopied(n)) {
-      const mark = document.createElement('span');
-      mark.className = 'copy-mark';
-      mark.textContent = '✓';
-      mark.title = 'この端末でコピー済み';
-      item.append(mark);
-    }
-
-    root.append(item);
+    root.append(makeItem(n));
   });
 
   if (ghost && shown.length < 4) {
-    const card = document.createElement('div');
-    card.className = 'item ghost-card';
-    card.dataset.id = ghost.id;
-    card.textContent =
-      '👻 メモの亡霊：' + label(ghost);
-    root.append(card);
+    root.append(makeGhostCard(ghost));
   }
 
-  if (currentList.length > visibleLimit) {
+  if (regular.length > visibleLimit) {
     const more = document.createElement('button');
     more.className = 'more-button';
     more.textContent = 'さらに10件表示';
@@ -566,42 +1193,45 @@ function render() {
   }
 }
 
-function choose(id,focus=false) {
-  const n = notes.find(x => x.id === id && !x.deleted);
+function choose(id,focus=false,options={}) {
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
+
   if (!n) return;
 
+  resetCopy();
+
   selected = id;
-
-  n.lastOpenedAt = iso();
-  enqueue(() => transaction([{...n}])).catch(() => {});
-
   version++;
 
-  try {
-    localStorage.setItem('mimi-last-id',id);
-  } catch(e) {}
+  localSet('mimi-last-id',id);
+  recordView(id);
 
-  $('title').value = n.title;
-  $('body').value = n.body;
-  $('ear').textContent = n.ear ? '★' : '☆';
+  updateEditor();
+
   $('status').textContent =
     failed ? '保存失敗' : '保存済み';
 
-  setScreen('edit');
-  updateLinks();
+  if (!options.noHistory) {
+    openEditorHistory();
+  } else {
+    showScreen('edit');
+  }
+
   render();
 
   if (focus) {
-    requestAnimationFrame(() => $('body').focus());
+    requestAnimationFrame(() =>
+      $('body').focus()
+    );
   }
 }
 
 function showEmpty() {
   selected = null;
-  $('title').value = '';
-  $('body').value = '';
-  $('ear').textContent = '☆';
-  updateLinks();
+  resetCopy();
+  updateEditor();
   render();
 }
 
@@ -609,7 +1239,10 @@ function scheduleSync() {
   if (!syncEnabled || !cloudUser) return;
 
   clearTimeout(syncTimer);
-  syncTimer = setTimeout(() => syncNow(),1500);
+
+  syncTimer = setTimeout(
+    () => syncNow(),1500
+  );
 }
 
 function save() {
@@ -619,13 +1252,16 @@ function save() {
   const title = $('title').value;
   const body = $('body').value;
 
-  if (title === n.title && body === n.body) return;
+  if (
+    title === n.title &&
+    body === n.body
+  ) return;
 
   n.title = title;
   n.body = body;
   n.updatedAt = iso();
 
-  updateLinks();
+  resetCopy();
 
   const snapshot = {...n};
   const v = ++version;
@@ -635,23 +1271,28 @@ function save() {
 
   enqueue(() => transaction([snapshot]))
     .then(() => {
-      if (selected === snapshot.id && version === v) {
+      if (
+        selected === snapshot.id &&
+        version === v
+      ) {
         $('status').textContent = '保存済み';
       }
+
       scheduleSync();
     })
     .catch(() => {});
 }
 
-async function create(focus=true) {
+async function create(focus=true,body='',title='') {
+  const now = iso();
+
   const n = {
     id:crypto.randomUUID(),
-    title:'',
-    body:'',
+    title,
+    body,
     ear:false,
-    createdAt:iso(),
-    updatedAt:iso(),
-    lastOpenedAt:iso(),
+    createdAt:now,
+    updatedAt:now,
     deleted:false
   };
 
@@ -659,10 +1300,12 @@ async function create(focus=true) {
 
   try {
     await enqueue(() => transaction([n]));
+
     choose(n.id,focus);
     scheduleSync();
   } catch(e) {
     notes = notes.filter(x => x.id !== n.id);
+
     await dialog(
       '保存できません',
       '新規メモを保存できませんでした。'
@@ -670,21 +1313,36 @@ async function create(focus=true) {
   }
 }
 
-async function toggleEar() {
-  const n = current();
+async function toggleFavoriteById(id) {
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
+
   if (!n) return;
+
+  const previous = {...n};
 
   n.ear = !n.ear;
   n.updatedAt = iso();
 
   const snapshot = {...n};
-  $('ear').textContent = n.ear ? '★' : '☆';
+
+  if (selected === id) {
+    $('ear').textContent = n.ear ? '★' : '☆';
+  }
+
+  render();
 
   try {
-    await enqueue(() => transaction([snapshot]));
-    render();
+    await enqueue(
+      () => transaction([snapshot])
+    );
+
     scheduleSync();
   } catch(e) {
+    Object.assign(n,previous);
+    render();
+
     await dialog(
       '保存エラー',
       String(e.message || e)
@@ -692,18 +1350,38 @@ async function toggleEar() {
   }
 }
 
+function toggleEar() {
+  if (selected) {
+    toggleFavoriteById(selected);
+  }
+}
+
 async function copyBody() {
   const n = current();
   if (!n) return;
 
+  const id = n.id;
+  const body = $('body').value;
+
   try {
-    await navigator.clipboard.writeText($('body').value);
-    markCopied(n);
+    await navigator.clipboard.writeText(body);
+
+    // コピー完了までに画面が変わっていた場合は
+    // 別のメモにチェックを表示しない。
+    if (
+      selected !== id ||
+      screen !== 'edit' ||
+      $('body').value !== body
+    ) return;
+
+    copiedId = id;
+    updateCopy();
+
     $('status').textContent = 'コピーしました';
   } catch(e) {
     await dialog(
       'コピーできませんでした',
-      'ブラウザのクリップボード権限を確認してください。'
+      'クリップボードへの書き込みが許可されていません。'
     );
   }
 }
@@ -713,16 +1391,14 @@ async function pasteNew() {
     const text = await navigator.clipboard.readText();
 
     if (!text) {
-      return dialog(
+      await dialog(
         'クリップボードが空です',
         'コピーした文章が見つかりません。'
       );
+      return;
     }
 
-    await create(false);
-    $('body').value = text;
-    save();
-    $('body').focus();
+    await create(true,text);
   } catch(e) {
     await dialog(
       '読み取れませんでした',
@@ -732,15 +1408,36 @@ async function pasteNew() {
 }
 
 async function showStats() {
+  // 統計はボタンを押したときだけ計算。
   const all = notes.filter(n => !n.deleted);
+
   const sizes = all.map(n =>
     (n.title+n.body).length
   );
 
-  const chars = sizes.reduce((a,b) => a+b,0);
-  const bangs = all.reduce(
-    (a,n) =>
-      a+(n.title+n.body).split('！').length-1,
+  const chars = sizes.reduce(
+    (a,b) => a+b,0
+  );
+
+  const longest = sizes.length
+    ? Math.max(...sizes)
+    : 0;
+
+  const shortest = sizes.length
+    ? Math.min(...sizes)
+    : 0;
+
+  const exclamations = all.reduce(
+    (sum,n) =>
+      sum +
+      ((n.title+n.body).match(/[!！]/g)||[]).length,
+    0
+  );
+
+  const questionMarks = all.reduce(
+    (sum,n) =>
+      sum +
+      ((n.title+n.body).match(/[?？]/g)||[]).length,
     0
   );
 
@@ -748,10 +1445,11 @@ async function showStats() {
     'どうでもいい記録',
     `メモ総数：${all.length}件\n`+
     `全文字数：${chars.toLocaleString()}字\n`+
-    `最長メモ：${Math.max(0,...sizes)}字\n`+
-    `最短メモ：${sizes.length ? Math.min(...sizes) : 0}字\n`+
-    `「！」の使用回数：${bangs}回\n\n`+
-    '本日のどうでもいい発見：メモの文字は、逃げずにここにいます。'
+    `最長メモ：${longest}字\n`+
+    `最短メモ：${shortest}字\n`+
+    `「！」の使用回数：${exclamations}回\n`+
+    `「？」の使用回数：${questionMarks}回\n\n`+
+    'メモは今日も、何事もなかったように保存されています。'
   );
 }
 
@@ -775,9 +1473,11 @@ function dialog(title,message,choices=['閉じる']) {
 
     choices.forEach((choice,i) => {
       const b = document.createElement('button');
+
       b.className =
         'action' +
         (i === choices.length-1 ? ' primary' : '');
+
       b.textContent = choice;
 
       b.onclick = () => {
@@ -815,6 +1515,7 @@ async function remove() {
   }
 
   const old = {...n};
+
   const tombstone = {
     ...n,
     deleted:true,
@@ -822,20 +1523,30 @@ async function remove() {
   };
 
   try {
-    await enqueue(() => transaction([tombstone]));
+    await enqueue(
+      () => transaction([tombstone])
+    );
+
     Object.assign(n,tombstone);
+
+    localRemove('mimi-last-id');
 
     const remaining = sorted();
 
     if (remaining.length) {
-      choose(remaining[0].id);
+      selected = remaining[0].id;
+      updateEditor();
     } else {
-      showEmpty();
+      selected = null;
+      updateEditor();
     }
 
+    showScreen('list');
+    render();
     scheduleSync();
   } catch(e) {
     Object.assign(n,old);
+
     await dialog(
       '削除エラー',
       String(e.message || e)
@@ -877,20 +1588,27 @@ async function exportJSON() {
   a.click();
   a.remove();
 
-  setTimeout(() => URL.revokeObjectURL(url),10000);
+  setTimeout(
+    () => URL.revokeObjectURL(url),
+    10000
+  );
 }
 
 async function importJSON(file) {
   if (!file) return;
 
   try {
-    const data = JSON.parse(await file.text());
+    const data = JSON.parse(
+      await file.text()
+    );
 
     if (
       data.format !== 'mimi-sync-v1' ||
       !Array.isArray(data.notes)
     ) {
-      throw Error('対応していないJSONバックアップです');
+      throw Error(
+        '対応していないJSONバックアップです'
+      );
     }
 
     const incoming = new Map();
@@ -910,13 +1628,14 @@ async function importJSON(file) {
         ear:!!raw.ear,
         createdAt:raw.createdAt ?? '',
         updatedAt:raw.updatedAt ?? '',
-        lastOpenedAt:
-          raw.lastOpenedAt ?? raw.updatedAt ?? '',
         deleted:false
       });
     }
 
-    const known = new Set(notes.map(n => n.id));
+    const known = new Set(
+      notes.map(n => n.id)
+    );
+
     const add = [...incoming.values()]
       .filter(n => !known.has(n.id));
 
@@ -932,14 +1651,19 @@ async function importJSON(file) {
     await queue;
 
     if (failed) {
-      throw Error('編集中のメモを保存できません');
+      throw Error(
+        '編集中のメモを保存できません'
+      );
     }
 
     if (add.length) {
-      await enqueue(() => transaction(add));
+      await enqueue(
+        () => transaction(add)
+      );
     }
 
     notes = await getAll();
+
     render();
     scheduleSync();
 
@@ -963,9 +1687,6 @@ function cleanNote(raw,id) {
     ear:!!raw.ear,
     createdAt:String(raw.createdAt ?? ''),
     updatedAt:String(raw.updatedAt ?? ''),
-    lastOpenedAt:String(
-      raw.lastOpenedAt ?? raw.updatedAt ?? ''
-    ),
     deleted:!!raw.deleted
   };
 }
@@ -980,11 +1701,17 @@ function updateAccountUI() {
     : 'ログインしていません';
 
   $('account').textContent = name;
-  $('login').classList.toggle('hide',!!cloudUser);
-  $('logout').classList.toggle('hide',!cloudUser);
+
+  $('login').classList.toggle(
+    'hide',!!cloudUser
+  );
+
+  $('logout').classList.toggle(
+    'hide',!cloudUser
+  );
+
   $('startSync').classList.toggle(
-    'hide',
-    !cloudUser || syncEnabled
+    'hide',!cloudUser || syncEnabled
   );
 
   if (cloudUser && syncEnabled) {
@@ -997,54 +1724,71 @@ async function loadFirebase() {
   const base =
     'https://www.gstatic.com/firebasejs/13.3.0/';
 
-  const [appMod,authMod,dbMod] = await Promise.all([
-    import(base+'firebase-app.js'),
-    import(base+'firebase-auth.js'),
-    import(base+'firebase-firestore.js')
-  ]);
+  const [appMod,authMod,dbMod] =
+    await Promise.all([
+      import(base+'firebase-app.js'),
+      import(base+'firebase-auth.js'),
+      import(base+'firebase-firestore.js')
+    ]);
 
-  const app = appMod.initializeApp(firebaseConfig);
+  const app = appMod.initializeApp(
+    firebaseConfig
+  );
+
   auth = authMod.getAuth(app);
   firestore = dbMod.getFirestore(app);
 
   firebase = {authMod,dbMod};
 
-  authMod.onAuthStateChanged(auth,async user => {
-    const generation = ++accountGeneration;
+  authMod.onAuthStateChanged(
+    auth,
+    async user => {
+      const generation =
+        ++accountGeneration;
 
-    clearTimeout(syncTimer);
-    clearInterval(syncInterval);
+      clearTimeout(syncTimer);
+      clearInterval(syncInterval);
 
-    syncEnabled = false;
-    cloudUser = user;
-    syncError = '';
+      syncEnabled = false;
+      cloudUser = user;
+      syncError = '';
 
-    if (user) {
-      try {
-        syncEnabled =
-          (await getMeta(syncKey(user.uid))) === true;
-      } catch(e) {
-        console.error(e);
-      }
-    }
-
-    if (generation !== accountGeneration) return;
-
-    updateAccountUI();
-
-    if (syncEnabled && user) {
-      syncNow();
-
-      syncInterval = setInterval(() => {
-        if (!document.hidden && navigator.onLine) {
-          syncNow();
+      if (user) {
+        try {
+          syncEnabled =
+            (await getMeta(
+              syncKey(user.uid)
+            )) === true;
+        } catch(e) {
+          console.error(e);
         }
-      },15000);
+      }
+
+      if (
+        generation !== accountGeneration
+      ) return;
+
+      updateAccountUI();
+
+      if (syncEnabled && user) {
+        syncNow();
+
+        syncInterval = setInterval(() => {
+          if (
+            !document.hidden &&
+            navigator.onLine
+          ) {
+            syncNow();
+          }
+        },15000);
+      }
+    },
+    error => {
+      console.error(error);
+      $('account').textContent =
+        '認証エラー';
     }
-  },error => {
-    console.error(error);
-    $('account').textContent = '認証エラー';
-  });
+  );
 }
 
 async function login() {
@@ -1065,8 +1809,7 @@ async function login() {
     });
 
     await firebase.authMod.signInWithPopup(
-      auth,
-      provider
+      auth,provider
     );
   } catch(e) {
     console.error(e);
@@ -1131,12 +1874,18 @@ async function startSync() {
   }
 
   try {
-    await setMeta(syncKey(user.uid),true);
+    await setMeta(
+      syncKey(user.uid),true
+    );
+
     syncEnabled = true;
     updateAccountUI();
 
     syncInterval = setInterval(() => {
-      if (!document.hidden && navigator.onLine) {
+      if (
+        !document.hidden &&
+        navigator.onLine
+      ) {
         syncNow();
       }
     },15000);
@@ -1186,7 +1935,9 @@ async function syncNow() {
     await queue;
 
     if (failed) {
-      throw Error('端末内の保存に失敗しています');
+      throw Error(
+        '端末内の保存に失敗しています'
+      );
     }
 
     $('status').textContent = '同期中';
@@ -1203,17 +1954,15 @@ async function syncNow() {
     const remote = new Map();
 
     remoteSnap.forEach(d => {
-      const value = d.data();
       remote.set(
         d.id,
-        cleanNote(value,d.id)
+        cleanNote(d.data(),d.id)
       );
     });
 
     const local = new Map(
       (await getAll()).map(n => [
-        n.id,
-        cleanNote(n,n.id)
+        n.id,cleanNote(n,n.id)
       ])
     );
 
@@ -1250,11 +1999,12 @@ async function syncNow() {
       !syncEnabled
     ) return;
 
-    // 通信中の編集を古いデータで上書きしない。
     await queue;
 
     const latest = new Map(
-      (await getAll()).map(n => [n.id,n])
+      (await getAll()).map(n => [
+        n.id,n
+      ])
     );
 
     const safeDownload = download.filter(r => {
@@ -1264,8 +2014,11 @@ async function syncNow() {
       if (!currentLocal) return true;
       if (!originalLocal) return false;
 
-      return dateValue(currentLocal.updatedAt) <=
-        dateValue(originalLocal.updatedAt);
+      return dateValue(
+        currentLocal.updatedAt
+      ) <= dateValue(
+        originalLocal.updatedAt
+      );
     });
 
     if (safeDownload.length) {
@@ -1275,30 +2028,26 @@ async function syncNow() {
 
       notes = await getAll();
 
-      const stillSelected = notes.find(n =>
-        n.id === selected && !n.deleted
-      );
+      const stillSelected = current();
 
       if (!stillSelected) {
-        const first = sorted()[0];
-
-        if (first) {
-          choose(first.id);
-        } else {
-          showEmpty();
-        }
+        selected = null;
+        updateEditor();
+        showScreen('list');
       } else if (
-        safeDownload.some(n => n.id === selected) &&
+        safeDownload.some(n =>
+          n.id === selected
+        ) &&
         document.activeElement !== $('title') &&
         document.activeElement !== $('body')
       ) {
-        choose(selected);
+        // 同期による再描画では履歴を増やさない。
+        updateEditor();
       }
 
       render();
     }
 
-    // 新しい端末側の編集をクラウドへ送信。
     for (const n of upload) {
       if (
         generation !== accountGeneration ||
@@ -1315,8 +2064,11 @@ async function syncNow() {
 
       if (
         latestRemote &&
-        dateValue(latestRemote.updatedAt) >=
-          dateValue(newest.updatedAt)
+        dateValue(
+          latestRemote.updatedAt
+        ) >= dateValue(
+          newest.updatedAt
+        )
       ) {
         continue;
       }
@@ -1333,8 +2085,9 @@ async function syncNow() {
   } catch(e) {
     console.error('SUGU sync:',e);
 
-    syncError =
-      String(e.code || e.message || e);
+    syncError = String(
+      e.code || e.message || e
+    );
 
     $('status').textContent =
       '端末保存済み・同期失敗';
@@ -1382,16 +2135,43 @@ async function syncMenu() {
   if (choice === 2) await logout();
 }
 
+async function receivePendingShare() {
+  const id = await getMeta(
+    'sugu-pending-share'
+  ).catch(() => null);
+
+  if (!id) return false;
+
+  await queue;
+  notes = await getAll();
+
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
+
+  if (n) {
+    choose(n.id,false);
+    scheduleSync();
+  }
+
+  // 保存済みメモの確認が終わってから
+  // 共有待ち情報を消す。
+  await setMeta(
+    'sugu-pending-share',null
+  ).catch(console.error);
+
+  return !!n;
+}
+
 async function init() {
   try {
     db = await openDB();
     notes = await getAll();
 
-    let last;
+    ghostDismissedDay =
+      localGet('sugu-ghost-dismiss') || '';
 
-    try {
-      last = localStorage.getItem('mimi-last-id');
-    } catch(e) {}
+    const last = localGet('mimi-last-id');
 
     if (
       last &&
@@ -1399,26 +2179,35 @@ async function init() {
         n.id === last && !n.deleted
       )
     ) {
-      choose(last);
-    } else if (sorted().length) {
-      choose(sorted()[0].id);
+      selected = last;
     } else {
-      await create(false);
+      selected = null;
     }
+
+    updateEditor();
+    render();
+
+    restoreHistory();
 
     $('status').textContent = '保存済み';
 
-    let previous = 'list';
+    if (
+      new URL(location.href)
+        .searchParams.has('shared')
+    ) {
+      await receivePendingShare();
 
-    try {
-      previous =
-        localStorage.getItem('sugu-screen') ||
-        'list';
-    } catch(e) {}
+      const cleanURL = new URL(location.href);
+      cleanURL.searchParams.delete('shared');
 
-    setScreen(
-      previous === 'edit' ? 'edit' : 'list'
-    );
+      history.replaceState(
+        history.state,
+        '',
+        cleanURL.pathname +
+        cleanURL.search +
+        cleanURL.hash
+      );
+    }
   } catch(e) {
     await dialog(
       '起動エラー',
@@ -1431,24 +2220,31 @@ async function init() {
   $('title').addEventListener('input',save);
   $('body').addEventListener('input',save);
 
+  // リンク解析は毎回の入力ではなく、
+  // 編集欄から離れたときに実行。
+  $('body').addEventListener(
+    'blur',updateLinks
+  );
+
   $('new').onclick = () => create();
   $('sideNew').onclick = () => create();
+
   $('copy').onclick = copyBody;
   $('paste').onclick = pasteNew;
   $('stats').onclick = showStats;
+
   $('ear').onclick = toggleEar;
   $('remove').onclick = remove;
 
-  $('openList').onclick = () => {
-    render();
-    setScreen('list');
-  };
-
-  $('closeList').onclick = () => setScreen('edit');
+  $('openList').onclick = goList;
+  $('closeList').onclick = goList;
 
   $('list').onclick = e => {
+    if (e.target.closest('button')) return;
+
     const item = e.target.closest('.item');
-    if (item) {
+
+    if (item?.dataset.id) {
       choose(item.dataset.id,true);
     }
   };
@@ -1458,19 +2254,21 @@ async function init() {
     render();
   };
 
-  document.querySelectorAll('.chip').forEach(b => {
-    b.onclick = () => {
-      filter = b.dataset.filter;
-      visibleLimit = 10;
+  document.querySelectorAll('.chip')
+    .forEach(b => {
+      b.onclick = () => {
+        filter = b.dataset.filter;
+        visibleLimit = 10;
 
-      document.querySelectorAll('.chip').forEach(x =>
-        x.classList.remove('active')
-      );
+        document.querySelectorAll('.chip')
+          .forEach(x =>
+            x.classList.remove('active')
+          );
 
-      b.classList.add('active');
-      render();
-    };
-  });
+        b.classList.add('active');
+        render();
+      };
+    });
 
   $('export').onclick = exportJSON;
   $('import').onclick = () => $('file').click();
@@ -1495,14 +2293,17 @@ async function init() {
     }
 
     if (e.key === 'Escape') {
-      setScreen('list');
+      goList();
     }
   });
 
-  window.addEventListener(
-    'popstate',
-    () => setScreen('list')
-  );
+  window.addEventListener('popstate',e => {
+    if (e.state?.sugu === 'edit' && current()) {
+      showScreen('edit');
+    } else {
+      showScreen('list');
+    }
+  });
 
   document.addEventListener(
     'visibilitychange',
@@ -1523,41 +2324,24 @@ async function init() {
     navigator.serviceWorker.addEventListener(
       'message',
       async e => {
-        if (e.data?.type === 'SUGU_SHARED') {
-          await queue;
-          notes = await getAll();
-          render();
+        if (
+          e.data?.type !== 'SUGU_SHARED'
+        ) return;
 
-          if (e.data.id) {
-            choose(e.data.id,false);
-          }
+        await queue;
+        notes = await getAll();
+
+        const n = notes.find(x =>
+          x.id === e.data.id && !x.deleted
+        );
+
+        if (n) {
+          choose(n.id,false);
+          scheduleSync();
         }
+
+        render();
       }
-    );
-  }
-
-  if (
-    new URL(location.href)
-      .searchParams.has('shared')
-  ) {
-    notes = await getAll();
-
-    const latestShared = notes
-      .filter(n => !n.deleted)
-      .sort(
-        (a,b) =>
-          dateValue(b.createdAt) -
-          dateValue(a.createdAt)
-      )[0];
-
-    if (latestShared) {
-      choose(latestShared.id,false);
-    } else {
-      render();
-    }
-
-    history.replaceState(
-      null,'',location.pathname
     );
   }
 
@@ -1565,16 +2349,16 @@ async function init() {
     'serviceWorker' in navigator &&
     location.protocol === 'https:'
   ) {
-    navigator.serviceWorker
-      .register('./sw.js')
+    navigator.serviceWorker.register('./sw.js')
       .catch(console.warn);
   }
 
-  // ローカル表示を終えてからFirebaseを読み込む。
+  // 画面表示を終えてからFirebaseを読み込む。
   loadFirebase().catch(e => {
     console.error(
       'Firebase initialization:',e
     );
+
     $('account').textContent =
       'クラウド接続不可';
   });
