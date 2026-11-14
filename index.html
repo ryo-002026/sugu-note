@@ -24,7 +24,6 @@
   --sage:#637b68;
   --sage-soft:#e8eee7;
   --clay:#b8795d;
-  --clay-soft:#f6e8df;
   --gold:#bb9455;
   --danger:#b96b62;
   --shadow:0 6px 28px #5546380c;
@@ -56,14 +55,15 @@ textarea:focus-visible,select:focus-visible{
 .toolbar{
   display:flex;
   align-items:center;
-  gap:5px;
+  gap:4px;
   min-height:60px;
-  padding:7px 12px;
+  padding:7px 10px;
   flex-shrink:0;
 }
 .side>.toolbar{border-bottom:1px solid var(--line)}
 .brand{
   flex:1;
+  min-width:0;
   padding-left:8px;
   color:#665244;
   font-family:Georgia,serif;
@@ -83,6 +83,12 @@ textarea:focus-visible,select:focus-visible{
 }
 .btn:hover:not(:disabled){background:var(--cream2)}
 .btn.active{color:var(--clay)}
+.btn.refreshing{color:var(--sage)}
+.btn.refreshing .refresh-glyph{
+  display:inline-block;
+  animation:spin .75s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 .status{
   font-size:12px;
   color:var(--muted);
@@ -185,7 +191,7 @@ textarea:focus-visible,select:focus-visible{
   position:relative;
   display:flex;
   align-items:stretch;
-  min-height:105px;
+  min-height:108px;
   margin-bottom:7px;
   border:1px solid #eee7de;
   border-radius:14px;
@@ -206,27 +212,33 @@ textarea:focus-visible,select:focus-visible{
   justify-content:center;
   align-items:center;
   flex-shrink:0;
-  width:65px;
-  padding:10px 4px;
+  width:69px;
+  padding:9px 3px;
   border-right:1px solid #f0e9e1;
   color:var(--clay);
 }
 .item-month{
   font-size:11px;
   font-weight:700;
-  letter-spacing:.1em;
+  letter-spacing:.08em;
 }
 .item-day{
   font-family:Georgia,serif;
-  font-size:38px;
-  font-weight:400;
-  line-height:1.13;
+  font-size:37px;
+  line-height:1.08;
   font-variant-numeric:lining-nums;
+}
+.item-time{
+  margin-top:7px;
+  color:#998a7c;
+  font-size:11px;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
 }
 .item-content{
   flex:1;
   min-width:0;
-  padding:17px 7px 13px 13px;
+  padding:16px 7px 12px 13px;
 }
 .item-content strong{
   display:block;
@@ -323,10 +335,6 @@ textarea:focus-visible,select:focus-visible{
   border-radius:8px;
   font-size:19px;
 }
-.list-sentinel{
-  height:8px;
-  width:100%;
-}
 .side-bottom{
   display:flex;
   align-items:stretch;
@@ -357,7 +365,6 @@ textarea:focus-visible,select:focus-visible{
   color:#fff;
   font-size:14px;
   font-weight:700;
-  letter-spacing:.03em;
 }
 .create-button:hover{background:#506b55}
 .editor{
@@ -367,9 +374,7 @@ textarea:focus-visible,select:focus-visible{
   min-height:0;
   background:#fffdf9;
 }
-.editor>.toolbar{
-  border-bottom:1px solid #f0ebe3;
-}
+.editor>.toolbar{border-bottom:1px solid #f0ebe3}
 .edit{
   display:flex;
   flex-direction:column;
@@ -623,7 +628,6 @@ textarea:focus-visible,select:focus-visible{
   height:25px;
   border-radius:20px;
   background:#d4cdc3;
-  transition:background .15s;
 }
 .switch::after{
   content:"";
@@ -662,8 +666,9 @@ textarea:focus-visible,select:focus-visible{
   #title{font-size:21px}
   .btn{min-width:35px;width:35px}
   .list{padding:0 11px 15px}
-  .item{min-height:100px}
-  .item-date{width:64px}
+  .item{min-height:105px}
+  .item-date{width:68px}
+  .item-day{font-size:36px}
 }
 @media(min-width:701px){
   .item-icon:not(.on):not(.pin-on){opacity:.6}
@@ -678,7 +683,10 @@ textarea:focus-visible,select:focus-visible{
     <header class="toolbar">
       <button id="closeList" class="btn mobile" title="一覧を閉じる">‹</button>
       <div class="brand">SUGU</div>
-      <button id="settings" class="btn" title="設定" aria-label="設定">⚙</button>
+      <button id="refresh" class="btn" title="メモを更新" aria-label="メモを更新">
+        <span class="refresh-glyph">↻</span>
+      </button>
+      <button id="settings" class="btn" title="設定">⚙</button>
       <button id="import" class="btn" title="バックアップを取り込む">⇩</button>
       <button id="export" class="btn" title="JSONバックアップを保存">⇧</button>
     </header>
@@ -863,7 +871,13 @@ let toastTimer = null;
 let undoInfo = null;
 let modalOpen = false;
 let settingsTab = 'list';
-let listObserver = null;
+
+let listItems = [];
+let renderedCount = 0;
+let renderedYear = null;
+let renderedGhostId = null;
+let listLoading = false;
+let listCheckScheduled = false;
 
 let firebase = null;
 let auth = null;
@@ -876,6 +890,7 @@ let syncTimer = null;
 let syncInterval = null;
 let accountGeneration = 0;
 let syncError = '';
+let manualRefreshing = false;
 
 const iso = () => new Date().toISOString();
 
@@ -936,19 +951,32 @@ function dayKey() {
   ].join('-');
 }
 
+/*
+ * 日付・時刻表示。
+ * 前版では時刻を返していなかったため、
+ * 今回 hour/minute を追加。
+ */
 function dateParts(n) {
   const raw = n.createdAt || n.updatedAt;
   const timestamp = dateValue(raw);
 
-  if (!timestamp)
-    return {year:'日付なし',month:'--',day:'--'};
+  if (!timestamp) {
+    return {
+      year:'日付なし',
+      month:'--',
+      day:'--',
+      time:'--:--'
+    };
+  }
 
   const d = new Date(timestamp);
+  const two = x => String(x).padStart(2,'0');
 
   return {
     year:String(d.getFullYear()),
-    month:String(d.getMonth()+1).padStart(2,'0'),
-    day:String(d.getDate()).padStart(2,'0')
+    month:two(d.getMonth()+1),
+    day:two(d.getDate()),
+    time:two(d.getHours())+':'+two(d.getMinutes())
   };
 }
 
@@ -1127,6 +1155,16 @@ function showScreen(next) {
     $('side').classList.toggle(
       'open',next === 'list'
     );
+  }
+
+  /*
+   * スマホでは一覧が開いた後で
+   * スクロール位置を再判定する。
+   */
+  if (next === 'list') {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(checkListBottom);
+    });
   }
 }
 
@@ -1465,7 +1503,15 @@ function makeItem(n) {
   day.className = 'item-day';
   day.textContent = parts.day;
 
-  date.append(month,day);
+  /*
+   * 今回追加した時刻表示。
+   * PC・スマホともに同じDOMを使用する。
+   */
+  const time = document.createElement('span');
+  time.className = 'item-time';
+  time.textContent = parts.time;
+
+  date.append(month,day,time);
 
   const content = document.createElement('div');
   content.className = 'item-content';
@@ -1593,13 +1639,19 @@ function makeYearHeading(year) {
   return heading;
 }
 
+/*
+ * 一覧描画を二段階に分ける。
+ *
+ * render()
+ *   検索・並べ替え・データ更新時に一覧を作り直す。
+ *
+ * appendNextNotes()
+ *   スクロール時に次の10件だけDOMへ追加する。
+ *
+ * これによりスマホでもスクロール位置を維持する。
+ */
 function render() {
   if (!db) return;
-
-  if (listObserver) {
-    listObserver.disconnect();
-    listObserver = null;
-  }
 
   const root = $('list');
   const oldScroll = root.scrollTop;
@@ -1617,61 +1669,145 @@ function render() {
 
   $('count').textContent = `${filtered.length}件`;
 
-  root.replaceChildren();
-
   const ghost = !q && filter === 'all'
     ? ghostCandidate(all) : null;
 
-  const regular = ghost
+  renderedGhostId = ghost?.id || null;
+
+  listItems = ghost
     ? filtered.filter(n => n.id !== ghost.id)
     : filtered;
 
-  const shown = regular.slice(0,visibleLimit);
+  renderedCount = 0;
+  renderedYear = null;
+  listLoading = false;
 
-  let previousYear = null;
+  root.replaceChildren();
 
-  shown.forEach((n,i) => {
-    if (i === 3 && ghost)
-      root.append(makeGhostCard(ghost));
+  appendNextNotes(false);
+
+  root.scrollTop = oldScroll;
+
+  scheduleListCheck();
+}
+
+function appendNextNotes(checkAgain=true) {
+  if (listLoading) return;
+
+  const root = $('list');
+
+  if (renderedCount >= listItems.length)
+    return;
+
+  listLoading = true;
+
+  const start = renderedCount;
+  const end = Math.min(
+    start+10,
+    listItems.length
+  );
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i=start;i<end;i++) {
+    const n = listItems[i];
+
+    if (
+      i === 3 &&
+      renderedGhostId
+    ) {
+      const ghost = notes.find(
+        x => x.id === renderedGhostId
+      );
+
+      if (ghost)
+        fragment.append(makeGhostCard(ghost));
+    }
 
     const year = dateParts(n).year;
 
-    if (year !== previousYear) {
-      root.append(makeYearHeading(year));
-      previousYear = year;
+    if (year !== renderedYear) {
+      fragment.append(makeYearHeading(year));
+      renderedYear = year;
     }
 
-    root.append(makeItem(n));
-  });
-
-  if (ghost && shown.length < 4)
-    root.append(makeGhostCard(ghost));
-
-  if (regular.length > visibleLimit) {
-    const sentinel = document.createElement('div');
-    sentinel.className = 'list-sentinel';
-    sentinel.setAttribute('aria-hidden','true');
-
-    root.append(sentinel);
-
-    listObserver = new IntersectionObserver(entries => {
-      if (!entries.some(e => e.isIntersecting))
-        return;
-
-      listObserver?.disconnect();
-      listObserver = null;
-
-      visibleLimit += 10;
-      render();
-    },{
-      root,
-      rootMargin:'0px 0px 180px 0px'
-    });
-
-    listObserver.observe(sentinel);
+    fragment.append(makeItem(n));
   }
 
-  root.scrollTop = oldScroll;
+  if (
+    end === listItems.length &&
+    end <= 3 &&
+    renderedGhostId
+  ) {
+    const ghost = notes.find(
+      x => x.id === renderedGhostId
+    );
+
+    if (ghost)
+      fragment.append(makeGhostCard(ghost));
+  }
+
+  root.append(fragment);
+
+  renderedCount = end;
+  listLoading = false;
+
+  if (checkAgain)
+    scheduleListCheck();
+}
+
+/*
+ * 下端から120px以内になったら10件追加。
+ * IntersectionObserverには依存しない。
+ */
+function checkListBottom() {
+  if (modalOpen || listLoading)
+    return;
+
+  if (renderedCount >= listItems.length)
+    return;
+
+  const root = $('list');
+
+  if (!root.isConnected)
+    return;
+
+  if (
+    matchMedia('(max-width:700px)').matches &&
+    screen !== 'list'
+  ) return;
+
+  if (
+    root.clientHeight <= 0 ||
+    root.getClientRects().length === 0
+  ) return;
+
+  const remaining =
+    root.scrollHeight -
+    root.scrollTop -
+    root.clientHeight;
+
+  if (remaining <= 120) {
+    appendNextNotes(false);
+
+    /*
+     * 初回10件で画面が埋まらない場合も
+     * 次の10件を読み込む。
+     */
+    scheduleListCheck();
+  }
+}
+
+function scheduleListCheck() {
+  if (listCheckScheduled)
+    return;
+
+  listCheckScheduled = true;
+
+  requestAnimationFrame(() => {
+    listCheckScheduled = false;
+    checkListBottom();
+  });
 }
 
 function choose(id,focus=false) {
@@ -2017,20 +2153,19 @@ function dialog(
       }
 
       if (e.key === 'Tab') {
-        const focusables = buttons;
-        const index = focusables.indexOf(
+        const index = buttons.indexOf(
           document.activeElement
         );
 
         if (e.shiftKey && index <= 0) {
           e.preventDefault();
-          focusables.at(-1)?.focus();
+          buttons.at(-1)?.focus();
         } else if (
           !e.shiftKey &&
-          index === focusables.length-1
+          index === buttons.length-1
         ) {
           e.preventDefault();
-          focusables[0]?.focus();
+          buttons[0]?.focus();
         }
       }
     }
@@ -2505,6 +2640,10 @@ async function startSync() {
   }
 }
 
+/*
+ * Firebase同期処理は前版の方式を維持。
+ * 手動更新ボタンからもこの関数を呼ぶ。
+ */
 async function syncNow() {
   if (
     !syncEnabled ||
@@ -2682,6 +2821,123 @@ async function syncNow() {
       syncAgain = false;
       scheduleSync();
     }
+  }
+}
+
+/*
+ * 手動更新。
+ *
+ * 1. 編集内容を端末へ保存
+ * 2. 同期が有効ならFirebase同期
+ * 3. IndexedDBから一覧を再取得
+ * 4. 選択メモとスクロール位置を維持
+ */
+async function manualRefresh() {
+  if (manualRefreshing || modalOpen)
+    return;
+
+  manualRefreshing = true;
+
+  const button = $('refresh');
+  const root = $('list');
+
+  const oldScroll = root.scrollTop;
+  const oldSelected = selected;
+  const editing = isEditableTarget(
+    document.activeElement
+  );
+
+  button.disabled = true;
+  button.classList.add('refreshing');
+  button.title = '更新中…';
+
+  $('status').textContent = '更新中…';
+
+  try {
+    save();
+    await queue;
+
+    if (failed)
+      throw Error('端末内への保存に失敗しています');
+
+    if (syncEnabled && cloudUser) {
+      if (!navigator.onLine) {
+        throw Error(
+          'オフラインです。クラウドの更新は取得できません。'
+        );
+      }
+
+      /*
+       * 同期中なら完了を待つ。
+       * 二重に同じ同期を開始しない。
+       */
+      if (syncing) {
+        let attempts = 0;
+
+        while (syncing && attempts < 100) {
+          await new Promise(
+            resolve => setTimeout(resolve,100)
+          );
+          attempts++;
+        }
+
+        if (syncing)
+          throw Error('同期処理が続いています');
+      }
+
+      await syncNow();
+
+      if (syncError)
+        throw Error('クラウド同期に失敗しました：'+syncError);
+    }
+
+    await queue;
+
+    notes = await getAll();
+
+    if (
+      oldSelected &&
+      notes.some(
+        n => n.id === oldSelected && !n.deleted
+      )
+    ) {
+      selected = oldSelected;
+    } else {
+      selected = null;
+    }
+
+    /*
+     * 入力中のテキストを不用意に
+     * 書き換えない。
+     */
+    if (!editing)
+      updateEditor();
+
+    render();
+    root.scrollTop = oldScroll;
+
+    $('status').textContent =
+      syncEnabled && cloudUser
+        ? '保存済み・同期済み'
+        : '保存済み';
+
+    toast(
+      syncEnabled && cloudUser
+        ? 'クラウドとメモを更新しました'
+        : '端末内のメモを更新しました'
+    );
+  } catch(e) {
+    console.error('SUGU refresh:',e);
+
+    $('status').textContent =
+      '更新できませんでした';
+
+    toast(String(e.message || e));
+  } finally {
+    manualRefreshing = false;
+    button.disabled = false;
+    button.classList.remove('refreshing');
+    button.title = 'メモを更新';
   }
 }
 
@@ -3073,6 +3329,8 @@ async function init() {
   $('new').onclick = () => create();
   $('sideNew').onclick = () => create();
 
+  $('refresh').onclick = manualRefresh;
+
   $('paste').onclick = pasteNew;
   $('stats').onclick = showStats;
   $('copy').onclick = copyBody;
@@ -3130,6 +3388,19 @@ async function init() {
         choose(item.dataset.id,false);
     }
   };
+
+  /*
+   * スマホ・PC共通のスクロール監視。
+   */
+  $('list').addEventListener(
+    'scroll',scheduleListCheck,
+    {passive:true}
+  );
+
+  window.addEventListener(
+    'resize',scheduleListCheck,
+    {passive:true}
+  );
 
   $('search').oninput = () => {
     visibleLimit = 10;
@@ -3234,8 +3505,11 @@ async function init() {
     () => {
       if (document.hidden) {
         save();
-      } else if (syncEnabled) {
-        syncNow();
+      } else {
+        scheduleListCheck();
+
+        if (syncEnabled)
+          syncNow();
       }
     }
   );
@@ -3279,8 +3553,10 @@ async function init() {
       .catch(console.warn);
   }
 
-  // 端末内のメモを先に表示する。
-  // Firebaseは起動後に読み込む。
+  /*
+   * 端末内のメモを先に表示し、
+   * Firebaseは後から読み込む。
+   */
   loadFirebase().catch(e => {
     console.error(
       'Firebase initialization:',e
