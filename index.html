@@ -1,9 +1,10 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8f9f6">
+<meta name="theme-color" content="#f6f5f0">
 <meta name="description" content="SUGU | 思いついたら、すぐ書ける。">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon-192.png">
@@ -12,149 +13,646 @@
 <style>
 :root{
   font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-  color:#26332d;background:#f8f9f6;
-  --green:#27735a;--line:#e2e7e1;--muted:#718077
+  color:#263c34;
+  background:#f6f5f0;
+  --bg:#f6f5f0;
+  --paper:#fffefa;
+  --side:#f0f2ec;
+  --green:#285e4c;
+  --green2:#39765f;
+  --pale:#e4eee5;
+  --line:#e0e5dc;
+  --muted:#7d8a80;
+  --bronze:#b48a53;
+  --danger:#ad665d;
+  --shadow:0 12px 36px rgba(32,58,43,.07);
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
 button,input,textarea,select{font:inherit}
 button{border:0;background:transparent;color:inherit;cursor:pointer}
 button:disabled{opacity:.35;cursor:default}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
-  outline:2px solid var(--green);outline-offset:2px
+  outline:2px solid var(--green2);
+  outline-offset:2px
 }
 .hide{display:none!important}
-.app{display:grid;grid-template-columns:320px minmax(0,1fr);height:100dvh;overflow:hidden}
-.side{display:flex;flex-direction:column;min-height:0;background:#fff;border-right:1px solid var(--line)}
-.toolbar{
-  display:flex;align-items:center;gap:5px;min-height:54px;
-  padding:6px 9px;border-bottom:1px solid var(--line);flex-shrink:0
+.app{
+  display:grid;
+  grid-template-columns:326px minmax(0,1fr);
+  width:100%;
+  height:100dvh;
+  overflow:hidden
 }
-.brand{flex:1;padding-left:6px;font-size:18px;font-weight:800;letter-spacing:.04em}
-.btn{display:grid;place-items:center;min-width:38px;height:38px;border-radius:9px;font-size:19px}
-.btn:hover:not(:disabled){background:#e7f3ec}
-.status{font-size:12px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.side{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  background:var(--side);
+  border-right:1px solid var(--line)
+}
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-height:61px;
+  padding:8px 13px;
+  flex-shrink:0
+}
+.side .toolbar{border-bottom:1px solid var(--line)}
+.brand{
+  flex:1;
+  padding-left:8px;
+  font-size:22px;
+  font-weight:850;
+  letter-spacing:.12em;
+  color:var(--green)
+}
+.brand small{
+  display:block;
+  margin-top:-2px;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.18em;
+  color:var(--muted)
+}
+.btn{
+  display:grid;
+  place-items:center;
+  min-width:38px;
+  height:38px;
+  border-radius:11px;
+  font-size:19px;
+  transition:background .12s,color .12s
+}
+.btn:hover:not(:disabled){background:var(--pale)}
+.btn.active{background:var(--pale);color:var(--green)}
+.btn.danger:hover{background:#f8e9e6;color:var(--danger)}
+.status{
+  font-size:12px;
+  color:var(--muted);
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis
+}
 .spacer{flex:1}
 .syncbar{
-  display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:7px 11px;
-  background:#f1f6f1;border-bottom:1px solid var(--line);font-size:12px
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:9px 15px;
+  border-bottom:1px solid var(--line);
+  font-size:11px;
+  color:var(--muted)
 }
-.syncbar span{flex:1;min-width:75px;overflow:hidden;text-overflow:ellipsis}
-.syncbtn{padding:6px 8px;border:1px solid #d4e2d7;border-radius:8px;background:white;font-size:12px}
+.syncbar span{
+  flex:1;
+  min-width:80px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+.syncbtn{
+  padding:6px 9px;
+  border:1px solid #d4ded4;
+  border-radius:9px;
+  background:var(--paper);
+  font-size:11px;
+  color:var(--green)
+}
+.search-wrap{padding:15px 14px 9px}
 .search{
-  width:calc(100% - 24px);margin:12px 12px 8px;padding:10px;
-  border:1px solid var(--line);border-radius:10px;background:#fafbf9
+  width:100%;
+  padding:12px 13px;
+  border:1px solid #dce4da;
+  border-radius:13px;
+  background:var(--paper);
+  color:#263c34;
+  font-size:14px;
+  outline:0
 }
-.filters{display:flex;gap:5px;padding:0 12px 8px;flex-wrap:wrap}
-.chip{padding:7px 10px;border-radius:18px;color:#66766e;font-size:12px}
-.chip.active{background:#e7f3ec;color:var(--green)}
-.sortbar{display:flex;align-items:center;justify-content:space-between;padding:0 12px 8px;gap:8px}
+.search:focus{border-color:#91b4a0}
+.filters{
+  display:flex;
+  gap:5px;
+  padding:0 14px 10px;
+  flex-wrap:wrap
+}
+.chip{
+  padding:8px 11px;
+  border-radius:20px;
+  color:#708075;
+  font-size:12px;
+  white-space:nowrap
+}
+.chip.active{
+  background:var(--green);
+  color:white
+}
+.sortbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px 10px;
+  gap:8px
+}
 .count{color:var(--muted);font-size:12px}
-.sort-select{max-width:145px;padding:5px;border:1px solid var(--line);border-radius:7px;background:#fff;font-size:12px}
-.list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
-.item{position:relative;padding:13px 15px;border-bottom:1px solid var(--line);cursor:pointer}
-.item:hover{background:#f5f8f5}
-.item.active{background:#e7f3ec}
-.item strong{
-  display:block;padding-right:67px;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap;font-size:14px
+.sort-select{
+  max-width:150px;
+  padding:7px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--paper);
+  color:var(--green);
+  font-size:12px
 }
-.item p{margin:5px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--muted)}
-.item small{color:#85918b;font-size:11px}
-.item-actions{position:absolute;top:7px;right:7px;display:flex;gap:1px}
-.item-icon{width:31px;height:34px;border-radius:7px;font-size:18px;color:#b5c1b8}
-.item-icon:hover{background:#edf2ed;color:var(--green)}
-.item-icon.on{color:#d09b36}
+.list{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:0 9px 12px
+}
+.item{
+  position:relative;
+  margin:4px 0;
+  padding:13px 91px 13px 13px;
+  min-height:108px;
+  border:1px solid transparent;
+  border-radius:13px;
+  cursor:pointer;
+  transition:background .12s,border-color .12s
+}
+.item:hover{background:#fffefa}
+.item.active{
+  background:var(--paper);
+  border-color:#c9dbcc;
+  box-shadow:0 2px 12px #244b3410
+}
+.item:focus-visible{
+  outline:2px solid var(--green);
+  outline-offset:-2px
+}
+.item strong{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:14px;
+  line-height:1.6
+}
+.item p{
+  margin:5px 0 7px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  color:var(--muted)
+}
+.item small{font-size:10px;color:#95a096}
+.item-meta{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  margin-top:5px
+}
+.progress{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 7px;
+  border-radius:7px;
+  background:#e5efe8;
+  color:var(--green);
+  font-size:11px;
+  font-weight:650
+}
+.progress.complete{
+  background:#d8eadc;
+  color:#2c7452
+}
+.item-actions{
+  position:absolute;
+  top:10px;
+  right:8px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  align-items:center
+}
+.item-icon{
+  display:grid;
+  place-items:center;
+  width:31px;
+  height:28px;
+  border-radius:8px;
+  color:#9ba99e;
+  font-size:18px
+}
+.item-icon:hover{background:#e7efe7;color:var(--green)}
+.item-icon.on{color:var(--bronze)}
 .item-icon.pin-on{color:var(--green)}
-.ghost-card{background:#f2ecfa;border-left:4px solid #9473bd}
-.ghost-card strong,.ghost-card p{color:#70568d}
+.item-icon.delete{font-size:16px}
+.item-icon.delete:hover{background:#fae9e6;color:var(--danger)}
+.ghost-card{
+  background:#eee8f4;
+  border-left:3px solid #9a7fba
+}
+.ghost-card strong,.ghost-card p{color:#745c8c}
 .ghost-card p{white-space:normal;line-height:1.5}
-.ghost-close{position:absolute;top:7px;right:7px;width:32px;height:32px;font-size:19px}
-.more-button{width:100%;padding:15px;color:var(--green);font-size:13px}
+.ghost-close{
+  position:absolute;
+  top:7px;
+  right:7px;
+  width:32px;
+  height:32px;
+  font-size:19px
+}
+.more-button{
+  width:100%;
+  padding:16px;
+  color:var(--green);
+  font-size:13px
+}
 .side-bottom{
-  display:flex;align-items:stretch;gap:8px;
-  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
-  border-top:1px solid var(--line);background:white;flex-shrink:0
+  display:flex;
+  align-items:stretch;
+  gap:8px;
+  padding:12px 13px calc(12px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);
+  background:var(--side);
+  flex-shrink:0
 }
 .bottom-icon{
-  display:grid;place-items:center;width:44px;min-width:44px;
-  min-height:48px;border:1px solid var(--line);border-radius:12px;
-  color:#60756a;font-size:20px
+  display:grid;
+  place-items:center;
+  width:44px;
+  min-width:44px;
+  min-height:48px;
+  border:1px solid #d6e0d5;
+  border-radius:13px;
+  background:var(--paper);
+  color:var(--green);
+  font-size:20px
 }
 .create-button{
-  flex:1;min-width:0;min-height:48px;border-radius:12px;
-  background:var(--green);color:white;font-weight:750
+  flex:1;
+  min-width:0;
+  min-height:48px;
+  border-radius:13px;
+  background:var(--green);
+  color:white;
+  font-weight:750;
+  letter-spacing:.03em
 }
-.create-button:hover{background:#1c5c47}
-.editor{display:flex;flex-direction:column;min-width:0;min-height:0}
+.create-button:hover{background:#1e4b3b}
+.editor{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:0;
+  background:var(--bg)
+}
+.editor-header{
+  border-bottom:1px solid var(--line);
+  background:rgba(255,254,250,.75)
+}
 .edit{
-  display:flex;flex-direction:column;flex:1;min-height:0;
-  width:100%;max-width:920px;margin:auto;padding:17px 27px
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  min-height:0;
+  width:calc(100% - 40px);
+  max-width:920px;
+  margin:20px auto;
+  padding:26px 36px;
+  border:1px solid #e9ece5;
+  border-radius:18px;
+  background:var(--paper);
+  box-shadow:var(--shadow)
 }
 #title{
-  width:100%;padding:12px 0;border:0;outline:0;background:none;
-  font-size:22px;font-weight:700
+  width:100%;
+  padding:10px 0 15px;
+  border:0;
+  border-bottom:1px solid #edf0e9;
+  outline:0;
+  background:none;
+  color:#263c34;
+  font-size:24px;
+  font-weight:750
 }
 #body{
-  flex:1;min-height:0;width:100%;padding:8px 0 20px;border:0;
-  outline:0;resize:none;background:none;font-size:16px;line-height:1.75
+  flex:1;
+  min-height:0;
+  width:100%;
+  padding:16px 0 20px;
+  border:0;
+  outline:0;
+  resize:none;
+  background:none;
+  color:#33443b;
+  font-size:16px;
+  line-height:1.85
 }
 .checklist{
-  flex:1;min-height:0;overflow-y:auto;padding:9px 0 20px
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:14px 0 20px
 }
-.check-row{display:flex;align-items:center;gap:10px;min-height:44px}
-.check-row input[type=checkbox]{width:19px;height:19px;accent-color:var(--green);flex-shrink:0}
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:47px
+}
+.check-row input[type=checkbox]{
+  width:19px;
+  height:19px;
+  accent-color:var(--green);
+  flex-shrink:0
+}
 .check-text{
-  flex:1;min-width:0;padding:9px 3px;border:0;border-bottom:1px solid #edf0ed;
-  background:transparent;outline:0;font-size:16px
+  flex:1;
+  min-width:0;
+  padding:11px 4px;
+  border:0;
+  border-bottom:1px solid #edf0e9;
+  background:transparent;
+  outline:0;
+  font-size:16px;
+  color:#33443b
 }
-.check-text.done{color:#89958e;text-decoration:line-through}
-.check-delete{width:30px;height:34px;color:#9ca8a0;font-size:18px}
-.check-add{padding:12px 3px;color:var(--green);font-size:14px}
-.edit-tools{display:flex;align-items:center;gap:8px;padding:4px 0 9px;flex-shrink:0}
-.mode-button{padding:7px 11px;border:1px solid var(--line);border-radius:9px;font-size:12px}
-.mode-button.on{background:#e7f3ec;border-color:#c8dfd1;color:var(--green)}
+.check-text.done{
+  color:#9ba69c;
+  text-decoration:line-through
+}
+.check-delete{
+  width:31px;
+  height:34px;
+  color:#a7b1a8;
+  font-size:18px
+}
+.check-add{
+  padding:14px 4px;
+  color:var(--green);
+  font-size:14px
+}
+.edit-tools{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:14px 0 0;
+  flex-shrink:0
+}
+.mode-button{
+  padding:8px 12px;
+  border:1px solid #dbe4d9;
+  border-radius:10px;
+  color:var(--green);
+  font-size:12px
+}
+.mode-button.on{
+  background:var(--pale);
+  border-color:#bcd3c3
+}
 .mode-hint{color:var(--muted);font-size:11px}
 .link-preview{
-  flex-shrink:0;max-height:120px;overflow-y:auto;
-  padding:8px 0;border-top:1px solid var(--line);font-size:13px
+  flex-shrink:0;
+  max-height:125px;
+  overflow-y:auto;
+  padding:10px 0;
+  border-top:1px solid var(--line);
+  font-size:13px
 }
 .link-preview:empty{display:none}
-.link-preview small{display:block;margin-bottom:5px;color:var(--muted)}
-.link-preview a{display:block;padding:5px 0;color:var(--green);overflow-wrap:anywhere}
-.copy-success{background:#e7f3ec;color:var(--green)}
-.empty-editor{flex:1;display:grid;place-items:center;color:#9aa69e;font-size:14px}
-.overlay{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:18px;background:#0008}
-.modal{width:min(480px,100%);max-height:90dvh;overflow:auto;padding:22px;border-radius:16px;background:#fff}
-.modal h2{margin:0 0 10px;font-size:18px}
-.modal p{white-space:pre-line;line-height:1.7;font-size:14px}
-.actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:20px}
-.action{padding:10px 15px;border-radius:9px;background:#edf0ec}
-.action.primary{background:var(--green);color:white}
-.toast{
-  position:fixed;left:50%;bottom:22px;transform:translateX(-50%);
-  z-index:40;display:flex;align-items:center;gap:12px;
-  max-width:calc(100vw - 30px);padding:12px 15px;
-  border-radius:12px;background:#263b30;color:#fff;
-  box-shadow:0 5px 24px #0003;font-size:13px
+.link-preview small{
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted)
 }
-.toast button{color:#baf1d0;font-weight:700;white-space:nowrap}
+.link-preview a{
+  display:block;
+  padding:5px 0;
+  color:var(--green);
+  overflow-wrap:anywhere
+}
+.copy-success{background:var(--pale);color:var(--green)}
+.empty-editor{
+  flex:1;
+  display:grid;
+  place-items:center;
+  color:#9aa69e;
+  font-size:14px
+}
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:30;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgba(20,37,28,.48)
+}
+.modal{
+  width:min(480px,100%);
+  max-height:90dvh;
+  overflow:auto;
+  padding:24px;
+  border-radius:19px;
+  background:var(--paper);
+  box-shadow:0 20px 70px #0002
+}
+.modal h2{
+  margin:0 0 10px;
+  font-size:19px;
+  color:var(--green)
+}
+.modal p{
+  white-space:pre-line;
+  line-height:1.75;
+  font-size:14px;
+  color:#58675c
+}
+.actions{
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px
+}
+.action{
+  padding:11px 16px;
+  border-radius:10px;
+  background:#edf0e9
+}
+.action.primary{background:var(--green);color:white}
+.action.danger{background:var(--danger);color:white}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translateX(-50%);
+  z-index:40;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  max-width:calc(100vw - 30px);
+  padding:13px 17px;
+  border-radius:13px;
+  background:#284b3b;
+  color:white;
+  box-shadow:0 8px 28px #0003;
+  font-size:13px
+}
+.toast button{
+  color:#c3f2d2;
+  font-weight:700;
+  white-space:nowrap
+}
+
+/* 設定画面 */
+.settings-modal{
+  width:min(610px,100%);
+  padding:0;
+  overflow:hidden
+}
+.settings-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:23px 25px 17px;
+  border-bottom:1px solid var(--line)
+}
+.settings-head h2{
+  margin:0;
+  flex:1;
+  font-size:20px
+}
+.settings-head small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px
+}
+.settings-close{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  background:#edf1eb;
+  font-size:20px
+}
+.settings-tabs{
+  display:flex;
+  gap:5px;
+  padding:12px 18px;
+  border-bottom:1px solid var(--line);
+  overflow-x:auto
+}
+.settings-tab{
+  flex:1;
+  min-width:68px;
+  padding:10px 8px;
+  border-radius:10px;
+  color:var(--muted);
+  font-size:12px;
+  white-space:nowrap
+}
+.settings-tab.active{
+  background:var(--green);
+  color:white
+}
+.settings-content{
+  padding:10px 23px 22px;
+  max-height:60dvh;
+  overflow-y:auto
+}
+.settings-row{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  justify-content:space-between;
+  padding:15px 0;
+  border-bottom:1px solid #edf0e9
+}
+.settings-row:last-child{border-bottom:0}
+.settings-text{flex:1;min-width:0}
+.settings-text strong{
+  display:block;
+  margin-bottom:5px;
+  font-size:14px;
+  font-weight:650
+}
+.settings-text small{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6
+}
+.switch{
+  position:relative;
+  display:block;
+  width:45px;
+  height:26px;
+  flex-shrink:0;
+  border-radius:20px;
+  background:#cbd4cb;
+  transition:background .15s
+}
+.switch::after{
+  content:"";
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:white;
+  box-shadow:0 1px 4px #0002;
+  transition:transform .15s
+}
+.switch.on{background:var(--green2)}
+.switch.on::after{transform:translateX(19px)}
+.settings-foot{
+  padding:13px 24px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6
+}
 .mobile{display:none}
 @media(max-width:700px){
   .app{display:block}
   .side{
-    position:fixed;inset:0;z-index:10;transform:translateX(-100%);
+    position:fixed;
+    inset:0;
+    z-index:10;
+    transform:translateX(-100%);
     transition:transform .12s ease
   }
   .side.open{transform:translateX(0)}
   .editor{height:100dvh}
   .mobile{display:grid}
-  .edit{padding:10px 17px}
-  #title{font-size:20px}
+  .edit{
+    width:100%;
+    margin:0;
+    padding:12px 19px;
+    border:0;
+    border-radius:0;
+    box-shadow:none
+  }
+  #title{font-size:21px}
   .btn{min-width:35px;width:35px}
+  .toolbar{padding:7px 9px}
+  .settings-content{max-height:58dvh}
+  .settings-tabs{padding:10px}
+  .settings-tab{padding:9px 5px}
 }
 @media(min-width:701px){
-  .item-icon:not(.on):not(.pin-on){opacity:.48}
+  .item-icon:not(.on):not(.pin-on){opacity:.72}
   .item:hover .item-icon{opacity:1}
 }
 </style>
@@ -164,22 +662,29 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <aside id="side" class="side">
     <header class="toolbar">
       <button id="closeList" class="btn mobile" title="一覧を閉じる">‹</button>
-      <div class="brand">SUGU</div>
+      <div class="brand">SUGU<small>YOUR LITTLE NOTEBOOK</small></div>
+      <button id="settingsSide" class="btn" title="設定">⚙</button>
       <button id="import" class="btn" title="バックアップを取り込む">⇩</button>
       <button id="export" class="btn" title="JSONバックアップを保存">⇧</button>
     </header>
-    <div class="syncbar">
+
+    <div id="syncbar" class="syncbar">
       <span id="account">ログインしていません</span>
       <button id="login" class="syncbtn">Googleログイン</button>
       <button id="logout" class="syncbtn hide">ログアウト</button>
       <button id="startSync" class="syncbtn hide">同期を開始</button>
     </div>
-    <input id="search" class="search" placeholder="メモを検索" aria-label="メモを検索">
+
+    <div class="search-wrap">
+      <input id="search" class="search" placeholder="メモを検索…" aria-label="メモを検索">
+    </div>
+
     <div class="filters">
       <button class="chip active" data-filter="all">すべて</button>
-      <button class="chip" data-filter="ear">★ お気に入り</button>
-      <button class="chip" data-filter="trash">ゴミ箱</button>
+      <button id="favoriteFilter" class="chip" data-filter="ear">★ お気に入り</button>
+      <button id="trashFilter" class="chip" data-filter="trash">ゴミ箱</button>
     </div>
+
     <div class="sortbar">
       <span id="count" class="count"></span>
       <select id="sort" class="sort-select" aria-label="並べ替え">
@@ -188,26 +693,30 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
         <option value="title">タイトル順</option>
       </select>
     </div>
-    <div id="list" class="list"></div>
+
+    <div id="list" class="list" aria-label="メモ一覧"></div>
+
     <div class="side-bottom">
-      <button id="paste" class="bottom-icon" title="コピーした文章からメモ" aria-label="コピーした文章からメモ">▣</button>
+      <button id="paste" class="bottom-icon" title="コピーした文章からメモ">▣</button>
       <button id="sideNew" class="create-button">＋ すぐメモ</button>
-      <button id="stats" class="bottom-icon" title="どうでもいい記録" aria-label="どうでもいい記録">▥</button>
+      <button id="stats" class="bottom-icon" title="どうでもいい記録">▥</button>
     </div>
   </aside>
 
   <main class="editor">
-    <header class="toolbar">
+    <header class="toolbar editor-header">
       <button id="openList" class="btn mobile" title="メモ一覧">‹</button>
       <span id="status" class="status">読み込み中</span>
       <div class="spacer"></div>
       <button id="syncMenu" class="btn" title="Googleログイン・同期">☁</button>
+      <button id="settingsMain" class="btn" title="設定">⚙</button>
       <button id="new" class="btn" title="新規メモ">＋</button>
       <button id="copy" class="btn" title="本文をコピー">□</button>
       <button id="pin" class="btn" title="ピン留め">♧</button>
       <button id="ear" class="btn" title="お気に入り">☆</button>
-      <button id="remove" class="btn" title="メモ削除">⌫</button>
+      <button id="remove" class="btn danger" title="メモ削除">⌫</button>
     </header>
+
     <div id="editArea" class="edit">
       <input id="title" placeholder="タイトル" autocomplete="off" aria-label="タイトル">
       <div class="edit-tools">
@@ -218,11 +727,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
       <div id="checklist" class="checklist hide"></div>
       <div id="links" class="link-preview"></div>
     </div>
-    <div id="emptyEditor" class="empty-editor hide">一覧からメモを選んでください</div>
+
+    <div id="emptyEditor" class="empty-editor hide">
+      一覧からメモを選んでください
+    </div>
   </main>
 </div>
+
 <input id="file" type="file" accept=".json,application/json" class="hide">
 <div id="dialogs"></div>
+
 <div id="toast" class="toast hide">
   <span id="toastText"></span>
   <button id="toastUndo" class="hide">元に戻す</button>
@@ -246,6 +760,53 @@ const firebaseConfig = {
   appId: "1:1056209931526:web:111fca8d731e2e1a452287"
 };
 
+const DEFAULT_SETTINGS = {
+  favorite:true,
+  pin:true,
+  checklist:true,
+  checkProgress:true,
+  ghost:true,
+  listDelete:true,
+  deleteKey:true,
+  sort:true,
+  links:true,
+  copy:true,
+  paste:true,
+  stats:true,
+  trash:true,
+  undo:true,
+  syncUI:true
+};
+
+const SETTING_GROUPS = {
+  list:[
+    ['favorite','お気に入り','★で分類します。並び順は変えません。'],
+    ['pin','ピン留め','指定したメモだけを先頭に固定します。'],
+    ['checkProgress','チェックリストの進捗','一覧に「☑ 2/5」などを表示します。'],
+    ['ghost','メモの亡霊','30日以上開いていないメモを時々紹介します。'],
+    ['listDelete','一覧の削除ボタン','★の下に削除ボタンを表示します。'],
+    ['deleteKey','Deleteキーで削除','PCの一覧で選択したメモを削除できます。'],
+    ['sort','並べ替え','更新順・作成順・タイトル順を切り替えます。']
+  ],
+  edit:[
+    ['checklist','チェックリスト編集','ボタンで通常メモとチェックリストを切り替えます。'],
+    ['links','本文中のURL一覧','本文の下にクリックできるリンクを表示します。'],
+    ['copy','本文コピー','本文をクリップボードにコピーします。']
+  ],
+  extras:[
+    ['paste','コピーした文章からメモ','クリップボードの文章で新しいメモを作ります。'],
+    ['stats','どうでもいい記録','メモ数や文字数などの統計を表示します。'],
+    ['trash','ゴミ箱','削除したメモを一覧から復元できます。'],
+    ['undo','削除直後の取り消し','削除後に「元に戻す」を表示します。']
+  ],
+  system:[
+    ['syncUI','クラウド同期の操作','Googleログイン・同期操作を表示します。']
+  ]
+};
+
+let settings = {...DEFAULT_SETTINGS};
+let settingsTab = 'list';
+
 let db;
 let notes = [];
 let selected = null;
@@ -260,6 +821,7 @@ let failed = false;
 let version = 0;
 let toastTimer = null;
 let undoInfo = null;
+let modalOpen = false;
 
 let firebase = null;
 let auth = null;
@@ -274,6 +836,7 @@ let accountGeneration = 0;
 let syncError = '';
 
 const iso = () => new Date().toISOString();
+const mobile = () => matchMedia('(max-width:700px)').matches;
 
 function localGet(key) {
   try { return localStorage.getItem(key); }
@@ -283,6 +846,23 @@ function localGet(key) {
 function localSet(key,value) {
   try { localStorage.setItem(key,String(value)); }
   catch(e) {}
+}
+
+function loadSettings() {
+  try {
+    const raw = JSON.parse(localGet('sugu-settings-v1') || '{}');
+    for (const key of Object.keys(DEFAULT_SETTINGS)) {
+      if (typeof raw[key] === 'boolean') settings[key] = raw[key];
+    }
+  } catch(e) {}
+}
+
+function saveSettings() {
+  localSet('sugu-settings-v1',JSON.stringify(settings));
+}
+
+function enabled(key) {
+  return settings[key] !== false;
 }
 
 function dateValue(s) {
@@ -367,12 +947,6 @@ function enqueue(job) {
   return task;
 }
 
-function normalizeChecks(raw) {
-  return Array.isArray(raw)
-    ? raw.map(Boolean)
-    : [];
-}
-
 function normalizeNote(raw,id=raw.id) {
   return {
     id,
@@ -381,7 +955,7 @@ function normalizeNote(raw,id=raw.id) {
     ear:!!raw.ear,
     pinned:!!raw.pinned,
     checklist:!!raw.checklist,
-    checks:normalizeChecks(raw.checks),
+    checks:Array.isArray(raw.checks) ? raw.checks.map(Boolean) : [],
     createdAt:String(raw.createdAt ?? ''),
     updatedAt:String(raw.updatedAt ?? ''),
     deleted:!!raw.deleted,
@@ -403,7 +977,8 @@ function sorted(includeDeleted=false) {
   );
 
   arr.sort((a,b) => {
-    if (!includeDeleted && !!a.pinned !== !!b.pinned)
+    if (!includeDeleted && enabled('pin') &&
+        !!a.pinned !== !!b.pinned)
       return a.pinned ? -1 : 1;
 
     if (includeDeleted)
@@ -425,7 +1000,7 @@ function sorted(includeDeleted=false) {
 function toast(message,undo=false) {
   clearTimeout(toastTimer);
   $('toastText').textContent = message;
-  $('toastUndo').classList.toggle('hide',!undo);
+  $('toastUndo').classList.toggle('hide',!undo || !enabled('undo'));
   $('toast').classList.remove('hide');
   toastTimer = setTimeout(() => {
     $('toast').classList.add('hide');
@@ -443,32 +1018,32 @@ function showScreen(next) {
   if (screen !== next) resetCopy();
   screen = next;
   localSet('sugu-screen',next);
-  if (matchMedia('(max-width:700px)').matches)
-    $('side').classList.toggle('open',next === 'list');
+  if (mobile()) $('side').classList.toggle('open',next === 'list');
 }
 
 function openEditorHistory() {
-  if (matchMedia('(max-width:700px)').matches &&
-      history.state?.sugu !== 'edit') {
+  if (mobile() && history.state?.sugu !== 'edit')
     history.pushState({sugu:'edit'},'',location.href);
-  }
   showScreen('edit');
 }
 
 function goList() {
-  if (matchMedia('(max-width:700px)').matches &&
-      history.state?.sugu === 'edit') {
+  if (mobile() && history.state?.sugu === 'edit')
     history.back();
-  } else {
+  else
     showScreen('list');
-  }
 }
 
 function updateLinks() {
   const root = $('links');
   root.replaceChildren();
 
-  const matches = $('body').value.match(/https?:\/\/[^\s<>"'「」]+/g) || [];
+  if (!enabled('links')) return;
+
+  const n = current();
+  if (!n) return;
+
+  const matches = n.body.match(/https?:\/\/[^\s<>"'「」]+/g) || [];
   const urls = [...new Set(matches)].slice(0,20);
   if (!urls.length) return;
 
@@ -491,13 +1066,26 @@ function updateLinks() {
   }
 }
 
+function checklistLines(n) {
+  return n.body ? n.body.split('\n') : [''];
+}
+
+function checklistProgress(n) {
+  const lines = checklistLines(n);
+  const total = lines.filter(x => x.trim()).length;
+  const done = lines.reduce((count,line,i) =>
+    count + (line.trim() && n.checks?.[i] ? 1 : 0),0
+  );
+  return {done,total};
+}
+
 function renderChecklist() {
   const n = current();
   const root = $('checklist');
   root.replaceChildren();
   if (!n || !n.checklist) return;
 
-  const lines = n.body ? n.body.split('\n') : [''];
+  const lines = checklistLines(n);
 
   lines.forEach((line,index) => {
     const row = document.createElement('div');
@@ -524,14 +1112,16 @@ function renderChecklist() {
       n.checks[index] = box.checked;
       text.classList.toggle('done',box.checked);
       persist(n);
+      render();
     };
 
     text.oninput = () => {
-      const updated = n.body ? n.body.split('\n') : [''];
+      const updated = checklistLines(n);
       updated[index] = text.value;
       n.body = updated.join('\n');
       $('body').value = n.body;
       persist(n);
+      render();
     };
 
     text.onkeydown = e => {
@@ -539,17 +1129,13 @@ function renderChecklist() {
         e.preventDefault();
         addChecklistRow(index+1);
       }
+      if (e.key === 'Backspace' && !text.value && lines.length > 1) {
+        e.preventDefault();
+        deleteChecklistRow(index);
+      }
     };
 
-    del.onclick = () => {
-      const updated = n.body ? n.body.split('\n') : [''];
-      updated.splice(index,1);
-      n.checks.splice(index,1);
-      n.body = updated.join('\n');
-      $('body').value = n.body;
-      persist(n);
-      renderChecklist();
-    };
+    del.onclick = () => deleteChecklistRow(index);
 
     row.append(box,text,del);
     root.append(row);
@@ -562,9 +1148,27 @@ function renderChecklist() {
   root.append(add);
 }
 
+function deleteChecklistRow(index) {
+  const n = current();
+  if (!n) return;
+
+  const lines = checklistLines(n);
+  lines.splice(index,1);
+  n.checks.splice(index,1);
+  n.body = lines.join('\n');
+  $('body').value = n.body;
+
+  persist(n);
+  renderChecklist();
+  render();
+
+  const inputs = $('checklist').querySelectorAll('.check-text');
+  inputs[Math.max(0,index-1)]?.focus();
+}
+
 function addChecklistRow(index) {
   const n = current();
-  if (!n || !n.checklist) return;
+  if (!n) return;
 
   const lines = n.body ? n.body.split('\n') : [];
   lines.splice(index,0,'');
@@ -574,9 +1178,31 @@ function addChecklistRow(index) {
 
   persist(n);
   renderChecklist();
+  render();
 
   const inputs = $('checklist').querySelectorAll('.check-text');
   inputs[index]?.focus();
+}
+
+function applySettings() {
+  $('favoriteFilter').classList.toggle('hide',!enabled('favorite'));
+  $('trashFilter').classList.toggle('hide',!enabled('trash'));
+  $('sort').classList.toggle('hide',!enabled('sort'));
+  $('paste').classList.toggle('hide',!enabled('paste'));
+  $('stats').classList.toggle('hide',!enabled('stats'));
+  $('syncbar').classList.toggle('hide',!enabled('syncUI'));
+  $('syncMenu').classList.toggle('hide',!enabled('syncUI'));
+  $('copy').classList.toggle('hide',!enabled('copy'));
+  $('pin').classList.toggle('hide',!enabled('pin'));
+  $('ear').classList.toggle('hide',!enabled('favorite'));
+  $('mode').classList.toggle('hide',!enabled('checklist'));
+  $('modeHint').classList.toggle('hide',!enabled('checklist'));
+
+  if (!enabled('favorite') && filter === 'ear') filter = 'all';
+  if (!enabled('trash') && filter === 'trash') filter = 'all';
+
+  updateFilterUI();
+  updateEditor();
 }
 
 function updateEditor() {
@@ -605,6 +1231,7 @@ function updateEditor() {
     : '☐ チェックリストにする';
   $('mode').classList.toggle('on',n.checklist);
   $('modeHint').textContent = n.checklist ? '1行につき1項目' : '';
+
   $('body').classList.toggle('hide',n.checklist);
   $('checklist').classList.toggle('hide',!n.checklist);
 
@@ -621,6 +1248,7 @@ function recordView(id) {
   const map = viewedMap();
   map[id] = Date.now();
   const entries = Object.entries(map);
+
   if (entries.length > 1000) {
     entries.sort((a,b) => b[1]-a[1]);
     localSet('sugu-viewed-v1',JSON.stringify(
@@ -632,15 +1260,20 @@ function recordView(id) {
 }
 
 function ghostCandidate(list) {
+  if (!enabled('ghost')) return null;
   if (ghostDismissedDay === dayKey()) return null;
+
   const viewed = viewedMap();
   const cutoff = Date.now() - 30*86400000;
+
   const candidates = list.filter(n => {
     const last = viewed[n.id] ||
       dateValue(n.createdAt || n.updatedAt);
     return last > 0 && last < cutoff;
   });
+
   if (!candidates.length) return null;
+
   return candidates[
     Math.floor(Date.now()/86400000) % candidates.length
   ];
@@ -650,13 +1283,13 @@ function makeGhostCard(n) {
   const card = document.createElement('div');
   card.className = 'item ghost-card';
   card.dataset.id = n.id;
+  card.tabIndex = 0;
 
   const title = document.createElement('strong');
   title.textContent = '👻 メモの亡霊';
 
   const message = document.createElement('p');
-  message.textContent =
-    `「私のこと、覚えていますか。」 ${label(n)}`;
+  message.textContent = `「私のこと、覚えていますか。」 ${label(n)}`;
 
   const close = document.createElement('button');
   close.className = 'ghost-close';
@@ -677,6 +1310,7 @@ function makeItem(n) {
   const item = document.createElement('div');
   item.className = 'item' + (n.id === selected ? ' active' : '');
   item.dataset.id = n.id;
+  item.tabIndex = 0;
 
   const title = document.createElement('strong');
   title.textContent = label(n);
@@ -687,7 +1321,25 @@ function makeItem(n) {
   const time = document.createElement('small');
   time.textContent = String(n.updatedAt || '').slice(0,19);
 
-  item.append(title,preview,time);
+  const meta = document.createElement('div');
+  meta.className = 'item-meta';
+  meta.append(time);
+
+  if (n.checklist) {
+    const progress = checklistProgress(n);
+    const tag = document.createElement('span');
+    tag.className = 'progress' +
+      (progress.total > 0 && progress.done === progress.total
+        ? ' complete' : '');
+
+    tag.textContent = enabled('checkProgress')
+      ? `☑ ${progress.done}/${progress.total}`
+      : '☑ チェックリスト';
+
+    meta.append(tag);
+  }
+
+  item.append(title,preview,meta);
 
   const actions = document.createElement('div');
   actions.className = 'item-actions';
@@ -703,25 +1355,41 @@ function makeItem(n) {
     };
     actions.append(restore);
   } else {
-    const pin = document.createElement('button');
-    pin.className = 'item-icon' + (n.pinned ? ' pin-on' : '');
-    pin.textContent = n.pinned ? '📌' : '♧';
-    pin.title = n.pinned ? 'ピン留め解除' : 'ピン留め';
-    pin.onclick = e => {
-      e.stopPropagation();
-      toggleField(n.id,'pinned');
-    };
+    if (enabled('pin')) {
+      const pin = document.createElement('button');
+      pin.className = 'item-icon' + (n.pinned ? ' pin-on' : '');
+      pin.textContent = n.pinned ? '📌' : '♧';
+      pin.title = n.pinned ? 'ピン留め解除' : 'ピン留め';
+      pin.onclick = e => {
+        e.stopPropagation();
+        toggleField(n.id,'pinned');
+      };
+      actions.append(pin);
+    }
 
-    const star = document.createElement('button');
-    star.className = 'item-icon' + (n.ear ? ' on' : '');
-    star.textContent = n.ear ? '★' : '☆';
-    star.title = n.ear ? 'お気に入り解除' : 'お気に入り';
-    star.onclick = e => {
-      e.stopPropagation();
-      toggleField(n.id,'ear');
-    };
+    if (enabled('favorite')) {
+      const star = document.createElement('button');
+      star.className = 'item-icon' + (n.ear ? ' on' : '');
+      star.textContent = n.ear ? '★' : '☆';
+      star.title = n.ear ? 'お気に入り解除' : 'お気に入り';
+      star.onclick = e => {
+        e.stopPropagation();
+        toggleField(n.id,'ear');
+      };
+      actions.append(star);
+    }
 
-    actions.append(pin,star);
+    if (enabled('listDelete')) {
+      const del = document.createElement('button');
+      del.className = 'item-icon delete';
+      del.textContent = '⌫';
+      del.title = 'メモを削除';
+      del.onclick = e => {
+        e.stopPropagation();
+        removeById(n.id);
+      };
+      actions.append(del);
+    }
   }
 
   item.append(actions);
@@ -739,6 +1407,7 @@ function render() {
   );
 
   $('count').textContent = `${filtered.length}件`;
+
   const root = $('list');
   root.replaceChildren();
 
@@ -780,6 +1449,7 @@ function choose(id,focus=false) {
   resetCopy();
   localSet('mimi-last-id',id);
   recordView(id);
+
   updateEditor();
   $('status').textContent = failed ? '保存失敗' : '保存済み';
   openEditorHistory();
@@ -801,9 +1471,13 @@ function scheduleSync() {
 
 function persist(n) {
   n.updatedAt = iso();
-  const snapshot = {...n,checks:[...(n.checks || [])]};
-  const v = ++version;
 
+  const snapshot = {
+    ...n,
+    checks:[...(n.checks || [])]
+  };
+
+  const v = ++version;
   failed = false;
   $('status').textContent = '保存中';
   resetCopy();
@@ -831,22 +1505,30 @@ function save() {
 
 async function create(focus=true,body='',title='') {
   const now = iso();
+
   const n = {
     id:crypto.randomUUID(),
-    title,body,ear:false,pinned:false,
-    checklist:false,checks:[],
-    createdAt:now,updatedAt:now,
-    deleted:false,deletedAt:''
+    title,body,
+    ear:false,
+    pinned:false,
+    checklist:false,
+    checks:[],
+    createdAt:now,
+    updatedAt:now,
+    deleted:false,
+    deletedAt:''
   };
 
   notes.push(n);
 
   try {
     await enqueue(() => transaction([n]));
+
     if (filter === 'trash') {
       filter = 'all';
       updateFilterUI();
     }
+
     choose(n.id,focus);
     scheduleSync();
   } catch(e) {
@@ -864,6 +1546,7 @@ async function toggleField(id,field) {
   n.updatedAt = iso();
 
   const snapshot = {...n,checks:[...(n.checks || [])]};
+
   if (selected === id) updateEditor();
   render();
 
@@ -872,20 +1555,22 @@ async function toggleField(id,field) {
     scheduleSync();
   } catch(e) {
     Object.assign(n,previous);
-    updateEditor();
+    if (selected === id) updateEditor();
     render();
     await dialog('保存エラー',String(e.message || e));
   }
 }
 
 function toggleChecklist() {
+  if (!enabled('checklist')) return;
+
   const n = current();
   if (!n) return;
 
   n.checklist = !n.checklist;
 
   if (n.checklist) {
-    const lines = n.body ? n.body.split('\n') : [''];
+    const lines = checklistLines(n);
     n.checks = lines.map((_,i) => !!n.checks[i]);
   }
 
@@ -895,6 +1580,8 @@ function toggleChecklist() {
 }
 
 async function copyBody() {
+  if (!enabled('copy')) return;
+
   const n = current();
   if (!n) return;
 
@@ -903,52 +1590,66 @@ async function copyBody() {
 
   try {
     await navigator.clipboard.writeText(body);
-    if (selected !== id || screen !== 'edit' || current()?.body !== body)
-      return;
+
+    if (selected !== id || screen !== 'edit' ||
+        current()?.body !== body) return;
 
     copiedId = id;
     $('copy').textContent = '✓';
     $('copy').classList.add('copy-success');
     toast('本文をコピーしました');
   } catch(e) {
-    await dialog('コピーできません','クリップボードへの書き込みが許可されていません。');
+    await dialog('コピーできません',
+      'クリップボードへの書き込みが許可されていません。');
   }
 }
 
 async function pasteNew() {
+  if (!enabled('paste')) return;
+
   try {
     const text = await navigator.clipboard.readText();
+
     if (!text) {
-      await dialog('クリップボードが空です','コピーした文章が見つかりません。');
+      await dialog('クリップボードが空です',
+        'コピーした文章が見つかりません。');
       return;
     }
+
     await create(true,text);
   } catch(e) {
-    await dialog('読み取りエラー','クリップボードの権限を確認してください。');
+    await dialog('読み取りエラー',
+      'クリップボードの権限を確認してください。');
   }
 }
 
 async function showStats() {
+  if (!enabled('stats')) return;
+
   const all = notes.filter(n => !n.deleted);
   const lengths = all.map(n => (n.title+n.body).length);
   const total = lengths.reduce((a,b) => a+b,0);
-  const checklists = all.filter(n => n.checklist).length;
-  const pinned = all.filter(n => n.pinned).length;
+  const longest = lengths.reduce((a,b) => Math.max(a,b),0);
+  const shortest = lengths.length
+    ? lengths.reduce((a,b) => Math.min(a,b),Infinity)
+    : 0;
 
   await dialog(
     'どうでもいい記録',
     `メモ総数：${all.length}件\n`+
     `全文字数：${total.toLocaleString()}字\n`+
-    `最長メモ：${lengths.length ? Math.max(...lengths) : 0}字\n`+
-    `最短メモ：${lengths.length ? Math.min(...lengths) : 0}字\n`+
-    `チェックリスト：${checklists}件\n`+
-    `ピン留め：${pinned}件\n\n`+
+    `最長メモ：${longest}字\n`+
+    `最短メモ：${shortest}字\n`+
+    `チェックリスト：${all.filter(n => n.checklist).length}件\n`+
+    `ピン留め：${all.filter(n => n.pinned).length}件\n\n`+
     'どうでもいい数字も、集めると少し気になります。'
   );
 }
 
 function dialog(title,message,choices=['閉じる']) {
   return new Promise(resolve => {
+    modalOpen = true;
+
     const host = $('dialogs');
     host.replaceChildren();
 
@@ -971,11 +1672,17 @@ function dialog(title,message,choices=['閉じる']) {
       const b = document.createElement('button');
       b.className = 'action' +
         (i === choices.length-1 ? ' primary' : '');
+
+      if (choice === 'ゴミ箱へ')
+        b.classList.add('danger');
+
       b.textContent = choice;
       b.onclick = () => {
         host.replaceChildren();
+        modalOpen = false;
         resolve(i);
       };
+
       actions.append(b);
     });
 
@@ -985,50 +1692,68 @@ function dialog(title,message,choices=['閉じる']) {
   });
 }
 
-async function remove() {
-  const n = current();
+async function removeById(id) {
+  if (modalOpen) return;
+
+  const n = notes.find(x => x.id === id && !x.deleted);
   if (!n) return;
 
+  const targetName = label(n);
+
   const choice = await dialog(
-    'メモをゴミ箱に移動しますか？',
-    'ゴミ箱から復元できます。同期中の場合は他の端末にも反映されます。',
+    'メモを削除しますか？',
+    `「${targetName}」をゴミ箱に移動します。\n`+
+    'ゴミ箱から復元できます。よろしいですか？',
     ['キャンセル','ゴミ箱へ']
   );
+
   if (choice !== 1) return;
 
   await queue;
+
   if (failed) {
-    await dialog('保存エラー','保存に失敗しているため削除を中止しました。');
+    await dialog('保存エラー',
+      '保存に失敗しているため削除を中止しました。');
     return;
   }
 
-  const old = {...n};
+  const target = notes.find(x => x.id === id && !x.deleted);
+  if (!target) return;
+
   const tombstone = {
-    ...n,deleted:true,deletedAt:iso(),updatedAt:iso()
+    ...target,
+    deleted:true,
+    deletedAt:iso(),
+    updatedAt:iso()
   };
 
   try {
     await enqueue(() => transaction([tombstone]));
-    Object.assign(n,tombstone);
-    selected = null;
-    updateEditor();
-    showScreen('list');
+    Object.assign(target,tombstone);
+
+    if (selected === id) {
+      selected = null;
+      updateEditor();
+    }
+
     render();
     scheduleSync();
 
-    undoInfo = {id:n.id};
+    undoInfo = {id};
     toast('メモをゴミ箱に移動しました',true);
   } catch(e) {
-    Object.assign(n,old);
     await dialog('削除エラー',String(e.message || e));
   }
+}
+
+async function remove() {
+  if (selected) await removeById(selected);
 }
 
 async function restoreNote(id) {
   const n = notes.find(x => x.id === id && x.deleted);
   if (!n) return;
 
-  const previous = {...n};
   const restored = {
     ...n,
     deleted:false,
@@ -1043,7 +1768,6 @@ async function restoreNote(id) {
     scheduleSync();
     toast('メモを復元しました');
   } catch(e) {
-    Object.assign(n,previous);
     await dialog('復元エラー',String(e.message || e));
   }
 }
@@ -1053,7 +1777,8 @@ async function exportJSON() {
   await queue;
 
   if (failed) {
-    await dialog('保存エラー','バックアップ前に保存状態を確認してください。');
+    await dialog('保存エラー',
+      'バックアップ前に保存状態を確認してください。');
     return;
   }
 
@@ -1069,11 +1794,14 @@ async function exportJSON() {
 
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
+
   a.href = url;
   a.download = 'SUGUBackup_'+iso().slice(0,10)+'.json';
+
   document.body.append(a);
   a.click();
   a.remove();
+
   setTimeout(() => URL.revokeObjectURL(url),10000);
 }
 
@@ -1083,13 +1811,15 @@ async function importJSON(file) {
   try {
     const data = JSON.parse(await file.text());
 
-    if (data.format !== 'mimi-sync-v1' || !Array.isArray(data.notes))
+    if (data.format !== 'mimi-sync-v1' ||
+        !Array.isArray(data.notes))
       throw Error('対応していないJSONバックアップです');
 
     const incoming = new Map();
 
     for (const raw of data.notes) {
       if (!raw || typeof raw.id !== 'string' || !raw.id) continue;
+
       incoming.set(raw.id,{
         ...normalizeNote(raw),
         deleted:false,
@@ -1098,20 +1828,28 @@ async function importJSON(file) {
     }
 
     const known = new Set(notes.map(n => n.id));
-    const add = [...incoming.values()].filter(n => !known.has(n.id));
+    const add = [...incoming.values()]
+      .filter(n => !known.has(n.id));
 
     const choice = await dialog(
       'バックアップを取り込みますか？',
-      `ファイル内：${incoming.size}件\n新規追加：${add.length}件\n既存メモは上書きしません。`,
+      `ファイル内：${incoming.size}件\n`+
+      `新規追加：${add.length}件\n`+
+      '既存メモは上書きしません。',
       ['キャンセル','取り込む']
     );
+
     if (choice !== 1) return;
 
     save();
     await queue;
-    if (failed) throw Error('編集中のメモを保存できません');
 
-    if (add.length) await enqueue(() => transaction(add));
+    if (failed)
+      throw Error('編集中のメモを保存できません');
+
+    if (add.length)
+      await enqueue(() => transaction(add));
+
     notes = await getAll();
     render();
     scheduleSync();
@@ -1155,6 +1893,7 @@ async function loadFirebase() {
 
   authMod.onAuthStateChanged(auth,async user => {
     const generation = ++accountGeneration;
+
     clearTimeout(syncTimer);
     clearInterval(syncInterval);
 
@@ -1164,19 +1903,22 @@ async function loadFirebase() {
 
     if (user) {
       try {
-        syncEnabled = (await getMeta(syncKey(user.uid))) === true;
+        syncEnabled =
+          (await getMeta(syncKey(user.uid))) === true;
       } catch(e) {
         console.error(e);
       }
     }
 
     if (generation !== accountGeneration) return;
+
     updateAccountUI();
 
     if (syncEnabled && user) {
       syncNow();
       syncInterval = setInterval(() => {
-        if (!document.hidden && navigator.onLine) syncNow();
+        if (!document.hidden && navigator.onLine)
+          syncNow();
       },15000);
     }
   },error => {
@@ -1187,7 +1929,8 @@ async function loadFirebase() {
 
 async function login() {
   if (!firebase) {
-    await dialog('準備中','Firebaseを読み込んでいます。少し待ってから試してください。');
+    await dialog('準備中',
+      'Firebaseを読み込んでいます。少し待ってから試してください。');
     return;
   }
 
@@ -1213,6 +1956,7 @@ async function logout() {
     '端末内のメモは残ります。',
     ['キャンセル','ログアウト']
   );
+
   if (choice !== 1) return;
 
   try {
@@ -1224,14 +1968,15 @@ async function logout() {
 
 async function startSync() {
   if (!cloudUser || syncEnabled) return;
+
   const user = cloudUser;
 
   const choice = await dialog(
     '初回同期を開始しますか？',
     `ログイン中：${user.email || 'Googleアカウント'}\n\n`+
-    '端末内のメモとクラウドのメモを統合します。'+
-    '\n同じIDのメモは更新日時が新しい方を優先します。'+
-    '\n先にJSONバックアップを保存してください。',
+    '端末内のメモとクラウドのメモを統合します。\n'+
+    '同じIDのメモは更新日時が新しい方を優先します。\n'+
+    '先にJSONバックアップを保存してください。',
     ['キャンセル','同期を開始']
   );
 
@@ -1241,7 +1986,8 @@ async function startSync() {
   await queue;
 
   if (failed) {
-    await dialog('同期を中止','端末内への保存に失敗しています。');
+    await dialog('同期を中止',
+      '端末内への保存に失敗しています。');
     return;
   }
 
@@ -1251,7 +1997,8 @@ async function startSync() {
     updateAccountUI();
 
     syncInterval = setInterval(() => {
-      if (!document.hidden && navigator.onLine) syncNow();
+      if (!document.hidden && navigator.onLine)
+        syncNow();
     },15000);
 
     await syncNow();
@@ -1264,8 +2011,8 @@ async function startSync() {
 }
 
 async function syncNow() {
-  if (!syncEnabled || !cloudUser || !firebase || !navigator.onLine)
-    return;
+  if (!syncEnabled || !cloudUser ||
+      !firebase || !navigator.onLine) return;
 
   if (syncing) {
     syncAgain = true;
@@ -1277,12 +2024,15 @@ async function syncNow() {
   const uid = cloudUser.uid;
   const generation = accountGeneration;
   const {dbMod} = firebase;
-  const collection = dbMod.collection(firestore,'users',uid,'notes');
+  const collection =
+    dbMod.collection(firestore,'users',uid,'notes');
 
   try {
     save();
     await queue;
-    if (failed) throw Error('端末内の保存に失敗しています');
+
+    if (failed)
+      throw Error('端末内の保存に失敗しています');
 
     $('status').textContent = '同期中';
 
@@ -1305,12 +2055,14 @@ async function syncNow() {
 
     for (const [id,r] of remote) {
       const l = local.get(id);
+
       if (!l || dateValue(r.updatedAt) > dateValue(l.updatedAt))
         download.push(r);
     }
 
     for (const [id,l] of local) {
       const r = remote.get(id);
+
       if (!r || dateValue(l.updatedAt) > dateValue(r.updatedAt))
         upload.push(l);
     }
@@ -1327,9 +2079,12 @@ async function syncNow() {
     const safeDownload = download.filter(r => {
       const now = latest.get(r.id);
       const old = local.get(r.id);
+
       if (!now) return true;
       if (!old) return false;
-      return dateValue(now.updatedAt) <= dateValue(old.updatedAt);
+
+      return dateValue(now.updatedAt) <=
+             dateValue(old.updatedAt);
     });
 
     if (safeDownload.length) {
@@ -1356,10 +2111,13 @@ async function syncNow() {
       if (generation !== accountGeneration ||
           cloudUser?.uid !== uid || !syncEnabled) return;
 
-      const newest = (await getAll()).find(x => x.id === n.id);
+      const newest = (await getAll())
+        .find(x => x.id === n.id);
+
       if (!newest) continue;
 
       const latestRemote = remote.get(n.id);
+
       if (latestRemote &&
           dateValue(latestRemote.updatedAt) >=
           dateValue(newest.updatedAt)) continue;
@@ -1378,6 +2136,7 @@ async function syncNow() {
     $('status').textContent = '端末保存済み・同期失敗';
   } finally {
     syncing = false;
+
     if (syncAgain) {
       syncAgain = false;
       scheduleSync();
@@ -1388,7 +2147,8 @@ async function syncNow() {
 async function syncMenu() {
   if (!cloudUser) {
     if (!firebase) {
-      await dialog('Googleログイン','Firebaseの読み込みが完了していません。');
+      await dialog('Googleログイン',
+        'Firebaseの読み込みが完了していません。');
     } else {
       await login();
     }
@@ -1412,19 +2172,24 @@ async function syncMenu() {
 }
 
 async function receivePendingShare() {
-  const id = await getMeta('sugu-pending-share').catch(() => null);
+  const id = await getMeta('sugu-pending-share')
+    .catch(() => null);
+
   if (!id) return false;
 
   await queue;
   notes = await getAll();
 
   const n = notes.find(x => x.id === id && !x.deleted);
+
   if (n) {
     choose(n.id,false);
     scheduleSync();
   }
 
-  await setMeta('sugu-pending-share',null).catch(console.error);
+  await setMeta('sugu-pending-share',null)
+    .catch(console.error);
+
   return !!n;
 }
 
@@ -1432,8 +2197,123 @@ function updateFilterUI() {
   document.querySelectorAll('.chip').forEach(b =>
     b.classList.toggle('active',b.dataset.filter === filter)
   );
-  $('sideNew').disabled = false;
   render();
+}
+
+/* 設定画面 */
+function openSettings() {
+  if (modalOpen) return;
+
+  modalOpen = true;
+  settingsTab = 'list';
+
+  const host = $('dialogs');
+  host.replaceChildren();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+
+  const box = document.createElement('div');
+  box.className = 'modal settings-modal';
+
+  const head = document.createElement('div');
+  head.className = 'settings-head';
+
+  const titleBox = document.createElement('div');
+  titleBox.style.flex = '1';
+
+  const title = document.createElement('h2');
+  title.textContent = 'SUGU 設定';
+
+  const subtitle = document.createElement('small');
+  subtitle.textContent = '自分にちょうどいいメモ帳に';
+
+  titleBox.append(title,subtitle);
+
+  const close = document.createElement('button');
+  close.className = 'settings-close';
+  close.textContent = '×';
+  close.title = '設定を閉じる';
+  close.onclick = () => {
+    host.replaceChildren();
+    modalOpen = false;
+  };
+
+  head.append(titleBox,close);
+
+  const tabs = document.createElement('div');
+  tabs.className = 'settings-tabs';
+
+  const content = document.createElement('div');
+  content.className = 'settings-content';
+
+  const foot = document.createElement('div');
+  foot.className = 'settings-foot';
+  foot.textContent =
+    '設定はこの端末に保存されます。機能をOFFにしても、保存済みのメモやチェック状態は削除されません。';
+
+  const tabNames = [
+    ['list','一覧'],
+    ['edit','編集'],
+    ['extras','便利機能'],
+    ['system','同期']
+  ];
+
+  function drawSettings() {
+    tabs.replaceChildren();
+    content.replaceChildren();
+
+    for (const [key,name] of tabNames) {
+      const b = document.createElement('button');
+      b.className = 'settings-tab' +
+        (settingsTab === key ? ' active' : '');
+      b.textContent = name;
+      b.onclick = () => {
+        settingsTab = key;
+        drawSettings();
+      };
+      tabs.append(b);
+    }
+
+    for (const [key,name,description] of SETTING_GROUPS[settingsTab]) {
+      const row = document.createElement('div');
+      row.className = 'settings-row';
+
+      const text = document.createElement('div');
+      text.className = 'settings-text';
+
+      const strong = document.createElement('strong');
+      strong.textContent = name;
+
+      const small = document.createElement('small');
+      small.textContent = description;
+
+      text.append(strong,small);
+
+      const toggle = document.createElement('button');
+      toggle.className = 'switch' +
+        (enabled(key) ? ' on' : '');
+      toggle.setAttribute('role','switch');
+      toggle.setAttribute('aria-label',name);
+      toggle.setAttribute('aria-checked',String(enabled(key)));
+
+      toggle.onclick = () => {
+        settings[key] = !enabled(key);
+        saveSettings();
+        applySettings();
+        drawSettings();
+      };
+
+      row.append(text,toggle);
+      content.append(row);
+    }
+  }
+
+  box.append(head,tabs,content,foot);
+  overlay.append(box);
+  host.append(overlay);
+
+  drawSettings();
 }
 
 async function init() {
@@ -1441,18 +2321,24 @@ async function init() {
     db = await openDB();
     notes = await getAll();
 
-    ghostDismissedDay = localGet('sugu-ghost-dismiss') || '';
+    loadSettings();
+
+    ghostDismissedDay =
+      localGet('sugu-ghost-dismiss') || '';
+
     sortMode = localGet('sugu-sort') || 'updated';
     $('sort').value = sortMode;
 
     const last = localGet('mimi-last-id');
-    selected = last && notes.some(n => n.id === last && !n.deleted)
+
+    selected = last &&
+      notes.some(n => n.id === last && !n.deleted)
       ? last : null;
 
-    updateEditor();
-    render();
+    applySettings();
 
     const previous = localGet('sugu-screen') || 'list';
+
     history.replaceState({sugu:'list'},'',location.href);
     showScreen('list');
 
@@ -1463,8 +2349,10 @@ async function init() {
 
     if (new URL(location.href).searchParams.has('shared')) {
       await receivePendingShare();
+
       const url = new URL(location.href);
       url.searchParams.delete('shared');
+
       history.replaceState(
         history.state,'',url.pathname+url.search+url.hash
       );
@@ -1472,7 +2360,8 @@ async function init() {
   } catch(e) {
     await dialog(
       '起動エラー',
-      '端末内の保存領域を開けませんでした。\n'+String(e.message || e)
+      '端末内の保存領域を開けませんでした。\n'+
+      String(e.message || e)
     );
     return;
   }
@@ -1487,28 +2376,50 @@ async function init() {
   $('stats').onclick = showStats;
   $('copy').onclick = copyBody;
   $('mode').onclick = toggleChecklist;
+
   $('pin').onclick = () => {
     if (selected) toggleField(selected,'pinned');
   };
+
   $('ear').onclick = () => {
     if (selected) toggleField(selected,'ear');
   };
+
   $('remove').onclick = remove;
+
+  $('settingsSide').onclick = openSettings;
+  $('settingsMain').onclick = openSettings;
 
   $('openList').onclick = goList;
   $('closeList').onclick = goList;
 
   $('list').onclick = e => {
     if (e.target.closest('button')) return;
+
     const item = e.target.closest('.item');
     if (!item?.dataset.id) return;
 
     if (filter === 'trash') {
       restoreNote(item.dataset.id);
     } else {
-      choose(item.dataset.id,true);
+      choose(item.dataset.id,false);
     }
   };
+
+  $('list').addEventListener('keydown',e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (e.target.closest('button')) return;
+
+    const item = e.target.closest('.item');
+    if (!item?.dataset.id) return;
+
+    e.preventDefault();
+
+    if (filter === 'trash')
+      restoreNote(item.dataset.id);
+    else
+      choose(item.dataset.id,false);
+  });
 
   $('search').oninput = () => {
     visibleLimit = 10;
@@ -1532,8 +2443,10 @@ async function init() {
 
   $('toastUndo').onclick = async () => {
     if (!undoInfo) return;
+
     const id = undoInfo.id;
     undoInfo = null;
+
     $('toast').classList.add('hide');
     await restoreNote(id);
   };
@@ -1552,11 +2465,45 @@ async function init() {
   $('syncMenu').onclick = syncMenu;
 
   document.addEventListener('keydown',e => {
+    if (modalOpen) return;
+
     if (e.ctrlKey && e.key.toLowerCase() === 'n') {
       e.preventDefault();
       create();
+      return;
     }
-    if (e.key === 'Escape') goList();
+
+    if (e.key === 'Escape') {
+      goList();
+      return;
+    }
+
+    if (e.key !== 'Delete' || !enabled('deleteKey')) return;
+    if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
+    if (mobile()) return;
+    if (filter === 'trash') return;
+    if (!selected) return;
+
+    const target = e.target;
+
+    if (target instanceof Element) {
+      if (target.closest('input,textarea,select,[contenteditable="true"]'))
+        return;
+
+      if (target.closest('button')) return;
+    }
+
+    // 一覧を操作中の場合に限定する。
+    const active = document.activeElement;
+    const listFocused =
+      active === $('list') ||
+      (active instanceof Element &&
+       !!active.closest('#list'));
+
+    if (!listFocused) return;
+
+    e.preventDefault();
+    removeById(selected);
   });
 
   window.addEventListener('popstate',e => {
@@ -1578,22 +2525,31 @@ async function init() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message',async e => {
       if (e.data?.type !== 'SUGU_SHARED') return;
+
       await queue;
       notes = await getAll();
-      const n = notes.find(x => x.id === e.data.id && !x.deleted);
+
+      const n = notes.find(x =>
+        x.id === e.data.id && !x.deleted
+      );
+
       if (n) {
         choose(n.id,false);
         scheduleSync();
       }
+
       render();
     });
   }
 
-  if ('serviceWorker' in navigator && location.protocol === 'https:') {
-    navigator.serviceWorker.register('./sw.js').catch(console.warn);
+  if ('serviceWorker' in navigator &&
+      location.protocol === 'https:') {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(console.warn);
   }
 
-  // 端末内のメモを先に表示し、Firebaseは後から読み込む。
+  // 端末内のメモを先に表示し、
+  // Firebaseは後から読み込む。
   loadFirebase().catch(e => {
     console.error('Firebase initialization:',e);
     $('account').textContent = 'クラウド接続不可';
