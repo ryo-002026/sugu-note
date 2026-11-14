@@ -12,18 +12,11 @@
 <style>
 :root{
   font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-  color:#3b3833;
-  background:#f7f3eb;
-  --paper:#fffdf9;
-  --cream:#f7f3eb;
-  --ink:#3b3833;
-  --muted:#8d867b;
-  --line:#e9e1d5;
-  --sage:#637b68;
-  --sage-soft:#e8eee7;
-  --clay:#b8795d;
-  --gold:#bb9455;
-  --danger:#b96b62;
+  color:#3b3833;background:#f7f3eb;
+  --paper:#fffdf9;--cream:#f7f3eb;--ink:#3b3833;
+  --muted:#8d867b;--line:#e9e1d5;--sage:#637b68;
+  --sage-soft:#e8eee7;--clay:#b8795d;
+  --gold:#bb9455;--danger:#b96b62;
 }
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%}
@@ -31,684 +24,371 @@ button,input,textarea,select{font:inherit}
 button{border:0;background:transparent;color:inherit;cursor:pointer}
 button:disabled{opacity:.35;cursor:default}
 button:focus-visible,input:focus-visible,textarea:focus-visible,
-select:focus-visible{
-  outline:2px solid var(--sage);
-  outline-offset:2px;
-}
+select:focus-visible{outline:2px solid var(--sage);outline-offset:2px}
 .hide{display:none!important}
 .app{
-  display:grid;
-  grid-template-columns:350px minmax(0,1fr);
-  height:100dvh;
-  overflow:hidden;
+  display:grid;grid-template-columns:350px minmax(0,1fr);
+  height:100dvh;overflow:hidden;
 }
 .side{
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-  background:var(--cream);
-  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;min-height:0;
+  background:var(--cream);border-right:1px solid var(--line);
 }
 .toolbar{
-  display:flex;
-  align-items:center;
-  gap:4px;
-  min-height:60px;
-  padding:7px 10px;
-  flex-shrink:0;
+  display:flex;align-items:center;gap:4px;
+  min-height:60px;padding:7px 10px;flex-shrink:0;
 }
 .side>.toolbar{border-bottom:1px solid var(--line)}
 .brand{
-  flex:1;
-  min-width:0;
-  padding-left:8px;
-  color:#665244;
-  font-family:Georgia,serif;
-  font-size:25px;
-  font-weight:700;
-  letter-spacing:.16em;
+  flex:1;min-width:0;padding-left:8px;color:#665244;
+  font-family:Georgia,serif;font-size:25px;
+  font-weight:700;letter-spacing:.16em;
 }
 .btn{
-  display:grid;
-  place-items:center;
-  min-width:38px;
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  font-size:19px;
+  display:grid;place-items:center;min-width:38px;
+  width:38px;height:38px;border-radius:12px;font-size:19px;
 }
 .btn:hover:not(:disabled){background:#eee7dc}
 .btn.active{color:var(--clay)}
 .refreshing .refresh-glyph{
-  display:inline-block;
-  animation:spin .75s linear infinite;
+  display:inline-block;animation:spin .75s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .status{
-  font-size:12px;
-  color:var(--muted);
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
+  font-size:12px;color:var(--muted);overflow:hidden;
+  white-space:nowrap;text-overflow:ellipsis;
 }
 .spacer{flex:1}
 .syncbar{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:6px;
-  padding:8px 16px;
-  background:#f1ede5;
-  border-bottom:1px solid var(--line);
-  font-size:11px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:6px;
+  padding:8px 16px;background:#f1ede5;
+  border-bottom:1px solid var(--line);font-size:11px;
 }
 .syncbar span{
-  flex:1;
-  min-width:70px;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  flex:1;min-width:70px;overflow:hidden;text-overflow:ellipsis;
 }
 .syncbtn{
-  padding:6px 9px;
-  border:1px solid #dfd5c9;
-  border-radius:9px;
-  background:var(--paper);
-  font-size:11px;
+  padding:6px 9px;border:1px solid #dfd5c9;
+  border-radius:9px;background:var(--paper);font-size:11px;
 }
 .search{
-  width:calc(100% - 32px);
-  margin:15px 16px 11px;
-  padding:12px 14px;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--paper);
-  color:var(--ink);
-  font-size:14px;
+  width:calc(100% - 32px);margin:15px 16px 11px;
+  padding:12px 14px;border:1px solid var(--line);
+  border-radius:13px;background:var(--paper);
+  color:var(--ink);font-size:14px;
 }
 .filters{
-  display:flex;
-  gap:5px;
-  padding:0 16px 12px;
-  flex-wrap:wrap;
+  display:flex;gap:5px;padding:0 16px 12px;flex-wrap:wrap;
 }
 .chip{
-  padding:8px 12px;
-  border-radius:20px;
-  color:#877c70;
-  font-size:12px;
+  padding:8px 12px;border-radius:20px;
+  color:#877c70;font-size:12px;
 }
 .chip.active{
-  background:var(--sage-soft);
-  color:#526b57;
-  font-weight:700;
+  background:var(--sage-soft);color:#526b57;font-weight:700;
 }
 .sortbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:0 16px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;padding:0 16px 10px;
 }
 .count{color:var(--muted);font-size:12px}
 .sort-select{
-  max-width:155px;
-  padding:6px 8px;
-  border:1px solid var(--line);
-  border-radius:9px;
-  background:var(--paper);
-  color:#71695f;
-  font-size:12px;
+  max-width:155px;padding:6px 8px;border:1px solid var(--line);
+  border-radius:9px;background:var(--paper);
+  color:#71695f;font-size:12px;
+}
+.search-empty{
+  padding:20px;text-align:center;color:var(--muted);font-size:13px;
 }
 .list{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  padding:0 12px 16px;
+  flex:1;min-height:0;overflow-y:auto;
+  overscroll-behavior:contain;padding:0 12px 16px;
 }
 .year-heading{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin:17px 5px 10px;
-  color:#8b7563;
-  font-family:Georgia,serif;
-  font-size:19px;
-  letter-spacing:.07em;
+  display:flex;align-items:center;gap:12px;
+  margin:17px 5px 10px;color:#8b7563;
+  font-family:Georgia,serif;font-size:19px;letter-spacing:.07em;
 }
 .year-heading:after{
-  content:"";
-  flex:1;
-  height:1px;
-  background:#dcd2c5;
+  content:"";flex:1;height:1px;background:#dcd2c5;
 }
 .item{
-  position:relative;
-  display:flex;
-  align-items:stretch;
-  min-height:108px;
-  margin-bottom:7px;
-  border:1px solid #eee7de;
-  border-radius:14px;
-  background:var(--paper);
-  box-shadow:0 6px 28px #5546380c;
-  cursor:pointer;
-  overflow:hidden;
+  position:relative;display:flex;align-items:stretch;
+  min-height:108px;margin-bottom:7px;
+  border:1px solid #eee7de;border-radius:14px;
+  background:var(--paper);box-shadow:0 6px 28px #5546380c;
+  cursor:pointer;overflow:hidden;
 }
 .item:hover{border-color:#d8cbbd}
 .item.active{
-  border-color:#a6b7a6;
-  background:#f8faf5;
+  border-color:#a6b7a6;background:#f8faf5;
   box-shadow:inset 3px 0 var(--sage),0 6px 28px #5546380c;
 }
 .item-date{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  flex-shrink:0;
-  width:69px;
-  padding:9px 3px;
-  border-right:1px solid #f0e9e1;
+  display:flex;flex-direction:column;justify-content:center;
+  align-items:center;flex-shrink:0;width:69px;
+  padding:9px 3px;border-right:1px solid #f0e9e1;
   color:var(--clay);
 }
 .item-month{
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.08em;
+  font-size:11px;font-weight:700;letter-spacing:.08em;
 }
 .item-day{
-  font-family:Georgia,serif;
-  font-size:37px;
-  line-height:1.08;
-  font-variant-numeric:lining-nums;
+  font-family:Georgia,serif;font-size:37px;
+  line-height:1.08;font-variant-numeric:lining-nums;
 }
 .item-time{
-  margin-top:7px;
-  color:#998a7c;
-  font-size:11px;
+  margin-top:7px;color:#998a7c;font-size:11px;
   font-variant-numeric:tabular-nums;
 }
 .item-content{
-  flex:1;
-  min-width:0;
-  padding:15px 7px 11px 13px;
+  flex:1;min-width:0;padding:15px 7px 11px 13px;
 }
 .item-content strong{
-  display:block;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-size:14px;
-  line-height:1.5;
+  display:block;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:14px;line-height:1.5;
+}
+.item-content mark{
+  background:#fff0b6;color:inherit;
+  border-radius:3px;padding:0 1px;
 }
 .item-content p{
-  display:-webkit-box;
-  margin:7px 0 0;
-  overflow:hidden;
-  color:#8d867d;
-  font-size:12px;
-  line-height:1.6;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
+  display:-webkit-box;margin:7px 0 0;overflow:hidden;
+  color:#8d867d;font-size:12px;line-height:1.6;
+  -webkit-box-orient:vertical;-webkit-line-clamp:2;
   overflow-wrap:anywhere;
 }
 .item-meta{
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:8px;
-  font-size:11px;
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:6px;margin-top:8px;font-size:11px;
 }
-.check-progress,.copied-marker,.conflict-marker{
-  display:inline-block;
-  padding:3px 7px;
-  border-radius:7px;
-  background:var(--sage-soft);
-  color:#5c775e;
-  font-size:11px;
+.check-progress,.copied-marker{
+  display:inline-block;padding:3px 7px;border-radius:7px;
+  background:var(--sage-soft);color:#5c775e;font-size:11px;
 }
-.copied-marker{
-  background:#f4e8d9;
-  color:#a1734c;
-}
-.conflict-marker{
-  background:#f8e7e5;
-  color:#a85f59;
-}
+.copied-marker{background:#f4e8d9;color:#a1734c}
 .item-actions{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  gap:1px;
-  width:37px;
-  padding:7px 5px 7px 0;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;flex-shrink:0;gap:1px;
+  width:37px;padding:7px 5px 7px 0;
 }
 .item-icon{
-  display:grid;
-  place-items:center;
-  width:29px;
-  height:29px;
-  border-radius:8px;
-  color:#b8b0a5;
-  font-size:18px;
+  display:grid;place-items:center;width:29px;height:29px;
+  border-radius:8px;color:#b8b0a5;font-size:18px;
 }
-.item-icon:hover{
-  background:#f0eae1;
-  color:var(--ink);
-}
+.item-icon:hover{background:#f0eae1;color:var(--ink)}
 .item-icon.on{color:var(--gold)}
 .item-icon.pin-on{color:var(--sage)}
-.item-icon.delete{
-  color:#c4b6ae;
-  font-size:20px;
-}
+.item-icon.delete{color:#c4b6ae;font-size:20px}
 .item-icon.delete:hover{
-  background:#f8e8e5;
-  color:var(--danger);
+  background:#f8e8e5;color:var(--danger);
 }
 .ghost-card{
-  display:block;
-  min-height:0;
-  padding:15px 42px 15px 17px;
-  border-color:#e4d7df;
-  background:#f5eff3;
+  display:block;min-height:0;padding:15px 42px 15px 17px;
+  border-color:#e4d7df;background:#f5eff3;
 }
 .ghost-card strong{
-  display:block;
-  color:#80677b;
-  font-size:13px;
+  display:block;color:#80677b;font-size:13px;
 }
 .ghost-card p{
-  margin:7px 0 0;
-  color:#917b8d;
-  font-size:12px;
-  line-height:1.6;
+  margin:7px 0 0;color:#917b8d;font-size:12px;line-height:1.6;
 }
 .ghost-close{
-  position:absolute;
-  top:7px;
-  right:8px;
-  width:30px;
-  height:30px;
-  border-radius:8px;
-  font-size:19px;
+  position:absolute;top:7px;right:8px;
+  width:30px;height:30px;border-radius:8px;font-size:19px;
 }
 .side-bottom{
-  display:flex;
-  align-items:stretch;
-  gap:8px;
+  display:flex;align-items:stretch;gap:8px;
   padding:11px 13px calc(11px + env(safe-area-inset-bottom));
   border-top:1px solid var(--line);
-  background:var(--cream);
-  flex-shrink:0;
+  background:var(--cream);flex-shrink:0;
 }
 .bottom-icon{
-  display:grid;
-  place-items:center;
-  width:44px;
-  min-width:44px;
-  min-height:49px;
-  border:1px solid #ded4c8;
-  border-radius:13px;
-  background:var(--paper);
-  color:#867769;
-  font-size:20px;
+  display:grid;place-items:center;width:44px;min-width:44px;
+  min-height:49px;border:1px solid #ded4c8;
+  border-radius:13px;background:var(--paper);
+  color:#867769;font-size:20px;
 }
 .create-button{
-  flex:1;
-  min-width:0;
-  min-height:49px;
-  border-radius:13px;
-  background:var(--sage);
-  color:white;
-  font-size:14px;
+  flex:1;min-width:0;min-height:49px;border-radius:13px;
+  background:var(--sage);color:white;font-size:14px;
   font-weight:700;
 }
 .create-button:hover{background:#506b55}
 .editor{
-  display:flex;
-  flex-direction:column;
-  min-width:0;
-  min-height:0;
-  background:#fffdf9;
+  display:flex;flex-direction:column;min-width:0;
+  min-height:0;background:#fffdf9;
 }
-.editor>.toolbar{
-  border-bottom:1px solid #f0ebe3;
-}
+.editor>.toolbar{border-bottom:1px solid #f0ebe3}
 .edit{
-  display:flex;
-  flex-direction:column;
-  flex:1;
-  min-height:0;
-  width:100%;
-  max-width:920px;
-  margin:auto;
-  padding:23px 35px;
+  display:flex;flex-direction:column;flex:1;min-height:0;
+  width:100%;max-width:920px;margin:auto;padding:23px 35px;
 }
 #title{
-  width:100%;
-  padding:13px 0;
-  border:0;
-  outline:0;
-  background:none;
-  color:var(--ink);
-  font-size:24px;
-  font-weight:700;
+  width:100%;padding:13px 0;border:0;outline:0;
+  background:none;color:var(--ink);
+  font-size:24px;font-weight:700;
 }
 #body{
-  flex:1;
-  min-height:0;
-  width:100%;
-  padding:10px 0 20px;
-  border:0;
-  outline:0;
-  resize:none;
-  background:none;
-  color:var(--ink);
-  font-size:16px;
-  line-height:1.85;
+  flex:1;min-height:0;width:100%;padding:10px 0 20px;
+  border:0;outline:0;resize:none;background:none;
+  color:var(--ink);font-size:16px;line-height:1.85;
 }
 .checklist{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  padding:9px 0 20px;
+  flex:1;min-height:0;overflow-y:auto;padding:9px 0 20px;
 }
 .check-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-height:44px;
+  display:flex;align-items:center;gap:10px;min-height:44px;
 }
 .check-row input[type=checkbox]{
-  width:19px;
-  height:19px;
-  accent-color:var(--sage);
-  flex-shrink:0;
+  width:19px;height:19px;accent-color:var(--sage);flex-shrink:0;
 }
 .check-text{
-  flex:1;
-  min-width:0;
-  padding:9px 3px;
-  border:0;
-  border-bottom:1px solid #eee9e2;
-  background:transparent;
-  outline:0;
-  font-size:16px;
+  flex:1;min-width:0;padding:9px 3px;border:0;
+  border-bottom:1px solid #eee9e2;background:transparent;
+  outline:0;font-size:16px;
 }
 .check-text.done{
-  color:#a09c93;
-  text-decoration:line-through;
+  color:#a09c93;text-decoration:line-through;
 }
 .check-delete{
-  width:30px;
-  height:34px;
-  color:#b7aca1;
-  font-size:18px;
+  width:30px;height:34px;color:#b7aca1;font-size:18px;
 }
 .check-add{
-  padding:12px 3px;
-  color:var(--sage);
-  font-size:14px;
+  padding:12px 3px;color:var(--sage);font-size:14px;
 }
 .edit-tools{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:5px 0 11px;
-  flex-shrink:0;
+  display:flex;align-items:center;gap:8px;
+  padding:5px 0 11px;flex-shrink:0;
 }
 .mode-button{
-  padding:8px 12px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  color:#81796e;
-  font-size:12px;
+  padding:8px 12px;border:1px solid var(--line);
+  border-radius:10px;color:#81796e;font-size:12px;
 }
 .mode-button.on{
   background:var(--sage-soft);
-  border-color:#c9d8c8;
-  color:var(--sage);
+  border-color:#c9d8c8;color:var(--sage);
 }
-.mode-hint{
-  color:var(--muted);
-  font-size:11px;
-}
+.mode-hint{color:var(--muted);font-size:11px}
 .link-preview{
-  flex-shrink:0;
-  max-height:120px;
-  overflow-y:auto;
-  padding:8px 0;
-  border-top:1px solid var(--line);
-  font-size:13px;
+  flex-shrink:0;max-height:120px;overflow-y:auto;
+  padding:8px 0;border-top:1px solid var(--line);font-size:13px;
 }
 .link-preview:empty{display:none}
 .link-preview small{
-  display:block;
-  margin-bottom:5px;
-  color:var(--muted);
+  display:block;margin-bottom:5px;color:var(--muted);
 }
 .link-preview a{
-  display:block;
-  padding:5px 0;
-  color:var(--sage);
-  overflow-wrap:anywhere;
+  display:block;padding:5px 0;color:var(--sage);overflow-wrap:anywhere;
 }
-.copy-success{
-  background:var(--sage-soft);
-  color:var(--sage);
-}
+.copy-success{background:var(--sage-soft);color:var(--sage)}
 .empty-editor{
-  flex:1;
-  display:grid;
-  place-items:center;
-  padding:20px;
-  color:#aaa297;
-  font-size:14px;
-  text-align:center;
+  flex:1;display:grid;place-items:center;padding:20px;
+  color:#aaa297;font-size:14px;text-align:center;
 }
 .overlay{
-  position:fixed;
-  inset:0;
-  z-index:30;
-  display:grid;
-  place-items:center;
-  padding:18px;
-  background:#332a2580;
+  position:fixed;inset:0;z-index:30;display:grid;
+  place-items:center;padding:18px;background:#332a2580;
 }
 .modal{
-  width:min(560px,100%);
-  max-height:90dvh;
-  overflow:auto;
-  padding:25px;
-  border:1px solid #eee5db;
-  border-radius:19px;
-  background:var(--paper);
+  width:min(560px,100%);max-height:90dvh;overflow:auto;
+  padding:25px;border:1px solid #eee5db;
+  border-radius:19px;background:var(--paper);
   box-shadow:0 20px 70px #21170e30;
 }
 .modal h2{
-  margin:0 0 10px;
-  color:#584b40;
-  font-size:19px;
+  margin:0 0 10px;color:#584b40;font-size:19px;
 }
 .modal p{
-  white-space:pre-line;
-  line-height:1.8;
-  color:#756d63;
-  font-size:14px;
+  white-space:pre-line;line-height:1.8;
+  color:#756d63;font-size:14px;
 }
 .actions{
-  display:flex;
-  justify-content:flex-end;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:22px;
+  display:flex;justify-content:flex-end;flex-wrap:wrap;
+  gap:10px;margin-top:22px;
 }
 .action{
-  padding:11px 16px;
-  border-radius:10px;
-  background:#eee8df;
-  font-size:13px;
+  padding:11px 16px;border-radius:10px;
+  background:#eee8df;font-size:13px;
 }
-.action.primary{
-  background:var(--sage);
-  color:white;
-}
-.action.danger{
-  background:var(--danger);
-  color:white;
-}
+.action.primary{background:var(--sage);color:white}
+.action.danger{background:var(--danger);color:white}
 .toast{
-  position:fixed;
-  left:50%;
-  bottom:22px;
-  transform:translateX(-50%);
-  z-index:40;
-  display:flex;
-  align-items:center;
-  gap:12px;
+  position:fixed;left:50%;bottom:22px;
+  transform:translateX(-50%);z-index:40;
+  display:flex;align-items:center;gap:12px;
   max-width:calc(100vw - 30px);
-  padding:12px 16px;
-  border-radius:12px;
-  background:#514a40;
-  color:white;
-  box-shadow:0 6px 28px #0003;
-  font-size:13px;
+  padding:12px 16px;border-radius:12px;
+  background:#514a40;color:white;
+  box-shadow:0 6px 28px #0003;font-size:13px;
 }
 .toast button{
-  color:#d8ebd8;
-  font-weight:700;
-  white-space:nowrap;
+  color:#d8ebd8;font-weight:700;white-space:nowrap;
 }
 .settings-tabs{
-  display:flex;
-  gap:5px;
-  overflow-x:auto;
-  padding:5px 0 13px;
-  border-bottom:1px solid var(--line);
+  display:flex;gap:5px;overflow-x:auto;
+  padding:5px 0 13px;border-bottom:1px solid var(--line);
 }
 .settings-tab{
-  flex-shrink:0;
-  padding:9px 11px;
-  border-radius:9px;
-  color:#8a8075;
-  font-size:12px;
+  flex-shrink:0;padding:9px 11px;
+  border-radius:9px;color:#8a8075;font-size:12px;
 }
 .settings-tab.active{
   background:var(--sage-soft);
-  color:var(--sage);
-  font-weight:700;
+  color:var(--sage);font-weight:700;
 }
 .settings-list{padding-top:7px}
 .setting-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  padding:14px 0;
-  border-bottom:1px solid #eee8e0;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:14px 0;border-bottom:1px solid #eee8e0;
 }
-.setting-info{
-  flex:1;
-  min-width:0;
-}
+.setting-info{flex:1;min-width:0}
 .setting-name{
-  display:block;
-  font-size:13px;
-  font-weight:700;
+  display:block;font-size:13px;font-weight:700;
 }
 .setting-desc{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.5;
+  display:block;margin-top:5px;color:var(--muted);
+  font-size:11px;line-height:1.5;
 }
 .switch{
-  position:relative;
-  flex-shrink:0;
-  width:43px;
-  height:25px;
-  border-radius:20px;
-  background:#d4cdc3;
+  position:relative;flex-shrink:0;width:43px;height:25px;
+  border-radius:20px;background:#d4cdc3;
 }
 .switch:after{
-  content:"";
-  position:absolute;
-  top:3px;
-  left:3px;
-  width:19px;
-  height:19px;
-  border-radius:50%;
-  background:white;
-  box-shadow:0 1px 4px #0002;
+  content:"";position:absolute;top:3px;left:3px;
+  width:19px;height:19px;border-radius:50%;
+  background:white;box-shadow:0 1px 4px #0002;
   transition:transform .15s;
 }
 .switch.on{background:var(--sage)}
-.switch.on:after{
-  transform:translateX(18px);
-}
+.switch.on:after{transform:translateX(18px)}
 .settings-note{
-  margin-top:16px;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.7;
+  margin-top:16px;color:var(--muted);
+  font-size:11px;line-height:1.7;
 }
 .review-item{
-  padding:12px 0;
-  border-bottom:1px solid var(--line);
+  padding:12px 0;border-bottom:1px solid var(--line);
 }
 .review-item strong{
-  display:block;
-  font-size:13px;
-  overflow-wrap:anywhere;
+  display:block;font-size:13px;overflow-wrap:anywhere;
 }
-.review-item p{
-  margin:4px 0;
-  font-size:12px;
-}
-.review-item .actions{
-  margin-top:8px;
-}
-.review-scroll{
-  max-height:48dvh;
-  overflow:auto;
-}
-.review-text{
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  max-height:35dvh;
-  overflow:auto;
-  padding:12px;
-  background:#f5f0e8;
-  border-radius:10px;
-  font-size:13px;
-}
+.review-item p{margin:4px 0;font-size:12px}
+.review-item .actions{margin-top:8px}
+.review-scroll{max-height:48dvh;overflow:auto}
 .mobile{display:none}
 @media(max-width:700px){
   .app{display:block}
   .side{
-    position:fixed;
-    inset:0;
-    z-index:10;
+    position:fixed;inset:0;z-index:10;
     transform:translateX(-100%);
     transition:transform .12s ease;
   }
-  .side.open{
-    transform:translateX(0);
-  }
+  .side.open{transform:translateX(0)}
   .editor{height:100dvh}
   .mobile{display:grid}
   .edit{padding:13px 19px}
   #title{font-size:21px}
-  .btn{
-    min-width:35px;
-    width:35px;
-  }
+  .btn{min-width:35px;width:35px}
   .list{padding:0 11px 15px}
   .item{min-height:105px}
   .item-date{width:68px}
@@ -721,6 +401,7 @@ select:focus-visible{
 </style>
 </head>
 <body>
+
 <div class="app">
   <aside id="side" class="side">
     <header class="toolbar">
@@ -891,6 +572,7 @@ const SETTING_GROUPS = [
 ];
 
 let settings = {...DEFAULT_SETTINGS};
+
 let db;
 let notes = [];
 let selected = null;
@@ -934,7 +616,7 @@ let manualRefreshing = false;
 let lastSync = 0;
 
 const iso = () => new Date().toISOString();
-const clone = x => JSON.parse(JSON.stringify(x));
+const clone = obj => JSON.parse(JSON.stringify(obj));
 
 function localGet(key){
   try{
@@ -955,36 +637,47 @@ function loadSettings(){
     const saved = JSON.parse(
       localGet('sugu-settings-v1') || '{}'
     );
-    for(const k of Object.keys(DEFAULT_SETTINGS)){
-      if(typeof saved[k] === 'boolean'){
-        settings[k] = saved[k];
+
+    for(const key of Object.keys(DEFAULT_SETTINGS)){
+      if(typeof saved[key] === 'boolean'){
+        settings[key] = saved[key];
       }
     }
   }catch(e){}
 }
 
 function saveSettings(){
-  localSet('sugu-settings-v1',JSON.stringify(settings));
+  localSet(
+    'sugu-settings-v1',
+    JSON.stringify(settings)
+  );
 }
 
 function timestamp(value){
   if(typeof value === 'number'){
-    return value < 1e11 ? value*1000 : value;
+    return value < 1e11
+      ? value*1000
+      : value;
   }
+
   if(!value) return 0;
 
   const s = String(value);
+
   if(/^\d{10,13}$/.test(s)){
     const n = Number(s);
     return n < 1e11 ? n*1000 : n;
   }
 
-  const n = Date.parse(s) || Date.parse(s.replace(' ','T'));
+  const n = Date.parse(s) ||
+    Date.parse(s.replace(' ','T'));
+
   return Number.isFinite(n) ? n : 0;
 }
 
 function todayKey(){
   const d = new Date();
+
   return [
     d.getFullYear(),
     String(d.getMonth()+1).padStart(2,'0'),
@@ -993,7 +686,10 @@ function todayKey(){
 }
 
 function dateParts(n){
-  const t = timestamp(n.createdAt || n.updatedAt);
+  const t = timestamp(
+    n.createdAt || n.updatedAt
+  );
+
   if(!t){
     return {
       year:'日付なし',
@@ -1014,12 +710,9 @@ function dateParts(n){
   };
 }
 
-/*
- * contentAt は一覧の並び順専用。
- * 同期の優先順位は旧版と同じ updatedAt だけを見る。
- */
 function normalizeNote(raw,id=raw.id){
   const updated = String(raw.updatedAt || '');
+
   return {
     id:String(id),
     title:String(raw.title ?? ''),
@@ -1028,11 +721,15 @@ function normalizeNote(raw,id=raw.id){
     pinned:!!raw.pinned,
     checklist:!!raw.checklist,
     checks:Array.isArray(raw.checks)
-      ? raw.checks.map(Boolean) : [],
+      ? raw.checks.map(Boolean)
+      : [],
     createdAt:String(raw.createdAt || ''),
     updatedAt:updated,
     contentAt:String(
-      raw.contentAt || updated || raw.createdAt || ''
+      raw.contentAt ||
+      updated ||
+      raw.createdAt ||
+      ''
     ),
     deleted:!!raw.deleted,
     deletedAt:String(raw.deletedAt || '')
@@ -1040,8 +737,9 @@ function normalizeNote(raw,id=raw.id){
 }
 
 function current(){
-  return notes.find(n =>
-    n.id === selected && !n.deleted
+  return notes.find(n=>
+    n.id === selected &&
+    !n.deleted
   );
 }
 
@@ -1052,18 +750,24 @@ function label(n){
 }
 
 function sorted(trash=false){
-  const arr = notes.filter(n =>
+  const arr = notes.filter(n=>
     trash ? n.deleted : !n.deleted
   );
 
   arr.sort((a,b)=>{
-    if(!trash && !!a.pinned !== !!b.pinned){
+    if(
+      !trash &&
+      !!a.pinned !== !!b.pinned
+    ){
       return a.pinned ? -1 : 1;
     }
 
     if(trash){
-      return timestamp(b.deletedAt || b.updatedAt) -
-        timestamp(a.deletedAt || a.updatedAt);
+      return timestamp(
+        b.deletedAt || b.updatedAt
+      ) - timestamp(
+        a.deletedAt || a.updatedAt
+      );
     }
 
     if(sortMode === 'created'){
@@ -1072,18 +776,25 @@ function sorted(trash=false){
     }
 
     if(sortMode === 'title'){
-      const v = label(a).localeCompare(label(b),'ja');
-      if(v) return v;
+      const result = label(a)
+        .localeCompare(label(b),'ja');
+
+      if(result) return result;
     }
 
-    return timestamp(b.contentAt || b.updatedAt) -
-      timestamp(a.contentAt || a.updatedAt);
+    return timestamp(
+      b.contentAt || b.updatedAt
+    ) - timestamp(
+      a.contentAt || a.updatedAt
+    );
   });
 
   return arr;
 }
 
-/* IndexedDB */
+/* ==================================================
+   IndexedDB
+================================================== */
 
 function openDB(){
   return new Promise((resolve,reject)=>{
@@ -1091,11 +802,17 @@ function openDB(){
 
     r.onupgradeneeded = ()=>{
       const d = r.result;
+
       if(!d.objectStoreNames.contains(TABLE)){
-        d.createObjectStore(TABLE,{keyPath:'id'});
+        d.createObjectStore(
+          TABLE,{keyPath:'id'}
+        );
       }
+
       if(!d.objectStoreNames.contains(META)){
-        d.createObjectStore(META,{keyPath:'key'});
+        d.createObjectStore(
+          META,{keyPath:'key'}
+        );
       }
     };
 
@@ -1109,8 +826,10 @@ function openDB(){
 
 function dbGetAll(){
   return new Promise((resolve,reject)=>{
-    const r = db.transaction(TABLE,'readonly')
-      .objectStore(TABLE).getAll();
+    const r = db.transaction(
+      TABLE,'readonly'
+    ).objectStore(TABLE).getAll();
+
     r.onsuccess = ()=>resolve(r.result);
     r.onerror = ()=>reject(r.error);
   });
@@ -1118,8 +837,10 @@ function dbGetAll(){
 
 function metaGet(key){
   return new Promise((resolve,reject)=>{
-    const r = db.transaction(META,'readonly')
-      .objectStore(META).get(key);
+    const r = db.transaction(
+      META,'readonly'
+    ).objectStore(META).get(key);
+
     r.onsuccess = ()=>resolve(r.result?.value);
     r.onerror = ()=>reject(r.error);
   });
@@ -1127,8 +848,12 @@ function metaGet(key){
 
 function metaPut(key,value){
   return new Promise((resolve,reject)=>{
-    const tx = db.transaction(META,'readwrite');
+    const tx = db.transaction(
+      META,'readwrite'
+    );
+
     tx.objectStore(META).put({key,value});
+
     tx.oncomplete = resolve;
     tx.onerror = ()=>reject(tx.error);
     tx.onabort = ()=>reject(tx.error);
@@ -1136,10 +861,15 @@ function metaPut(key,value){
 }
 
 function dbPutMany(items){
-  if(!items.length) return Promise.resolve();
+  if(!items.length){
+    return Promise.resolve();
+  }
 
   return new Promise((resolve,reject)=>{
-    const tx = db.transaction(TABLE,'readwrite');
+    const tx = db.transaction(
+      TABLE,'readwrite'
+    );
+
     const store = tx.objectStore(TABLE);
 
     for(const n of items){
@@ -1166,11 +896,15 @@ function enqueue(job){
 
 async function waitForSaves(){
   await queue;
-  if(saveError) throw saveError;
+
+  if(saveError){
+    throw saveError;
+  }
 }
 
 function storeNote(n){
   const snapshot = clone(n);
+
   saveError = null;
   $('status').textContent = '保存中';
 
@@ -1179,9 +913,13 @@ function storeNote(n){
   );
 
   task.then(()=>{
-    if(selected === snapshot.id && !saveError){
+    if(
+      selected === snapshot.id &&
+      !saveError
+    ){
       $('status').textContent = '保存済み';
     }
+
     scheduleSync();
   }).catch(()=>{});
 
@@ -1190,6 +928,7 @@ function storeNote(n){
 
 function markChanged(n,content=false){
   const now = iso();
+
   n.updatedAt = now;
 
   if(content){
@@ -1200,9 +939,66 @@ function markChanged(n,content=false){
   scheduleListRefresh(content);
 }
 
+/* ==================================================
+   一覧の軽量更新
+================================================== */
+
 function scheduleListRefresh(content=false){
   listDirty = true;
   clearTimeout(listRefreshTimer);
+
+  /*
+   * 本文入力中は一覧全体を作り直さない。
+   * 表示中のカードだけ文字を更新する。
+   */
+  if(content && selected){
+    const n = current();
+
+    const row = [
+      ...$('list').querySelectorAll(
+        '.item[data-id]'
+      )
+    ].find(x=>
+      x.dataset.id === selected
+    );
+
+    if(n && row){
+      const contentNode = row.querySelector(
+        '.item-content'
+      );
+
+      if(contentNode){
+        const q = $('search').value
+          .trim().toLocaleLowerCase();
+
+        const strong = contentNode.querySelector(
+          'strong'
+        );
+        const p = contentNode.querySelector('p');
+
+        if(strong){
+          setHighlighted(strong,label(n),q);
+        }
+
+        if(p){
+          const preview = n.checklist
+            ? (
+                n.body.split('\n')
+                  .filter(Boolean)
+                  .slice(0,3)
+                  .join(' / ') ||
+                'チェックリスト'
+              )
+            : n.body.replace(/\s+/g,' ')
+                .slice(0,220);
+
+          setHighlighted(p,preview,q);
+        }
+      }
+    }
+
+    return;
+  }
 
   if(
     screen === 'list' ||
@@ -1210,22 +1006,26 @@ function scheduleListRefresh(content=false){
   ){
     listRefreshTimer = setTimeout(()=>{
       if(listDirty){
-        listDirty = false;
         render();
       }
-    },content ? 450 : 70);
+    },90);
   }
 }
 
-/* 通知・ダイアログ */
+/* ==================================================
+   トースト・確認ダイアログ
+================================================== */
 
 function toast(message,undo=false){
   clearTimeout(toastTimer);
 
   $('toastText').textContent = message;
+
   $('toastUndo').classList.toggle(
-    'hide',!undo || !settings.undo
+    'hide',
+    !undo || !settings.undo
   );
+
   $('toast').classList.remove('hide');
 
   toastTimer = setTimeout(()=>{
@@ -1234,7 +1034,12 @@ function toast(message,undo=false){
   },6000);
 }
 
-function dialog(title,message,choices=['閉じる'],options={}){
+function dialog(
+  title,
+  message,
+  choices=['閉じる'],
+  options={}
+){
   return new Promise(resolve=>{
     modalOpen = true;
 
@@ -1242,6 +1047,7 @@ function dialog(title,message,choices=['閉じる'],options={}){
     host.replaceChildren();
 
     const previous = document.activeElement;
+
     const overlay = document.createElement('div');
     const box = document.createElement('div');
     const h = document.createElement('h2');
@@ -1251,8 +1057,10 @@ function dialog(title,message,choices=['閉じる'],options={}){
 
     overlay.className = 'overlay';
     box.className = 'modal';
+
     box.setAttribute('role','dialog');
     box.setAttribute('aria-modal','true');
+
     h.textContent = title;
     p.textContent = message;
     actions.className = 'actions';
@@ -1261,14 +1069,19 @@ function dialog(title,message,choices=['閉じる'],options={}){
 
     function finish(index){
       if(finished) return;
+
       finished = true;
       modalOpen = false;
       host.replaceChildren();
-      document.removeEventListener('keydown',keys,true);
+
+      document.removeEventListener(
+        'keydown',keys,true
+      );
 
       if(previous?.isConnected){
         previous.focus({preventScroll:true});
       }
+
       resolve(index);
     }
 
@@ -1277,17 +1090,25 @@ function dialog(title,message,choices=['閉じる'],options={}){
         e.preventDefault();
         e.stopPropagation();
         finish(0);
-      }else if(e.key === 'Enter' && !e.isComposing){
+      }else if(
+        e.key === 'Enter' &&
+        !e.isComposing
+      ){
         e.preventDefault();
         e.stopPropagation();
         finish(options.enterIndex ?? 0);
       }else if(e.key === 'Tab'){
-        const i = buttons.indexOf(document.activeElement);
+        const i = buttons.indexOf(
+          document.activeElement
+        );
 
         if(e.shiftKey && i <= 0){
           e.preventDefault();
           buttons.at(-1)?.focus();
-        }else if(!e.shiftKey && i === buttons.length-1){
+        }else if(
+          !e.shiftKey &&
+          i === buttons.length-1
+        ){
           e.preventDefault();
           buttons[0]?.focus();
         }
@@ -1300,12 +1121,15 @@ function dialog(title,message,choices=['閉じる'],options={}){
 
       if(i === choices.length-1){
         b.classList.add(
-          options.danger ? 'danger' : 'primary'
+          options.danger
+            ? 'danger'
+            : 'primary'
         );
       }
 
       b.textContent = name;
       b.onclick = ()=>finish(i);
+
       buttons.push(b);
       actions.append(b);
     });
@@ -1314,7 +1138,10 @@ function dialog(title,message,choices=['閉じる'],options={}){
     overlay.append(box);
     host.append(overlay);
 
-    document.addEventListener('keydown',keys,true);
+    document.addEventListener(
+      'keydown',keys,true
+    );
+
     requestAnimationFrame(()=>{
       (
         options.focusConfirm
@@ -1325,7 +1152,96 @@ function dialog(title,message,choices=['閉じる'],options={}){
   });
 }
 
-/* メモ一覧 */
+/* ==================================================
+   検索
+================================================== */
+
+/*
+ * メモごとの検索対象をキャッシュする。
+ * メモ本文やタイトルが変わった場合だけ再計算。
+ * 追加の通信や保存処理は発生しない。
+ */
+const searchCache = new WeakMap();
+
+function searchText(n){
+  const old = searchCache.get(n);
+
+  if(
+    old &&
+    old.title === n.title &&
+    old.body === n.body
+  ){
+    return old.text;
+  }
+
+  const text = (
+    n.title+'\n'+n.body
+  ).toLocaleLowerCase();
+
+  searchCache.set(n,{
+    title:n.title,
+    body:n.body,
+    text
+  });
+
+  return text;
+}
+
+/*
+ * 検索一致文字を背景色で強調する。
+ * HTML文字列の挿入は使わない。
+ */
+function setHighlighted(node,text,query){
+  node.replaceChildren();
+
+  if(!query){
+    node.textContent = text;
+    return;
+  }
+
+  const lower = text.toLocaleLowerCase();
+
+  let from = 0;
+  let hits = 0;
+  let index;
+
+  while(
+    hits < 8 &&
+    (
+      index = lower.indexOf(query,from)
+    ) !== -1
+  ){
+    if(index > from){
+      node.append(
+        document.createTextNode(
+          text.slice(from,index)
+        )
+      );
+    }
+
+    const mark = document.createElement('mark');
+
+    mark.textContent = text.slice(
+      index,
+      index+query.length
+    );
+
+    node.append(mark);
+
+    from = index+query.length;
+    hits++;
+  }
+
+  node.append(
+    document.createTextNode(
+      text.slice(from)
+    )
+  );
+}
+
+/* ==================================================
+   メモ一覧
+================================================== */
 
 function viewedMap(){
   try{
@@ -1341,14 +1257,14 @@ function recordView(id){
   const map = viewedMap();
   map[id] = Date.now();
 
+  const entries = Object.entries(map)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,1000);
+
   localSet(
     'sugu-viewed-v1',
     JSON.stringify(
-      Object.fromEntries(
-        Object.entries(map)
-          .sort((a,b)=>b[1]-a[1])
-          .slice(0,1000)
-      )
+      Object.fromEntries(entries)
     )
   );
 }
@@ -1357,14 +1273,20 @@ function ghostCandidate(arr){
   if(
     !settings.ghost ||
     ghostDismissedDay === todayKey()
-  ) return null;
+  ){
+    return null;
+  }
 
   const viewed = viewedMap();
   const cutoff = Date.now()-30*86400000;
 
   const old = arr.filter(n=>{
-    const last = viewed[n.id] ||
-      timestamp(n.createdAt || n.updatedAt);
+    const last =
+      viewed[n.id] ||
+      timestamp(
+        n.createdAt || n.updatedAt
+      );
+
     return last > 0 && last < cutoff;
   });
 
@@ -1375,8 +1297,10 @@ function ghostCandidate(arr){
 
 function makeYear(year){
   const h = document.createElement('div');
+
   h.className = 'year-heading';
   h.textContent = year;
+
   return h;
 }
 
@@ -1389,27 +1313,37 @@ function makeGhost(n){
   title.textContent = '👻 メモの亡霊';
 
   const p = document.createElement('p');
+
   p.textContent =
     `「私のこと、覚えていますか。」 ${label(n)}`;
 
   const close = document.createElement('button');
+
   close.className = 'ghost-close';
   close.textContent = '×';
   close.title = '今日は表示しない';
 
   close.onclick = e=>{
     e.stopPropagation();
+
     ghostDismissedDay = todayKey();
-    localSet('sugu-ghost-dismiss',ghostDismissedDay);
+
+    localSet(
+      'sugu-ghost-dismiss',
+      ghostDismissedDay
+    );
+
     render();
   };
 
   card.append(title,p,close);
+
   return card;
 }
 
 function makeIcon(text,title,fn,className=''){
   const b = document.createElement('button');
+
   b.className = 'item-icon '+className;
   b.textContent = text;
   b.title = title;
@@ -1425,26 +1359,34 @@ function makeIcon(text,title,fn,className=''){
 
 function makeItem(n){
   const item = document.createElement('div');
+
   item.className =
     'item'+(n.id === selected ? ' active' : '');
+
   item.dataset.id = n.id;
   item.tabIndex = 0;
+
   item.setAttribute('role','button');
   item.setAttribute('aria-label',label(n));
 
   const d = dateParts(n);
+
   const date = document.createElement('div');
   const month = document.createElement('span');
   const day = document.createElement('span');
   const time = document.createElement('span');
 
   date.className = 'item-date';
+
   month.className = 'item-month';
   month.textContent = d.month+' /';
+
   day.className = 'item-day';
   day.textContent = d.day;
+
   time.className = 'item-time';
   time.textContent = d.time;
+
   date.append(month,day,time);
 
   const content = document.createElement('div');
@@ -1453,45 +1395,69 @@ function makeItem(n){
   const meta = document.createElement('div');
 
   content.className = 'item-content';
-  title.textContent = label(n);
-  preview.textContent = n.checklist
+
+  const q = $('search').value
+    .trim().toLocaleLowerCase();
+
+  setHighlighted(title,label(n),q);
+
+  const previewText = n.checklist
     ? (
         n.body.split('\n')
           .filter(Boolean)
           .slice(0,3)
-          .join(' / ') || 'チェックリスト'
+          .join(' / ') ||
+        'チェックリスト'
       )
-    : n.body.replace(/\s+/g,' ').slice(0,140);
+    : n.body.replace(/\s+/g,' ')
+        .slice(0,220);
+
+  setHighlighted(
+    preview,
+    previewText,
+    q
+  );
 
   content.append(title,preview);
   meta.className = 'item-meta';
 
-  if(n.checklist && settings.checklistProgress){
-    const lines = n.body ? n.body.split('\n') : [];
-    const total = lines.filter(x=>x.trim()).length;
+  if(
+    n.checklist &&
+    settings.checklistProgress
+  ){
+    const lines = n.body
+      ? n.body.split('\n')
+      : [];
+
+    const total = lines.filter(
+      x=>x.trim()
+    ).length;
+
     const done = lines.filter(
       (x,i)=>x.trim() && n.checks[i]
     ).length;
 
     const b = document.createElement('span');
+
     b.className = 'check-progress';
     b.textContent = `☑ ${done}/${total}`;
+
     meta.append(b);
   }
 
   if(copiedId === n.id){
     const b = document.createElement('span');
+
     b.className = 'copied-marker';
     b.textContent = '✓ コピー済み';
+
     meta.append(b);
   }
 
-  if(n.title.startsWith('【競合コピー】')){
-    const b = document.createElement('span');
-    b.className = 'conflict-marker';
-    b.textContent = '要確認';
-    meta.append(b);
-  }
+  /*
+   * 以前の「要確認」表示は撤去。
+   * 既存の競合コピーのデータは変更しない。
+   */
 
   if(meta.childNodes.length){
     content.append(meta);
@@ -1503,7 +1469,8 @@ function makeItem(n){
   if(filter === 'trash'){
     actions.append(
       makeIcon(
-        '↶','メモを復元',
+        '↶',
+        'メモを復元',
         ()=>restoreNote(n.id)
       )
     );
@@ -1512,7 +1479,9 @@ function makeItem(n){
       actions.append(
         makeIcon(
           n.pinned ? '📌' : '♧',
-          n.pinned ? 'ピン留め解除' : 'ピン留め',
+          n.pinned
+            ? 'ピン留め解除'
+            : 'ピン留め',
           ()=>toggleField(n.id,'pinned'),
           n.pinned ? 'pin-on' : ''
         )
@@ -1523,7 +1492,9 @@ function makeItem(n){
       actions.append(
         makeIcon(
           n.ear ? '★' : '☆',
-          n.ear ? 'お気に入り解除' : 'お気に入り',
+          n.ear
+            ? 'お気に入り解除'
+            : 'お気に入り',
           ()=>toggleField(n.id,'ear'),
           n.ear ? 'on' : ''
         )
@@ -1533,7 +1504,8 @@ function makeItem(n){
     if(settings.listDelete){
       actions.append(
         makeIcon(
-          '×','メモを削除',
+          '×',
+          'メモを削除',
           ()=>remove(n.id),
           'delete'
         )
@@ -1542,6 +1514,7 @@ function makeItem(n){
   }
 
   item.append(date,content,actions);
+
   return item;
 }
 
@@ -1551,18 +1524,20 @@ function render(){
   const root = $('list');
   const scroll = root.scrollTop;
   const desired = Math.max(10,renderedCount);
+
   const q = $('search').value
-    .trim().toLocaleLowerCase();
+    .trim()
+    .toLocaleLowerCase();
 
   let all = sorted(filter === 'trash');
+
   all = all.filter(n=>
     (filter !== 'ear' || n.ear) &&
-    (n.title+'\n'+n.body)
-      .toLocaleLowerCase()
-      .includes(q)
+    searchText(n).includes(q)
   );
 
-  $('count').textContent = `${all.length}件`;
+  $('count').textContent =
+    `${all.length}件`;
 
   ghostNote = !q && filter === 'all'
     ? ghostCandidate(all)
@@ -1572,7 +1547,19 @@ function render(){
   renderedCount = 0;
   renderedYear = null;
   ghostInserted = false;
+
   root.replaceChildren();
+
+  if(!listItems.length && !ghostNote){
+    const empty = document.createElement('p');
+
+    empty.className = 'search-empty';
+    empty.textContent = q
+      ? '一致するメモがありません'
+      : 'メモがありません';
+
+    root.append(empty);
+  }
 
   while(
     renderedCount <
@@ -1588,15 +1575,22 @@ function render(){
 
   root.scrollTop = scroll;
   listDirty = false;
+
   scheduleListCheck();
 }
 
 function appendNext(check=true){
-  if(renderedCount >= listItems.length) return;
+  if(renderedCount >= listItems.length){
+    return;
+  }
 
   const root = $('list');
   const start = renderedCount;
-  const end = Math.min(start+10,listItems.length);
+  const end = Math.min(
+    start+10,
+    listItems.length
+  );
+
   const f = document.createDocumentFragment();
 
   for(let i=start;i<end;i++){
@@ -1633,32 +1627,41 @@ function appendNext(check=true){
 
   root.append(f);
 
-  if(check) scheduleListCheck();
+  if(check){
+    scheduleListCheck();
+  }
 }
 
 function checkListBottom(){
   if(
     modalOpen ||
     renderedCount >= listItems.length
-  ) return;
+  ){
+    return;
+  }
 
   if(
     matchMedia('(max-width:700px)').matches &&
     screen !== 'list'
-  ) return;
+  ){
+    return;
+  }
 
   const root = $('list');
 
   if(
     !root.clientHeight ||
     !root.getClientRects().length
-  ) return;
+  ){
+    return;
+  }
 
-  if(
+  const remaining =
     root.scrollHeight -
     root.scrollTop -
-    root.clientHeight <= 120
-  ){
+    root.clientHeight;
+
+  if(remaining <= 120){
     appendNext(false);
     scheduleListCheck();
   }
@@ -1666,6 +1669,7 @@ function checkListBottom(){
 
 function scheduleListCheck(){
   if(listCheckScheduled) return;
+
   listCheckScheduled = true;
 
   requestAnimationFrame(()=>{
@@ -1674,7 +1678,9 @@ function scheduleListCheck(){
   });
 }
 
-/* スマホとPCの画面切り替え */
+/* ==================================================
+   画面切り替え
+================================================== */
 
 function showScreen(next){
   if(screen === 'list'){
@@ -1686,16 +1692,22 @@ function showScreen(next){
 
   if(matchMedia('(max-width:700px)').matches){
     $('side').classList.toggle(
-      'open',next === 'list'
+      'open',
+      next === 'list'
     );
   }
 
   if(next === 'list'){
-    if(listDirty) render();
+    if(listDirty){
+      render();
+    }
 
     requestAnimationFrame(()=>{
       $('list').scrollTop = lastListScroll;
-      requestAnimationFrame(checkListBottom);
+
+      requestAnimationFrame(
+        checkListBottom
+      );
     });
   }
 }
@@ -1706,7 +1718,9 @@ function openEditorScreen(){
     history.state?.sugu !== 'edit'
   ){
     history.pushState(
-      {sugu:'edit'},'',location.href
+      {sugu:'edit'},
+      '',
+      location.href
     );
   }
 
@@ -1728,22 +1742,46 @@ function goList(){
 
 function choose(id,focus=false){
   const n = notes.find(x=>
-    x.id === id && !x.deleted
+    x.id === id &&
+    !x.deleted
   );
+
   if(!n) return;
 
   selected = id;
+
   localSet('mimi-last-id',id);
   recordView(id);
+
   updateEditor();
   openEditorScreen();
-  scheduleListRefresh();
+
+  /*
+   * 選択表示だけを更新し、
+   * 一覧全体の再描画を避ける。
+   */
+  document.querySelectorAll(
+    '#list .item.active'
+  ).forEach(x=>{
+    x.classList.remove('active');
+  });
+
+  const activeRow = [
+    ...$('list').querySelectorAll(
+      '.item[data-id]'
+    )
+  ].find(x=>
+    x.dataset.id === id
+  );
+
+  activeRow?.classList.add('active');
 
   if(focus){
     requestAnimationFrame(()=>{
       if(n.checklist){
         $('checklist')
-          .querySelector('.check-text')?.focus();
+          .querySelector('.check-text')
+          ?.focus();
       }else{
         $('body').focus();
       }
@@ -1751,7 +1789,9 @@ function choose(id,focus=false){
   }
 }
 
-/* メモ編集 */
+/* ==================================================
+   本文編集
+================================================== */
 
 function updateLinks(){
   const root = $('links');
@@ -1763,7 +1803,8 @@ function updateLinks(){
     /https?:\/\/[^\s<>"'「」]+/g
   ) || [];
 
-  const urls = [...new Set(matches)].slice(0,20);
+  const urls = [...new Set(matches)]
+    .slice(0,20);
 
   if(!urls.length) return;
 
@@ -1773,20 +1814,28 @@ function updateLinks(){
 
   for(const raw of urls){
     const clean = raw.replace(
-      /[.,。、）)\]】]+$/g,''
+      /[.,。、）)\]】]+$/g,
+      ''
     );
 
     try{
       const url = new URL(clean);
-      if(!['http:','https:'].includes(url.protocol)){
+
+      if(
+        !['http:','https:'].includes(
+          url.protocol
+        )
+      ){
         continue;
       }
 
       const a = document.createElement('a');
+
       a.href = url.href;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
       a.textContent = clean;
+
       root.append(a);
     }catch(e){}
   }
@@ -1810,12 +1859,16 @@ function renderChecklist(){
     const del = document.createElement('button');
 
     row.className = 'check-row';
+
     box.type = 'checkbox';
     box.checked = !!n.checks[i];
 
     text.type = 'text';
+
     text.className =
-      'check-text'+(box.checked ? ' done' : '');
+      'check-text'+
+      (box.checked ? ' done' : '');
+
     text.value = line;
     text.placeholder = '項目を入力';
 
@@ -1824,7 +1877,11 @@ function renderChecklist(){
 
     box.onchange = ()=>{
       n.checks[i] = box.checked;
-      text.classList.toggle('done',box.checked);
+      text.classList.toggle(
+        'done',
+        box.checked
+      );
+
       markChanged(n,true);
     };
 
@@ -1835,7 +1892,9 @@ function renderChecklist(){
 
       arr[i] = text.value;
       n.body = arr.join('\n');
+
       $('body').value = n.body;
+
       markChanged(n,true);
     };
 
@@ -1853,8 +1912,10 @@ function renderChecklist(){
 
       arr.splice(i,1);
       n.checks.splice(i,1);
+
       n.body = arr.join('\n');
       $('body').value = n.body;
+
       markChanged(n,true);
       renderChecklist();
     };
@@ -1864,14 +1925,20 @@ function renderChecklist(){
   });
 
   const add = document.createElement('button');
+
   add.className = 'check-add';
   add.textContent = '＋ 項目を追加';
-  add.onclick = ()=>addChecklistRow(lines.length);
+
+  add.onclick = ()=>{
+    addChecklistRow(lines.length);
+  };
+
   root.append(add);
 }
 
 function addChecklistRow(index){
   const n = current();
+
   if(!n || !n.checklist) return;
 
   const lines = n.body
@@ -1880,7 +1947,9 @@ function addChecklistRow(index){
 
   lines.splice(index,0,'');
   n.checks.splice(index,0,false);
+
   n.body = lines.join('\n');
+
   $('body').value = n.body;
 
   markChanged(n,true);
@@ -1894,40 +1963,70 @@ function addChecklistRow(index){
 function updateEditor(){
   const n = current();
 
-  $('editArea').classList.toggle('hide',!n);
-  $('emptyEditor').classList.toggle('hide',!!n);
+  $('editArea').classList.toggle(
+    'hide',!n
+  );
 
-  for(const id of ['copy','pin','ear','remove']){
+  $('emptyEditor').classList.toggle(
+    'hide',!!n
+  );
+
+  for(const id of [
+    'copy','pin','ear','remove'
+  ]){
     $(id).disabled = !n;
   }
 
   if(!n){
     $('title').value = '';
     $('body').value = '';
+
     $('links').replaceChildren();
     $('checklist').replaceChildren();
+
     return;
   }
 
   $('title').value = n.title;
   $('body').value = n.body;
-  $('ear').textContent = n.ear ? '★' : '☆';
-  $('pin').textContent = n.pinned ? '📌' : '♧';
-  $('copy').textContent = copiedId === n.id ? '✓' : '□';
+
+  $('ear').textContent =
+    n.ear ? '★' : '☆';
+
+  $('pin').textContent =
+    n.pinned ? '📌' : '♧';
+
+  $('copy').textContent =
+    copiedId === n.id ? '✓' : '□';
+
   $('copy').classList.toggle(
-    'copy-success',copiedId === n.id
+    'copy-success',
+    copiedId === n.id
   );
 
   $('mode').textContent = n.checklist
     ? '☑ チェックリスト ON'
     : '☐ チェックリストにする';
 
-  $('mode').classList.toggle('on',n.checklist);
-  $('modeHint').textContent =
-    n.checklist ? '1行につき1項目' : '';
+  $('mode').classList.toggle(
+    'on',
+    n.checklist
+  );
 
-  $('body').classList.toggle('hide',n.checklist);
-  $('checklist').classList.toggle('hide',!n.checklist);
+  $('modeHint').textContent =
+    n.checklist
+      ? '1行につき1項目'
+      : '';
+
+  $('body').classList.toggle(
+    'hide',
+    n.checklist
+  );
+
+  $('checklist').classList.toggle(
+    'hide',
+    !n.checklist
+  );
 
   renderChecklist();
   updateLinks();
@@ -1935,14 +2034,19 @@ function updateEditor(){
 
 function saveEditor(){
   const n = current();
+
   if(!n) return;
 
   const title = $('title').value;
+
   const body = n.checklist
     ? n.body
     : $('body').value;
 
-  if(title === n.title && body === n.body){
+  if(
+    title === n.title &&
+    body === n.body
+  ){
     return;
   }
 
@@ -1956,7 +2060,11 @@ function saveEditor(){
   markChanged(n,true);
 }
 
-async function create(focus=true,body='',title=''){
+async function create(
+  focus=true,
+  body='',
+  title=''
+){
   const now = iso();
 
   const n = {
@@ -1975,12 +2083,17 @@ async function create(focus=true,body='',title=''){
   };
 
   try{
-    await enqueue(()=>dbPutMany([n]));
+    await enqueue(
+      ()=>dbPutMany([n])
+    );
+
     notes.push(n);
 
     if(filter !== 'all'){
       filter = 'all';
       updateFilterUI();
+    }else{
+      listDirty = true;
     }
 
     choose(n.id,focus);
@@ -1995,11 +2108,18 @@ async function create(focus=true,body='',title=''){
 
 async function toggleField(id,field){
   const n = notes.find(x=>
-    x.id === id && !x.deleted
+    x.id === id &&
+    !x.deleted
   );
+
   if(!n) return;
 
   n[field] = !n[field];
+
+  /*
+   * ★やピン留めの操作は
+   * 本文更新日時を変更しない。
+   */
   markChanged(n,false);
 
   if(selected === id){
@@ -2009,6 +2129,7 @@ async function toggleField(id,field){
 
 function toggleChecklist(){
   const n = current();
+
   if(!n) return;
 
   n.checklist = !n.checklist;
@@ -2029,12 +2150,16 @@ function toggleChecklist(){
 
 async function copyBody(){
   const n = current();
+
   if(!n) return;
 
   const id = n.id;
 
   try{
-    await navigator.clipboard.writeText(n.body);
+    await navigator.clipboard.writeText(
+      n.body
+    );
+
     copiedId = id;
 
     if(selected === id){
@@ -2042,6 +2167,7 @@ async function copyBody(){
     }
 
     scheduleListRefresh();
+
     toast('本文をコピーしました');
   }catch(e){
     await dialog(
@@ -2053,13 +2179,15 @@ async function copyBody(){
 
 async function pasteNew(){
   try{
-    const text = await navigator.clipboard.readText();
+    const text =
+      await navigator.clipboard.readText();
 
     if(!text){
       await dialog(
         'クリップボードが空です',
         'コピーした文章が見つかりません。'
       );
+
       return;
     }
 
@@ -2074,18 +2202,26 @@ async function pasteNew(){
 
 async function showStats(){
   const all = notes.filter(n=>!n.deleted);
+
   const lengths = all.map(
     n=>(n.title+n.body).length
   );
-  const total = lengths.reduce((a,b)=>a+b,0);
+
+  const total = lengths.reduce(
+    (a,b)=>a+b,
+    0
+  );
 
   await dialog(
     'どうでもいい記録',
     `メモ総数：${all.length}件\n`+
     `全文字数：${total.toLocaleString()}字\n`+
     `最長メモ：${Math.max(0,...lengths)}字\n`+
-    `最短メモ：${lengths.length
-      ? Math.min(...lengths) : 0}字\n`+
+    `最短メモ：${
+      lengths.length
+        ? Math.min(...lengths)
+        : 0
+    }字\n`+
     `チェックリスト：${
       all.filter(n=>n.checklist).length
     }件\n`+
@@ -2098,19 +2234,24 @@ async function showStats(){
   );
 }
 
-/* ゴミ箱 */
+/* ==================================================
+   ゴミ箱
+================================================== */
 
 async function remove(id=selected){
   if(modalOpen) return;
 
   const n = notes.find(x=>
-    x.id === id && !x.deleted
+    x.id === id &&
+    !x.deleted
   );
+
   if(!n) return;
 
   const choice = await dialog(
     'メモをゴミ箱に移動しますか？',
-    `「${label(n)}」\n\nゴミ箱から復元できます。`,
+    `「${label(n)}」\n\n`+
+    'ゴミ箱から復元できます。',
     ['キャンセル','ゴミ箱へ'],
     {
       enterIndex:1,
@@ -2131,7 +2272,10 @@ async function remove(id=selected){
       updatedAt:iso()
     };
 
-    await enqueue(()=>dbPutMany([tomb]));
+    await enqueue(
+      ()=>dbPutMany([tomb])
+    );
+
     Object.assign(n,tomb);
 
     if(selected === id){
@@ -2141,9 +2285,14 @@ async function remove(id=selected){
     }
 
     undoInfo = {id};
+
     render();
     scheduleSync();
-    toast('ゴミ箱に移動しました',true);
+
+    toast(
+      'ゴミ箱に移動しました',
+      true
+    );
   }catch(e){
     await dialog(
       '削除エラー',
@@ -2154,8 +2303,10 @@ async function remove(id=selected){
 
 async function restoreNote(id){
   const n = notes.find(x=>
-    x.id === id && x.deleted
+    x.id === id &&
+    x.deleted
   );
+
   if(!n) return;
 
   const restored = {
@@ -2166,10 +2317,15 @@ async function restoreNote(id){
   };
 
   try{
-    await enqueue(()=>dbPutMany([restored]));
+    await enqueue(
+      ()=>dbPutMany([restored])
+    );
+
     Object.assign(n,restored);
+
     render();
     scheduleSync();
+
     toast('メモを復元しました');
   }catch(e){
     await dialog(
@@ -2179,7 +2335,9 @@ async function restoreNote(id){
   }
 }
 
-/* バックアップ */
+/* ==================================================
+   JSONバックアップ
+================================================== */
 
 async function exportJSON(){
   saveEditor();
@@ -2187,7 +2345,9 @@ async function exportJSON(){
   try{
     await waitForSaves();
 
-    // ゴミ箱も含めて保存する。
+    /*
+     * ゴミ箱内のメモもバックアップする。
+     */
     const all = await dbGetAll();
 
     const blob = new Blob(
@@ -2202,15 +2362,23 @@ async function exportJSON(){
           2
         )
       ],
-      {type:'application/json'}
+      {
+        type:'application/json'
+      }
     );
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const url =
+      URL.createObjectURL(blob);
+
+    const a =
+      document.createElement('a');
 
     a.href = url;
+
     a.download =
-      'SUGUBackup_ALL_'+iso().slice(0,10)+'.json';
+      'SUGUBackup_ALL_'+
+      iso().slice(0,10)+
+      '.json';
 
     document.body.append(a);
     a.click();
@@ -2236,13 +2404,17 @@ async function importJSON(file){
   if(!file) return;
 
   try{
-    const data = JSON.parse(await file.text());
+    const data = JSON.parse(
+      await file.text()
+    );
 
     if(
       data.format !== 'mimi-sync-v1' ||
       !Array.isArray(data.notes)
     ){
-      throw Error('対応していないJSON形式です');
+      throw Error(
+        '対応していないJSON形式です'
+      );
     }
 
     const incoming = new Map();
@@ -2252,7 +2424,9 @@ async function importJSON(file){
         !raw ||
         typeof raw.id !== 'string' ||
         !raw.id
-      ) continue;
+      ){
+        continue;
+      }
 
       incoming.set(
         raw.id,
@@ -2265,7 +2439,9 @@ async function importJSON(file){
     );
 
     const add = [...incoming.values()]
-      .filter(n=>!known.has(n.id));
+      .filter(
+        n=>!known.has(n.id)
+      );
 
     const choice = await dialog(
       'バックアップを取り込みますか？',
@@ -2279,9 +2455,13 @@ async function importJSON(file){
 
     saveEditor();
     await waitForSaves();
-    await enqueue(()=>dbPutMany(add));
+
+    await enqueue(
+      ()=>dbPutMany(add)
+    );
 
     notes = await dbGetAll();
+
     render();
     scheduleSync();
 
@@ -2297,12 +2477,18 @@ async function importJSON(file){
   }
 }
 
-/* 既存の競合コピーを調べる */
+/* ==================================================
+   既存の競合コピーの整理機能
+
+   新しい競合コピーの自動作成はしない。
+================================================== */
 
 function conflictCandidates(){
   return notes.filter(n=>
     !n.deleted &&
-    n.title.startsWith('【競合コピー】')
+    n.title.startsWith(
+      '【競合コピー】'
+    )
   );
 }
 
@@ -2345,31 +2531,52 @@ async function reviewConflicts(){
   const host = $('dialogs');
   host.replaceChildren();
 
-  const overlay = document.createElement('div');
-  const box = document.createElement('div');
-  const h = document.createElement('h2');
-  const intro = document.createElement('p');
-  const scroll = document.createElement('div');
-  const actions = document.createElement('div');
-  const close = document.createElement('button');
+  const overlay =
+    document.createElement('div');
+
+  const box =
+    document.createElement('div');
+
+  const h =
+    document.createElement('h2');
+
+  const intro =
+    document.createElement('p');
+
+  const scroll =
+    document.createElement('div');
+
+  const actions =
+    document.createElement('div');
+
+  const close =
+    document.createElement('button');
 
   overlay.className = 'overlay';
   box.className = 'modal';
+
   h.textContent =
     `競合コピー整理（${copies.length}件）`;
 
   intro.textContent =
-    '自動では削除しません。本文が同じ候補でも、必ず中身を確認してください。';
+    '自動では削除しません。元のメモと同じ内容か、個別に確認してください。';
 
   scroll.className = 'review-scroll';
   actions.className = 'actions';
+
   close.className = 'action primary';
   close.textContent = '閉じる';
 
   function finish(){
     modalOpen = false;
     host.replaceChildren();
-    document.removeEventListener('keydown',keys,true);
+
+    document.removeEventListener(
+      'keydown',
+      keys,
+      true
+    );
+
     render();
   }
 
@@ -2385,13 +2592,16 @@ async function reviewConflicts(){
 
   for(const n of copies){
     const bare = n.title.replace(
-      /^【競合コピー】/,''
+      /^【競合コピー】/,
+      ''
     );
 
     const matches = notes.filter(x=>
       x.id !== n.id &&
       !x.deleted &&
-      !x.title.startsWith('【競合コピー】') &&
+      !x.title.startsWith(
+        '【競合コピー】'
+      ) &&
       (
         x.title === bare ||
         label(x) === bare
@@ -2402,12 +2612,23 @@ async function reviewConflicts(){
       x=>sameContent(n,x)
     );
 
-    const row = document.createElement('div');
-    const name = document.createElement('strong');
-    const desc = document.createElement('p');
-    const buttons = document.createElement('div');
-    const view = document.createElement('button');
-    const trash = document.createElement('button');
+    const row =
+      document.createElement('div');
+
+    const name =
+      document.createElement('strong');
+
+    const desc =
+      document.createElement('p');
+
+    const buttons =
+      document.createElement('div');
+
+    const view =
+      document.createElement('button');
+
+    const trash =
+      document.createElement('button');
 
     row.className = 'review-item';
     name.textContent = label(n);
@@ -2427,12 +2648,17 @@ async function reviewConflicts(){
 
     view.className = 'action';
     view.textContent = '内容を見る';
+
     view.onclick = ()=>{
       finish();
+
       selected = n.id;
+
       updateEditor();
       openEditorScreen();
+
       scheduleListRefresh();
+
       toast(
         'コピーを開きました。内容を確認してください。'
       );
@@ -2440,6 +2666,7 @@ async function reviewConflicts(){
 
     trash.className = 'action';
     trash.textContent = 'ゴミ箱へ…';
+
     trash.onclick = async()=>{
       finish();
       await remove(n.id);
@@ -2451,23 +2678,30 @@ async function reviewConflicts(){
   }
 
   actions.append(close);
-  box.append(h,intro,scroll,actions);
+
+  box.append(
+    h,
+    intro,
+    scroll,
+    actions
+  );
+
   overlay.append(box);
   host.append(overlay);
 
   document.addEventListener(
-    'keydown',keys,true
+    'keydown',
+    keys,
+    true
   );
 }
 
-/*
- * Firebase同期
- *
- * 旧版の updatedAt 比較方式を復活。
- *
- * baseline は参照しない。
- * 競合コピーは自動作成しない。
- */
+/* ==================================================
+   Firebase同期
+
+   前回のupdatedAt比較方式を維持。
+   競合コピーを自動生成しない。
+================================================== */
 
 function syncKey(uid){
   return 'enabled:'+uid;
@@ -2476,28 +2710,47 @@ function syncKey(uid){
 function updateAccountUI(){
   $('account').textContent = cloudUser
     ? (
-        cloudUser.email || 'Googleアカウント'
-      ) + (syncEnabled ? ' ・ 同期有効' : '')
+        cloudUser.email ||
+        'Googleアカウント'
+      ) +
+      (
+        syncEnabled
+          ? ' ・ 同期有効'
+          : ''
+      )
     : 'ログインしていません';
 
   $('login').classList.toggle(
-    'hide',!!cloudUser
+    'hide',
+    !!cloudUser
   );
+
   $('logout').classList.toggle(
-    'hide',!cloudUser
+    'hide',
+    !cloudUser
   );
+
   $('startSync').classList.toggle(
-    'hide',!cloudUser || syncEnabled
+    'hide',
+    !cloudUser || syncEnabled
   );
 }
 
 function scheduleSync(){
-  if(!syncEnabled || !cloudUser) return;
+  if(
+    !syncEnabled ||
+    !cloudUser
+  ){
+    return;
+  }
 
   clearTimeout(syncTimer);
 
   syncTimer = setTimeout(()=>{
-    if(!document.hidden && navigator.onLine){
+    if(
+      !document.hidden &&
+      navigator.onLine
+    ){
       syncNow();
     }
   },1500);
@@ -2529,16 +2782,23 @@ async function loadFirebase(){
       import(base+'firebase-firestore.js')
     ]);
 
-  const app = appMod.initializeApp(firebaseConfig);
+  const app = appMod.initializeApp(
+    firebaseConfig
+  );
 
   auth = authMod.getAuth(app);
   firestore = dbMod.getFirestore(app);
-  firebase = {authMod,dbMod};
+
+  firebase = {
+    authMod,
+    dbMod
+  };
 
   authMod.onAuthStateChanged(
     auth,
     async user=>{
-      const generation = ++accountGeneration;
+      const generation =
+        ++accountGeneration;
 
       clearTimeout(syncTimer);
       clearInterval(syncInterval);
@@ -2550,25 +2810,37 @@ async function loadFirebase(){
       if(user){
         try{
           syncEnabled =
-            (await metaGet(syncKey(user.uid))) === true;
+            (
+              await metaGet(
+                syncKey(user.uid)
+              )
+            ) === true;
         }catch(e){
           console.error(e);
         }
       }
 
-      if(generation !== accountGeneration){
+      if(
+        generation !==
+        accountGeneration
+      ){
         return;
       }
 
       updateAccountUI();
 
-      if(syncEnabled && user){
+      if(
+        syncEnabled &&
+        user
+      ){
         startInterval();
         syncNow();
       }
     },
     e=>{
-      $('account').textContent = '認証エラー';
+      $('account').textContent =
+        '認証エラー';
+
       console.error(e);
     }
   );
@@ -2592,12 +2864,17 @@ async function login(){
     });
 
     await firebase.authMod.signInWithPopup(
-      auth,provider
+      auth,
+      provider
     );
   }catch(e){
     await dialog(
       'ログインエラー',
-      String(e.code || e.message || e)
+      String(
+        e.code ||
+        e.message ||
+        e
+      )
     );
   }
 }
@@ -2614,7 +2891,9 @@ async function logout(){
   if(choice !== 1) return;
 
   try{
-    await firebase.authMod.signOut(auth);
+    await firebase.authMod.signOut(
+      auth
+    );
   }catch(e){
     await dialog(
       'ログアウトエラー',
@@ -2624,7 +2903,12 @@ async function logout(){
 }
 
 async function startSync(){
-  if(!cloudUser || syncEnabled) return;
+  if(
+    !cloudUser ||
+    syncEnabled
+  ){
+    return;
+  }
 
   const user = cloudUser;
 
@@ -2637,17 +2921,21 @@ async function startSync(){
   if(
     choice !== 1 ||
     cloudUser?.uid !== user.uid
-  ) return;
+  ){
+    return;
+  }
 
   try{
     saveEditor();
     await waitForSaves();
 
     await metaPut(
-      syncKey(user.uid),true
+      syncKey(user.uid),
+      true
     );
 
     syncEnabled = true;
+
     updateAccountUI();
     startInterval();
 
@@ -2658,10 +2946,12 @@ async function startSync(){
     }
   }catch(e){
     syncEnabled = false;
+
     clearInterval(syncInterval);
 
     await metaPut(
-      syncKey(user.uid),false
+      syncKey(user.uid),
+      false
     ).catch(console.error);
 
     updateAccountUI();
@@ -2674,8 +2964,11 @@ async function startSync(){
 }
 
 function sameRecord(a,b){
-  return JSON.stringify(normalizeNote(a)) ===
-    JSON.stringify(normalizeNote(b));
+  return JSON.stringify(
+    normalizeNote(a)
+  ) === JSON.stringify(
+    normalizeNote(b)
+  );
 }
 
 function accountValid(uid,generation){
@@ -2686,23 +2979,15 @@ function accountValid(uid,generation){
   );
 }
 
-/*
- * 競合コピーを一切作らない同期処理。
- *
- * 1. IndexedDBの保存を待つ。
- * 2. Firestoreのメモを取得する。
- * 3. 同じIDはupdatedAtが新しい側を採用する。
- * 4. 同期中に編集されたメモは上書きしない。
- * 5. 同期中に変更されたローカル内容は
- *    古い状態のままアップロードしない。
- */
 async function syncNow(){
   if(
     !syncEnabled ||
     !cloudUser ||
     !firebase ||
     !navigator.onLine
-  ) return;
+  ){
+    return;
+  }
 
   if(syncing){
     syncAgain = true;
@@ -2724,32 +3009,55 @@ async function syncNow(){
 
       const {dbMod} = firebase;
 
-      const collection = dbMod.collection(
-        firestore,'users',uid,'notes'
-      );
+      const collection =
+        dbMod.collection(
+          firestore,
+          'users',
+          uid,
+          'notes'
+        );
 
-      const snap = await dbMod.getDocs(collection);
+      const snap =
+        await dbMod.getDocs(
+          collection
+        );
 
-      if(!accountValid(uid,generation)) return;
+      if(
+        !accountValid(
+          uid,
+          generation
+        )
+      ){
+        return;
+      }
 
       const remote = new Map();
 
       snap.forEach(d=>{
         remote.set(
           d.id,
-          normalizeNote(d.data(),d.id)
+          normalizeNote(
+            d.data(),
+            d.id
+          )
         );
       });
 
       const before = new Map(
         (await dbGetAll()).map(
-          n=>[n.id,normalizeNote(n)]
+          n=>[
+            n.id,
+            normalizeNote(n)
+          ]
         )
       );
 
       const downloads = [];
       const uploads = [];
 
+      /*
+       * クラウド側が新しいものを取得する。
+       */
       for(const [id,r] of remote){
         const l = before.get(id);
 
@@ -2762,6 +3070,9 @@ async function syncNow(){
         }
       }
 
+      /*
+       * 端末側が新しいものを送信する。
+       */
       for(const [id,l] of before){
         const r = remote.get(id);
 
@@ -2776,57 +3087,90 @@ async function syncNow(){
 
       await waitForSaves();
 
-      if(!accountValid(uid,generation)) return;
+      if(
+        !accountValid(
+          uid,
+          generation
+        )
+      ){
+        return;
+      }
 
       const latest = new Map(
         (await dbGetAll()).map(
-          n=>[n.id,normalizeNote(n)]
+          n=>[
+            n.id,
+            normalizeNote(n)
+          ]
         )
       );
 
-      const safeDownloads = downloads.filter(r=>{
-        const previous = before.get(r.id);
-        const now = latest.get(r.id);
+      const safeDownloads =
+        downloads.filter(r=>{
+          const previous =
+            before.get(r.id);
 
-        // 現在入力中のメモはクラウドで置き換えない。
-        if(
-          r.id === selected &&
-          isEditableTarget(document.activeElement)
-        ){
-          return false;
-        }
+          const now =
+            latest.get(r.id);
 
-        if(!previous){
-          return !now;
-        }
+          if(
+            r.id === selected &&
+            isEditableTarget(
+              document.activeElement
+            )
+          ){
+            return false;
+          }
 
-        if(
-          !now ||
-          !sameRecord(now,previous)
-        ){
-          return false;
-        }
+          if(!previous){
+            return !now;
+          }
 
-        return timestamp(r.updatedAt) >
-          timestamp(now.updatedAt);
-      });
+          if(
+            !now ||
+            !sameRecord(
+              now,
+              previous
+            )
+          ){
+            return false;
+          }
+
+          return timestamp(
+            r.updatedAt
+          ) > timestamp(
+            now.updatedAt
+          );
+        });
 
       if(safeDownloads.length){
         await enqueue(
-          ()=>dbPutMany(safeDownloads)
+          ()=>dbPutMany(
+            safeDownloads
+          )
         );
 
         const byId = new Map(
-          notes.map(n=>[n.id,n])
+          notes.map(
+            n=>[n.id,n]
+          )
         );
 
         for(const r of safeDownloads){
-          byId.set(r.id,r);
+          byId.set(
+            r.id,
+            r
+          );
         }
 
-        notes = [...byId.values()];
+        notes = [
+          ...byId.values()
+        ];
 
-        if(selected && !current()){
+        if(
+          selected &&
+          !current()
+        ){
           selected = null;
           updateEditor();
           showScreen('list');
@@ -2836,7 +3180,9 @@ async function syncNow(){
           )
         ){
           if(
-            isEditableTarget(document.activeElement)
+            isEditableTarget(
+              document.activeElement
+            )
           ){
             syncAgain = true;
           }else{
@@ -2848,54 +3194,86 @@ async function syncNow(){
       }
 
       /*
-       * アップロードの直前に、端末内データを
-       * もう一度確認する。
+       * 同期中に変更されたメモについては、
+       * その同期で古い内容を送信しない。
        */
       for(const candidate of uploads){
-        if(!accountValid(uid,generation)) return;
+        if(
+          !accountValid(
+            uid,
+            generation
+          )
+        ){
+          return;
+        }
 
         await waitForSaves();
 
-        const now = (await dbGetAll()).find(
+        const now = (
+          await dbGetAll()
+        ).find(
           n=>n.id === candidate.id
         );
 
-        if(!now) continue;
+        if(!now){
+          continue;
+        }
 
-        if(!sameRecord(now,candidate)){
+        if(
+          !sameRecord(
+            now,
+            candidate
+          )
+        ){
           syncAgain = true;
           continue;
         }
 
-        const r = remote.get(candidate.id);
+        const r = remote.get(
+          candidate.id
+        );
 
         if(
           r &&
-          timestamp(r.updatedAt) >=
-            timestamp(now.updatedAt)
+          timestamp(
+            r.updatedAt
+          ) >= timestamp(
+            now.updatedAt
+          )
         ){
           continue;
         }
 
         await dbMod.setDoc(
-          dbMod.doc(collection,candidate.id),
+          dbMod.doc(
+            collection,
+            candidate.id
+          ),
           normalizeNote(now)
         );
       }
 
       lastSync = Date.now();
       syncError = '';
+
       $('status').textContent =
         '保存済み・同期済み';
+
     }catch(e){
-      console.error('SUGU sync:',e);
+      console.error(
+        'SUGU sync:',
+        e
+      );
 
       syncError = String(
-        e.code || e.message || e
+        e.code ||
+        e.message ||
+        e
       );
 
       $('status').textContent =
         '端末保存済み・同期失敗';
+
     }finally{
       syncing = false;
     }
@@ -2909,10 +3287,13 @@ async function syncNow(){
   }
 }
 
-/* 手動更新 */
-
 async function manualRefresh(){
-  if(manualRefreshing || modalOpen) return;
+  if(
+    manualRefreshing ||
+    modalOpen
+  ){
+    return;
+  }
 
   manualRefreshing = true;
 
@@ -2922,15 +3303,22 @@ async function manualRefresh(){
   button.disabled = true;
   button.classList.add('refreshing');
   button.title = '更新中…';
-  $('status').textContent = '更新中…';
+
+  $('status').textContent =
+    '更新中…';
 
   try{
     saveEditor();
     await waitForSaves();
 
-    if(syncEnabled && cloudUser){
+    if(
+      syncEnabled &&
+      cloudUser
+    ){
       if(!navigator.onLine){
-        throw Error('オフラインです');
+        throw Error(
+          'オフラインです'
+        );
       }
 
       await syncNow();
@@ -2942,31 +3330,48 @@ async function manualRefresh(){
 
     await waitForSaves();
 
-    const fromDisk = await dbGetAll();
+    const fromDisk =
+      await dbGetAll();
 
-    if(!isEditableTarget(document.activeElement)){
+    if(
+      !isEditableTarget(
+        document.activeElement
+      )
+    ){
       notes = fromDisk;
 
-      if(selected && !current()){
+      if(
+        selected &&
+        !current()
+      ){
         selected = null;
       }
 
       updateEditor();
+
     }else{
       const byId = new Map(
-        fromDisk.map(n=>[n.id,n])
+        fromDisk.map(
+          n=>[n.id,n]
+        )
       );
 
       const active = current();
 
       if(active){
-        byId.set(active.id,active);
+        byId.set(
+          active.id,
+          active
+        );
       }
 
-      notes = [...byId.values()];
+      notes = [
+        ...byId.values()
+      ];
     }
 
     render();
+
     $('list').scrollTop = scroll;
 
     $('status').textContent =
@@ -2974,17 +3379,28 @@ async function manualRefresh(){
         ? '保存済み・同期済み'
         : '保存済み';
 
-    toast('メモを更新しました');
+    toast(
+      'メモを更新しました'
+    );
+
   }catch(e){
     $('status').textContent =
       '更新できませんでした';
 
-    toast(String(e.message || e));
+    toast(
+      String(e.message || e)
+    );
+
   }finally{
     manualRefreshing = false;
+
     button.disabled = false;
-    button.classList.remove('refreshing');
-    button.title = 'メモを更新';
+    button.classList.remove(
+      'refreshing'
+    );
+
+    button.title =
+      'メモを更新';
   }
 }
 
@@ -3003,7 +3419,11 @@ async function syncMenu(){
     'SUGU クラウド同期',
     `アカウント：${cloudUser.email || ''}\n`+
     `状態：${syncError || '同期有効'}`,
-    ['閉じる','今すぐ同期','ログアウト']
+    [
+      '閉じる',
+      '今すぐ同期',
+      'ログアウト'
+    ]
   );
 
   if(choice === 1){
@@ -3015,16 +3435,19 @@ async function syncMenu(){
   }
 }
 
-/* 設定画面 */
+/* ==================================================
+   設定
+================================================== */
 
 function updateFilterUI(){
-  document.querySelectorAll('.chip')
-    .forEach(b=>{
-      b.classList.toggle(
-        'active',
-        b.dataset.filter === filter
-      );
-    });
+  document.querySelectorAll(
+    '.chip'
+  ).forEach(b=>{
+    b.classList.toggle(
+      'active',
+      b.dataset.filter === filter
+    );
+  });
 
   render();
 }
@@ -3044,30 +3467,41 @@ function applySettings(){
 
   for(const [id,key] of pairs){
     $(id).classList.toggle(
-      'hide',!settings[key]
+      'hide',
+      !settings[key]
     );
   }
 
-  document.querySelector('.syncbar')
-    .classList.toggle(
-      'hide',!settings.syncControls
-    );
+  document.querySelector(
+    '.syncbar'
+  ).classList.toggle(
+    'hide',
+    !settings.syncControls
+  );
 
   document.querySelector(
     '[data-filter="ear"]'
   ).classList.toggle(
-    'hide',!settings.favorites
+    'hide',
+    !settings.favorites
   );
 
   document.querySelector(
     '[data-filter="trash"]'
   ).classList.toggle(
-    'hide',!settings.trash
+    'hide',
+    !settings.trash
   );
 
   if(
-    (filter === 'ear' && !settings.favorites) ||
-    (filter === 'trash' && !settings.trash)
+    (
+      filter === 'ear' &&
+      !settings.favorites
+    ) ||
+    (
+      filter === 'trash' &&
+      !settings.trash
+    )
   ){
     filter = 'all';
   }
@@ -3084,27 +3518,49 @@ function openSettings(){
   const host = $('dialogs');
   host.replaceChildren();
 
-  const overlay = document.createElement('div');
-  const box = document.createElement('div');
-  const h = document.createElement('h2');
-  const tabs = document.createElement('div');
-  const list = document.createElement('div');
-  const note = document.createElement('div');
-  const actions = document.createElement('div');
-  const review = document.createElement('button');
-  const close = document.createElement('button');
+  const overlay =
+    document.createElement('div');
+
+  const box =
+    document.createElement('div');
+
+  const h =
+    document.createElement('h2');
+
+  const tabs =
+    document.createElement('div');
+
+  const list =
+    document.createElement('div');
+
+  const note =
+    document.createElement('div');
+
+  const actions =
+    document.createElement('div');
+
+  const review =
+    document.createElement('button');
+
+  const close =
+    document.createElement('button');
 
   overlay.className = 'overlay';
   box.className = 'modal';
+
   h.textContent = 'SUGU の設定';
+
   tabs.className = 'settings-tabs';
   list.className = 'settings-list';
   note.className = 'settings-note';
+
   note.textContent =
     '設定はこの端末に保存されます。メモは削除されません。';
+
   actions.className = 'actions';
 
   review.className = 'action';
+
   review.textContent =
     `競合コピーを確認（${conflictCandidates().length}件）`;
 
@@ -3114,8 +3570,11 @@ function openSettings(){
   function finish(){
     modalOpen = false;
     host.replaceChildren();
+
     document.removeEventListener(
-      'keydown',keys,true
+      'keydown',
+      keys,
+      true
     );
   }
 
@@ -3134,23 +3593,34 @@ function openSettings(){
     reviewConflicts();
   };
 
-  actions.append(review,close);
+  actions.append(
+    review,
+    close
+  );
 
   function draw(){
     tabs.replaceChildren();
     list.replaceChildren();
 
     for(const group of SETTING_GROUPS){
-      const b = document.createElement('button');
+      const b =
+        document.createElement('button');
 
       b.className =
         'settings-tab'+
-        (settingsTab === group.id ? ' active' : '');
+        (
+          settingsTab === group.id
+            ? ' active'
+            : ''
+        );
 
-      b.textContent = group.name;
+      b.textContent =
+        group.name;
 
       b.onclick = ()=>{
-        settingsTab = group.id;
+        settingsTab =
+          group.id;
+
         draw();
       };
 
@@ -3161,61 +3631,113 @@ function openSettings(){
       g=>g.id === settingsTab
     );
 
-    for(const [key,name,desc] of group.items){
-      const row = document.createElement('div');
-      const info = document.createElement('div');
-      const title = document.createElement('span');
-      const description = document.createElement('span');
-      const toggle = document.createElement('button');
+    for(
+      const [key,name,desc]
+      of group.items
+    ){
+      const row =
+        document.createElement('div');
+
+      const info =
+        document.createElement('div');
+
+      const title =
+        document.createElement('span');
+
+      const description =
+        document.createElement('span');
+
+      const toggle =
+        document.createElement('button');
 
       row.className = 'setting-row';
       info.className = 'setting-info';
+
       title.className = 'setting-name';
       title.textContent = name;
-      description.className = 'setting-desc';
+
+      description.className =
+        'setting-desc';
+
       description.textContent = desc;
-      info.append(title,description);
+
+      info.append(
+        title,
+        description
+      );
 
       toggle.className =
-        'switch'+(settings[key] ? ' on' : '');
+        'switch'+
+        (
+          settings[key]
+            ? ' on'
+            : ''
+        );
 
-      toggle.setAttribute('role','switch');
       toggle.setAttribute(
-        'aria-checked',String(settings[key])
+        'role',
+        'switch'
       );
-      toggle.setAttribute('aria-label',name);
+
+      toggle.setAttribute(
+        'aria-checked',
+        String(settings[key])
+      );
+
+      toggle.setAttribute(
+        'aria-label',
+        name
+      );
 
       toggle.onclick = ()=>{
-        settings[key] = !settings[key];
+        settings[key] =
+          !settings[key];
+
         saveSettings();
         applySettings();
         draw();
       };
 
-      row.append(info,toggle);
+      row.append(
+        info,
+        toggle
+      );
+
       list.append(row);
     }
   }
 
-  box.append(h,tabs,list,note,actions);
+  box.append(
+    h,
+    tabs,
+    list,
+    note,
+    actions
+  );
+
   overlay.append(box);
   host.append(overlay);
 
   document.addEventListener(
-    'keydown',keys,true
+    'keydown',
+    keys,
+    true
   );
 
   draw();
 }
 
-/* 起動・イベント */
+/* ==================================================
+   起動・操作イベント
+================================================== */
 
 function isEditableTarget(target){
   return (
     target instanceof Element &&
     !!target.closest(
       'input,textarea,select,'+
-      '[contenteditable="true"],[role="textbox"]'
+      '[contenteditable="true"],'+
+      '[role="textbox"]'
     )
   );
 }
@@ -3225,13 +3747,17 @@ async function receivePendingShare(){
     'sugu-pending-share'
   ).catch(()=>null);
 
-  if(!id) return false;
+  if(!id){
+    return false;
+  }
 
   await waitForSaves();
+
   notes = await dbGetAll();
 
   const n = notes.find(x=>
-    x.id === id && !x.deleted
+    x.id === id &&
+    !x.deleted
   );
 
   if(n){
@@ -3240,7 +3766,8 @@ async function receivePendingShare(){
   }
 
   await metaPut(
-    'sugu-pending-share',null
+    'sugu-pending-share',
+    null
   ).catch(console.error);
 
   return !!n;
@@ -3249,31 +3776,41 @@ async function receivePendingShare(){
 async function init(){
   try{
     db = await openDB();
+
     notes = await dbGetAll();
 
     loadSettings();
 
     ghostDismissedDay =
-      localGet('sugu-ghost-dismiss') || '';
+      localGet(
+        'sugu-ghost-dismiss'
+      ) || '';
 
     sortMode =
-      localGet('sugu-sort') || 'updated';
+      localGet(
+        'sugu-sort'
+      ) || 'updated';
 
     if(
-      !['updated','created','title']
-        .includes(sortMode)
+      ![
+        'updated',
+        'created',
+        'title'
+      ].includes(sortMode)
     ){
       sortMode = 'updated';
     }
 
     $('sort').value = sortMode;
 
-    const last = localGet('mimi-last-id');
+    const last =
+      localGet('mimi-last-id');
 
     selected =
       last &&
-      notes.some(
-        n=>n.id === last && !n.deleted
+      notes.some(n=>
+        n.id === last &&
+        !n.deleted
       )
         ? last
         : null;
@@ -3282,10 +3819,13 @@ async function init(){
     applySettings();
 
     const previous =
-      localGet('sugu-screen') || 'list';
+      localGet('sugu-screen') ||
+      'list';
 
     history.replaceState(
-      {sugu:'list'},'',location.href
+      {sugu:'list'},
+      '',
+      location.href
     );
 
     showScreen('list');
@@ -3297,88 +3837,155 @@ async function init(){
       openEditorScreen();
     }
 
-    $('status').textContent = '保存済み';
+    $('status').textContent =
+      '保存済み';
 
     if(
       new URL(location.href)
-        .searchParams.has('shared')
+        .searchParams
+        .has('shared')
     ){
       await receivePendingShare();
 
-      const url = new URL(location.href);
-      url.searchParams.delete('shared');
+      const url =
+        new URL(location.href);
+
+      url.searchParams.delete(
+        'shared'
+      );
 
       history.replaceState(
         history.state,
         '',
-        url.pathname+url.search+url.hash
+        url.pathname+
+        url.search+
+        url.hash
       );
     }
+
   }catch(e){
     await dialog(
       '起動エラー',
       '保存領域を開けませんでした。\n'+
       String(e.message || e)
     );
+
     return;
   }
 
   $('title').addEventListener(
-    'input',saveEditor
+    'input',
+    saveEditor
   );
 
   $('body').addEventListener(
-    'input',saveEditor
+    'input',
+    saveEditor
   );
 
+  /*
+   * 入力が終わったタイミングで
+   * 一覧の並び順を最新状態にする。
+   */
   $('body').addEventListener(
-    'blur',updateLinks
+    'blur',
+    ()=>{
+      updateLinks();
+
+      if(listDirty){
+        render();
+      }
+    }
   );
 
-  $('new').onclick = ()=>create();
-  $('sideNew').onclick = ()=>create();
-  $('refresh').onclick = manualRefresh;
-  $('settings').onclick = openSettings;
-  $('paste').onclick = pasteNew;
-  $('stats').onclick = showStats;
-  $('copy').onclick = copyBody;
-  $('mode').onclick = toggleChecklist;
+  $('title').addEventListener(
+    'blur',
+    ()=>{
+      if(listDirty){
+        render();
+      }
+    }
+  );
+
+  $('new').onclick =
+    ()=>create();
+
+  $('sideNew').onclick =
+    ()=>create();
+
+  $('refresh').onclick =
+    manualRefresh;
+
+  $('settings').onclick =
+    openSettings;
+
+  $('paste').onclick =
+    pasteNew;
+
+  $('stats').onclick =
+    showStats;
+
+  $('copy').onclick =
+    copyBody;
+
+  $('mode').onclick =
+    toggleChecklist;
 
   $('pin').onclick = ()=>{
     if(selected){
-      toggleField(selected,'pinned');
+      toggleField(
+        selected,
+        'pinned'
+      );
     }
   };
 
   $('ear').onclick = ()=>{
     if(selected){
-      toggleField(selected,'ear');
+      toggleField(
+        selected,
+        'ear'
+      );
     }
   };
 
-  $('remove').onclick = ()=>remove();
+  $('remove').onclick =
+    ()=>remove();
 
-  $('openList').onclick = goList;
+  $('openList').onclick =
+    goList;
 
   $('closeList').onclick = ()=>{
     showScreen('edit');
   };
 
   $('list').onclick = e=>{
-    if(e.target.closest('button')) return;
+    if(e.target.closest('button')){
+      return;
+    }
 
-    const item = e.target.closest('.item');
-    if(!item?.dataset.id) return;
+    const item =
+      e.target.closest('.item');
+
+    if(!item?.dataset.id){
+      return;
+    }
 
     if(filter === 'trash'){
-      restoreNote(item.dataset.id);
+      restoreNote(
+        item.dataset.id
+      );
     }else{
-      choose(item.dataset.id,false);
+      choose(
+        item.dataset.id,
+        false
+      );
     }
   };
 
   $('list').onkeydown = e=>{
-    const item = e.target.closest('.item');
+    const item =
+      e.target.closest('.item');
 
     if(
       item &&
@@ -3388,9 +3995,14 @@ async function init(){
       e.preventDefault();
 
       if(filter === 'trash'){
-        restoreNote(item.dataset.id);
+        restoreNote(
+          item.dataset.id
+        );
       }else{
-        choose(item.dataset.id,false);
+        choose(
+          item.dataset.id,
+          false
+        );
       }
     }
   };
@@ -3398,7 +4010,9 @@ async function init(){
   $('list').addEventListener(
     'scroll',
     ()=>{
-      lastListScroll = $('list').scrollTop;
+      lastListScroll =
+        $('list').scrollTop;
+
       scheduleListCheck();
     },
     {passive:true}
@@ -3417,13 +4031,18 @@ async function init(){
       $('list').scrollTop = 0;
       lastListScroll = 0;
       renderedCount = 0;
+
       render();
-    },150);
+    },100);
   };
 
   $('sort').onchange = e=>{
     sortMode = e.target.value;
-    localSet('sugu-sort',sortMode);
+
+    localSet(
+      'sugu-sort',
+      sortMode
+    );
 
     $('list').scrollTop = 0;
     lastListScroll = 0;
@@ -3432,76 +4051,114 @@ async function init(){
     render();
   };
 
-  document.querySelectorAll('.chip')
-    .forEach(b=>{
-      b.onclick = ()=>{
-        filter = b.dataset.filter;
-        $('list').scrollTop = 0;
-        lastListScroll = 0;
-        renderedCount = 0;
-        updateFilterUI();
-      };
-    });
+  document.querySelectorAll(
+    '.chip'
+  ).forEach(b=>{
+    b.onclick = ()=>{
+      filter =
+        b.dataset.filter;
+
+      $('list').scrollTop = 0;
+      lastListScroll = 0;
+      renderedCount = 0;
+
+      updateFilterUI();
+    };
+  });
 
   $('toastUndo').onclick = async()=>{
-    if(!undoInfo) return;
-
-    const id = undoInfo.id;
-    undoInfo = null;
-
-    $('toast').classList.add('hide');
-    await restoreNote(id);
-  };
-
-  $('export').onclick = exportJSON;
-  $('import').onclick = ()=>$('file').click();
-
-  $('file').onchange = async e=>{
-    await importJSON(e.target.files[0]);
-    e.target.value = '';
-  };
-
-  $('login').onclick = login;
-  $('logout').onclick = logout;
-  $('startSync').onclick = startSync;
-  $('syncMenu').onclick = syncMenu;
-
-  document.addEventListener('keydown',e=>{
-    if(modalOpen) return;
-
-    if(
-      e.ctrlKey &&
-      e.key.toLowerCase() === 'n'
-    ){
-      e.preventDefault();
-      create();
+    if(!undoInfo){
       return;
     }
 
-    if(
-      e.key === 'Delete' &&
-      !e.repeat &&
-      !e.isComposing &&
-      !e.ctrlKey &&
-      !e.altKey &&
-      !e.metaKey &&
-      !isEditableTarget(e.target) &&
-      settings.deleteKey &&
-      !matchMedia('(max-width:700px)').matches &&
-      filter !== 'trash'
-    ){
-      const target = e.target.closest?.('.item');
+    const id =
+      undoInfo.id;
 
-      if(target?.dataset.id){
+    undoInfo = null;
+
+    $('toast').classList.add(
+      'hide'
+    );
+
+    await restoreNote(id);
+  };
+
+  $('export').onclick =
+    exportJSON;
+
+  $('import').onclick = ()=>{
+    $('file').click();
+  };
+
+  $('file').onchange = async e=>{
+    await importJSON(
+      e.target.files[0]
+    );
+
+    e.target.value = '';
+  };
+
+  $('login').onclick =
+    login;
+
+  $('logout').onclick =
+    logout;
+
+  $('startSync').onclick =
+    startSync;
+
+  $('syncMenu').onclick =
+    syncMenu;
+
+  document.addEventListener(
+    'keydown',
+    e=>{
+      if(modalOpen){
+        return;
+      }
+
+      if(
+        e.ctrlKey &&
+        e.key.toLowerCase() === 'n'
+      ){
         e.preventDefault();
-        remove(target.dataset.id);
+        create();
+        return;
+      }
+
+      if(
+        e.key === 'Delete' &&
+        !e.repeat &&
+        !e.isComposing &&
+        !e.ctrlKey &&
+        !e.altKey &&
+        !e.metaKey &&
+        !isEditableTarget(
+          e.target
+        ) &&
+        settings.deleteKey &&
+        !matchMedia(
+          '(max-width:700px)'
+        ).matches &&
+        filter !== 'trash'
+      ){
+        const target =
+          e.target.closest?.('.item');
+
+        if(target?.dataset.id){
+          e.preventDefault();
+
+          remove(
+            target.dataset.id
+          );
+        }
+      }
+
+      if(e.key === 'Escape'){
+        goList();
       }
     }
-
-    if(e.key === 'Escape'){
-      goList();
-    }
-  });
+  );
 
   window.addEventListener(
     'popstate',
@@ -3545,19 +4202,28 @@ async function init(){
     navigator.serviceWorker.addEventListener(
       'message',
       async e=>{
-        if(e.data?.type !== 'SUGU_SHARED'){
+        if(
+          e.data?.type !==
+          'SUGU_SHARED'
+        ){
           return;
         }
 
         await waitForSaves();
+
         notes = await dbGetAll();
 
-        const n = notes.find(
-          x=>x.id === e.data.id && !x.deleted
+        const n = notes.find(x=>
+          x.id === e.data.id &&
+          !x.deleted
         );
 
         if(n){
-          choose(n.id,false);
+          choose(
+            n.id,
+            false
+          );
+
           scheduleSync();
         }
 
@@ -3576,12 +4242,13 @@ async function init(){
   }
 
   /*
-   * 端末内のメモを先に表示する。
-   * Firebaseの読み込み完了は待たない。
+   * 端末内の表示を優先し、
+   * Firebaseは後から初期化する。
    */
   loadFirebase().catch(e=>{
     console.error(
-      'Firebase initialization:',e
+      'Firebase initialization:',
+      e
     );
 
     $('account').textContent =
@@ -3590,6 +4257,7 @@ async function init(){
 }
 
 init();
+
 </script>
 </body>
 </html>
