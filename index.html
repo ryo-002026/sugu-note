@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8f1e9">
+<meta name="theme-color" content="#f7f3eb">
 <meta name="description" content="SUGU | 思いついたら、すぐ書ける。">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon-192.png">
@@ -13,425 +13,690 @@
 <style>
 :root{
   font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-  color:#44332d;
-  background:#f8f1e9;
-  --bg:#f8f1e9;
+  color:#3b3833;
+  background:#f7f3eb;
   --paper:#fffdf9;
-  --side:#f6e9dd;
-  --ink:#44332d;
-  --muted:#99877b;
-  --line:#eaded3;
-  --accent:#b96e51;
-  --accent-dark:#98543c;
-  --accent-pale:#f7e4d8;
-  --green:#698b6c;
-  --gold:#d4a451;
-  --danger:#b85b55;
-  --shadow:0 5px 22px rgba(93,54,35,.055)
+  --cream:#f7f3eb;
+  --cream2:#eee7dc;
+  --ink:#3b3833;
+  --muted:#8d867b;
+  --line:#e9e1d5;
+  --sage:#637b68;
+  --sage-soft:#e8eee7;
+  --clay:#b8795d;
+  --clay-soft:#f6e8df;
+  --gold:#bb9455;
+  --danger:#b96b62;
+  --shadow:0 6px 28px #5546380c;
 }
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden}
+html,body{margin:0;width:100%;height:100%}
 button,input,textarea,select{font:inherit}
 button{border:0;background:transparent;color:inherit;cursor:pointer}
 button:disabled{opacity:.35;cursor:default}
-button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
-  outline:2px solid var(--accent);outline-offset:2px
+button:focus-visible,input:focus-visible,
+textarea:focus-visible,select:focus-visible{
+  outline:2px solid var(--sage);
+  outline-offset:2px;
 }
 .hide{display:none!important}
 .app{
-  display:grid;grid-template-columns:365px minmax(0,1fr);
-  width:100%;height:100dvh;overflow:hidden
+  display:grid;
+  grid-template-columns:350px minmax(0,1fr);
+  height:100dvh;
+  overflow:hidden;
 }
 .side{
-  display:flex;flex-direction:column;min-height:0;
-  background:var(--side);border-right:1px solid var(--line)
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  background:var(--cream);
+  border-right:1px solid var(--line);
 }
 .toolbar{
-  display:flex;align-items:center;gap:4px;min-height:61px;
-  padding:8px 12px;flex-shrink:0
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-height:60px;
+  padding:7px 12px;
+  flex-shrink:0;
 }
+.side>.toolbar{border-bottom:1px solid var(--line)}
 .brand{
-  flex:1;padding-left:7px;color:var(--accent-dark);
-  font-size:23px;font-weight:850;letter-spacing:.11em
-}
-.brand small{
-  display:block;font-size:9px;font-weight:500;
-  letter-spacing:.18em;color:var(--muted)
+  flex:1;
+  padding-left:8px;
+  color:#665244;
+  font-family:Georgia,serif;
+  font-size:25px;
+  font-weight:700;
+  letter-spacing:.16em;
 }
 .btn{
-  display:grid;place-items:center;min-width:37px;height:38px;
-  border-radius:11px;font-size:19px
+  display:grid;
+  place-items:center;
+  min-width:38px;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  font-size:19px;
+  transition:background .15s;
 }
-.btn:hover:not(:disabled){background:#f0ded0}
-.btn.active{background:var(--accent-pale);color:var(--accent-dark)}
-.btn.danger:hover{background:#f7e0de;color:var(--danger)}
-.spacer{flex:1}
+.btn:hover:not(:disabled){background:var(--cream2)}
+.btn.active{color:var(--clay)}
 .status{
-  color:var(--muted);font-size:12px;overflow:hidden;
-  white-space:nowrap;text-overflow:ellipsis
+  font-size:12px;
+  color:var(--muted);
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
+.spacer{flex:1}
 .syncbar{
-  display:flex;align-items:center;flex-wrap:wrap;gap:6px;
-  padding:7px 15px 11px;font-size:11px;color:var(--muted)
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:8px 16px;
+  background:#f1ede5;
+  border-bottom:1px solid var(--line);
+  font-size:11px;
 }
 .syncbar span{
-  flex:1;min-width:80px;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap
+  flex:1;
+  min-width:70px;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .syncbtn{
-  padding:6px 9px;border:1px solid var(--line);
-  border-radius:9px;background:var(--paper);font-size:11px
+  padding:6px 9px;
+  border:1px solid #dfd5c9;
+  border-radius:9px;
+  background:var(--paper);
+  font-size:11px;
 }
-.search-wrap{padding:9px 13px 11px}
 .search{
-  width:100%;padding:13px 14px;border:1px solid #eadbd0;
-  border-radius:16px;background:var(--paper);color:var(--ink);
-  font-size:14px;box-shadow:var(--shadow)
+  width:calc(100% - 32px);
+  margin:15px 16px 11px;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:14px;
 }
 .filters{
-  display:flex;gap:6px;padding:0 13px 12px;flex-wrap:wrap
+  display:flex;
+  gap:5px;
+  padding:0 16px 12px;
+  flex-wrap:wrap;
 }
 .chip{
-  padding:8px 11px;border-radius:20px;
-  font-size:12px;color:#947d70
+  padding:8px 12px;
+  border-radius:20px;
+  color:#877c70;
+  font-size:12px;
 }
-.chip.active{background:var(--accent);color:white}
+.chip.active{
+  background:var(--sage-soft);
+  color:#526b57;
+  font-weight:700;
+}
 .sortbar{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:8px;padding:0 16px 10px
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:0 16px 10px;
 }
-.count{font-size:12px;color:var(--muted)}
+.count{color:var(--muted);font-size:12px}
 .sort-select{
-  max-width:153px;padding:7px;border:1px solid var(--line);
-  border-radius:9px;background:var(--paper);font-size:12px;
-  color:var(--ink)
+  max-width:155px;
+  padding:6px 8px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  background:var(--paper);
+  color:#71695f;
+  font-size:12px;
 }
 .list{
-  flex:1;min-height:0;overflow-y:auto;
-  overscroll-behavior:contain;padding:0 10px 12px
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:0 12px 16px;
 }
-.year-head{
-  display:flex;align-items:center;gap:12px;
-  padding:22px 9px 9px
+.year-heading{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:17px 5px 10px;
+  color:#8b7563;
+  font-family:Georgia,serif;
+  font-size:19px;
+  letter-spacing:.07em;
 }
-.year-head:first-child{padding-top:9px}
-.year-head strong{
-  color:#754a38;font-size:24px;font-weight:600;
-  letter-spacing:.03em;font-variant-numeric:tabular-nums
-}
-.year-head .rule{
-  height:1px;background:#dfc6b6;flex:1
-}
-.year-head small{color:var(--muted);font-size:11px}
-.pinned-head{padding-top:9px}
-.pinned-head strong{font-size:15px;color:var(--accent-dark)}
-.note-group{
-  overflow:hidden;border:1px solid #eadfd7;
-  border-radius:17px;background:var(--paper);
-  box-shadow:var(--shadow)
+.year-heading::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:#dcd2c5;
 }
 .item{
-  position:relative;display:flex;align-items:center;
-  min-height:102px;padding:12px 7px 12px 9px;
-  border-bottom:1px solid #efe6df;cursor:pointer
+  position:relative;
+  display:flex;
+  align-items:stretch;
+  min-height:105px;
+  margin-bottom:7px;
+  border:1px solid #eee7de;
+  border-radius:14px;
+  background:var(--paper);
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  overflow:hidden;
 }
-.item:last-child{border-bottom:0}
-.item:hover{background:#fff7f0}
+.item:hover{border-color:#d8cbbd}
 .item.active{
-  background:linear-gradient(115deg,#fff2e7,#f9ded0)
+  border-color:#a6b7a6;
+  background:#f8faf5;
+  box-shadow:inset 3px 0 var(--sage),var(--shadow);
 }
-.item:focus-visible{outline-offset:-2px}
-.date-col{
-  flex:0 0 71px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:0;
-  padding-right:7px;border-right:1px solid #f0e3d9
+.item-date{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  flex-shrink:0;
+  width:65px;
+  padding:10px 4px;
+  border-right:1px solid #f0e9e1;
+  color:var(--clay);
 }
-.date-main{
-  display:flex;align-items:baseline;justify-content:center;
-  gap:2px;white-space:nowrap
+.item-month{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.1em;
 }
-.date-month{font-size:13px;color:var(--accent-dark)}
-.date-day{
-  font-size:35px;font-weight:300;line-height:1.15;
-  letter-spacing:-.045em;color:#9e6049;
-  font-variant-numeric:tabular-nums
+.item-day{
+  font-family:Georgia,serif;
+  font-size:38px;
+  font-weight:400;
+  line-height:1.13;
+  font-variant-numeric:lining-nums;
 }
-.date-time{
-  padding-top:5px;font-size:11px;color:var(--muted);
-  font-variant-numeric:tabular-nums
+.item-content{
+  flex:1;
+  min-width:0;
+  padding:17px 7px 13px 13px;
 }
-.note-content{flex:1;min-width:0;padding:0 7px 0 12px}
-.note-content strong{
-  display:block;overflow:hidden;text-overflow:ellipsis;
-  white-space:nowrap;font-size:14px;font-weight:680;
-  line-height:1.6
+.item-content strong{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:14px;
+  line-height:1.5;
 }
-.note-content p{
-  margin:5px 0 0;overflow:hidden;text-overflow:ellipsis;
-  display:-webkit-box;-webkit-line-clamp:2;
+.item-content p{
+  display:-webkit-box;
+  margin:7px 0 0;
+  overflow:hidden;
+  color:#8d867d;
+  font-size:12px;
+  line-height:1.6;
   -webkit-box-orient:vertical;
-  font-size:12px;line-height:1.55;color:#8d8077;
-  overflow-wrap:anywhere
+  -webkit-line-clamp:2;
+  overflow-wrap:anywhere;
 }
-.progress{
-  display:inline-block;margin-top:6px;padding:4px 7px;
-  border-radius:7px;background:#e8efe7;
-  color:#527c59;font-size:11px
+.item-meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  color:#8a988b;
+  font-size:11px;
 }
-.progress.complete{background:#dceadd}
+.check-progress{
+  display:inline-block;
+  padding:3px 7px;
+  border-radius:7px;
+  background:var(--sage-soft);
+  color:#5c775e;
+  font-size:11px;
+}
 .item-actions{
-  display:flex;flex-direction:column;gap:2px;
-  flex:0 0 32px;align-items:center;justify-content:center
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  gap:1px;
+  width:37px;
+  padding:7px 5px 7px 0;
 }
 .item-icon{
-  display:grid;place-items:center;width:31px;height:28px;
-  border-radius:8px;font-size:17px;color:#b9a79b
+  display:grid;
+  place-items:center;
+  width:29px;
+  height:29px;
+  border-radius:8px;
+  color:#b8b0a5;
+  font-size:18px;
 }
-.item-icon:hover{background:#f3e4da;color:var(--accent-dark)}
+.item-icon:hover{
+  background:#f0eae1;
+  color:var(--ink);
+}
 .item-icon.on{color:var(--gold)}
-.item-icon.pin-on{color:var(--accent)}
-.item-icon.delete{font-size:16px}
-.item-icon.delete:hover{background:#f8e4e1;color:var(--danger)}
+.item-icon.pin-on{color:var(--sage)}
+.item-icon.delete{
+  color:#c4b6ae;
+  font-size:20px;
+}
+.item-icon.delete:hover{
+  background:#f8e8e5;
+  color:var(--danger);
+}
 .ghost-card{
-  padding:14px;margin:10px 0;border-radius:14px;
-  background:#f1e9f2;color:#755d80;cursor:pointer
+  display:block;
+  min-height:0;
+  padding:15px 42px 15px 17px;
+  border-color:#e4d7df;
+  background:#f5eff3;
 }
-.ghost-card strong{display:block;font-size:13px}
-.ghost-card p{margin:6px 25px 0 0;font-size:12px;line-height:1.5}
-.ghost-close{float:right;font-size:20px}
-.more-button{
-  width:100%;padding:16px;color:var(--accent-dark);font-size:13px
+.ghost-card strong{
+  display:block;
+  color:#80677b;
+  font-size:13px;
 }
-.empty-list{
-  padding:35px 12px;text-align:center;color:var(--muted);
-  font-size:13px;line-height:1.8
+.ghost-card p{
+  margin:7px 0 0;
+  color:#917b8d;
+  font-size:12px;
+  line-height:1.6;
+}
+.ghost-close{
+  position:absolute;
+  top:7px;
+  right:8px;
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  font-size:19px;
+}
+.list-sentinel{
+  height:8px;
+  width:100%;
 }
 .side-bottom{
-  display:flex;align-items:stretch;gap:8px;
+  display:flex;
+  align-items:stretch;
+  gap:8px;
   padding:11px 13px calc(11px + env(safe-area-inset-bottom));
-  border-top:1px solid #e8d9cc;flex-shrink:0
+  border-top:1px solid var(--line);
+  background:var(--cream);
+  flex-shrink:0;
 }
 .bottom-icon{
-  display:grid;place-items:center;width:43px;min-width:43px;
-  min-height:48px;border:1px solid #e3d3c7;
-  border-radius:13px;background:var(--paper);
-  color:var(--accent-dark);font-size:19px
+  display:grid;
+  place-items:center;
+  width:44px;
+  min-width:44px;
+  min-height:49px;
+  border:1px solid #ded4c8;
+  border-radius:13px;
+  background:var(--paper);
+  color:#867769;
+  font-size:20px;
 }
 .create-button{
-  flex:1;min-width:0;min-height:48px;border-radius:13px;
-  background:var(--accent);color:white;font-weight:750;
-  box-shadow:0 3px 10px #9c624020
+  flex:1;
+  min-width:0;
+  min-height:49px;
+  border-radius:13px;
+  background:var(--sage);
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.03em;
 }
-.create-button:hover{background:var(--accent-dark)}
+.create-button:hover{background:#506b55}
 .editor{
-  display:flex;flex-direction:column;min-width:0;min-height:0;
-  background:
-    radial-gradient(circle at 93% 92%,#f4ded0 0,transparent 30%),
-    radial-gradient(circle at 5% 3%,#fff9f3 0,transparent 38%),
-    var(--bg)
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  min-height:0;
+  background:#fffdf9;
 }
-.editor-header{border-bottom:1px solid var(--line)}
+.editor>.toolbar{
+  border-bottom:1px solid #f0ebe3;
+}
 .edit{
-  display:flex;flex-direction:column;flex:1;min-height:0;
-  width:calc(100% - 42px);max-width:940px;
-  margin:20px auto;padding:29px 37px;
-  border:1px solid #f0e6df;border-radius:21px;
-  background:rgba(255,253,249,.96);box-shadow:var(--shadow)
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  min-height:0;
+  width:100%;
+  max-width:920px;
+  margin:auto;
+  padding:23px 35px;
 }
 #title{
-  width:100%;padding:8px 0 17px;border:0;
-  border-bottom:1px solid #eee5df;outline:0;
-  background:none;color:#613e30;font-size:25px;font-weight:730
+  width:100%;
+  padding:13px 0;
+  border:0;
+  outline:0;
+  background:none;
+  color:var(--ink);
+  font-size:24px;
+  font-weight:700;
 }
 #body{
-  flex:1;min-height:0;width:100%;padding:18px 0;
-  border:0;outline:0;resize:none;background:none;
-  color:#473b35;font-size:16px;line-height:1.85
+  flex:1;
+  min-height:0;
+  width:100%;
+  padding:10px 0 20px;
+  border:0;
+  outline:0;
+  resize:none;
+  background:none;
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.85;
 }
-.edit-tools{
-  display:flex;align-items:center;gap:9px;
-  padding:15px 0 0;flex-shrink:0
+.checklist{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:9px 0 20px;
 }
-.mode-button{
-  padding:8px 12px;border:1px solid #eadbd0;
-  border-radius:10px;color:var(--accent-dark);font-size:12px
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:44px;
 }
-.mode-button.on{
-  background:var(--accent-pale);border-color:#e8c4b0
-}
-.mode-hint{font-size:11px;color:var(--muted)}
-.checklist{flex:1;min-height:0;overflow-y:auto;padding:14px 0}
-.check-row{display:flex;align-items:center;gap:10px;min-height:46px}
 .check-row input[type=checkbox]{
-  width:19px;height:19px;accent-color:var(--accent);flex-shrink:0
+  width:19px;
+  height:19px;
+  accent-color:var(--sage);
+  flex-shrink:0;
 }
 .check-text{
-  flex:1;min-width:0;padding:11px 4px;
-  border:0;border-bottom:1px solid #f0e7df;
-  outline:0;background:none;font-size:16px;color:var(--ink)
+  flex:1;
+  min-width:0;
+  padding:9px 3px;
+  border:0;
+  border-bottom:1px solid #eee9e2;
+  background:transparent;
+  outline:0;
+  font-size:16px;
 }
-.check-text.done{color:#aaa09a;text-decoration:line-through}
-.check-delete{width:30px;height:34px;color:#b9aaa0;font-size:18px}
-.check-add{padding:14px 4px;color:var(--accent-dark);font-size:14px}
+.check-text.done{
+  color:#a09c93;
+  text-decoration:line-through;
+}
+.check-delete{
+  width:30px;
+  height:34px;
+  color:#b7aca1;
+  font-size:18px;
+}
+.check-add{
+  padding:12px 3px;
+  color:var(--sage);
+  font-size:14px;
+}
+.edit-tools{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:5px 0 11px;
+  flex-shrink:0;
+}
+.mode-button{
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:#81796e;
+  font-size:12px;
+}
+.mode-button.on{
+  background:var(--sage-soft);
+  border-color:#c9d8c8;
+  color:var(--sage);
+}
+.mode-hint{
+  color:var(--muted);
+  font-size:11px;
+}
 .link-preview{
-  flex-shrink:0;max-height:125px;overflow-y:auto;
-  padding:10px 0;border-top:1px solid var(--line);font-size:13px
+  flex-shrink:0;
+  max-height:120px;
+  overflow-y:auto;
+  padding:8px 0;
+  border-top:1px solid var(--line);
+  font-size:13px;
 }
 .link-preview:empty{display:none}
 .link-preview small{
-  display:block;margin-bottom:5px;color:var(--muted)
+  display:block;
+  margin-bottom:5px;
+  color:var(--muted);
 }
 .link-preview a{
-  display:block;padding:5px 0;color:var(--accent-dark);
-  overflow-wrap:anywhere
+  display:block;
+  padding:5px 0;
+  color:var(--sage);
+  overflow-wrap:anywhere;
 }
-.copy-success{background:#e6f0e5;color:var(--green)}
+.copy-success{
+  background:var(--sage-soft);
+  color:var(--sage);
+}
 .empty-editor{
-  flex:1;display:grid;place-items:center;
-  color:var(--muted);font-size:14px
+  flex:1;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  color:#aaa297;
+  font-size:14px;
+  text-align:center;
 }
 .overlay{
-  position:fixed;inset:0;z-index:30;display:grid;
-  place-items:center;padding:18px;background:#30211db0
+  position:fixed;
+  inset:0;
+  z-index:30;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:#332a2580;
 }
 .modal{
-  width:min(480px,100%);max-height:90dvh;overflow:auto;
-  padding:24px;border-radius:20px;background:var(--paper);
-  box-shadow:0 18px 65px #0003
+  width:min(480px,100%);
+  max-height:90dvh;
+  overflow:auto;
+  padding:25px;
+  border:1px solid #eee5db;
+  border-radius:19px;
+  background:var(--paper);
+  box-shadow:0 20px 70px #21170e30;
 }
-.modal h2{margin:0 0 10px;font-size:19px;color:#704735}
+.modal h2{
+  margin:0 0 10px;
+  color:#584b40;
+  font-size:19px;
+}
 .modal p{
-  white-space:pre-line;line-height:1.75;
-  font-size:14px;color:#75665d
+  white-space:pre-line;
+  line-height:1.8;
+  color:#756d63;
+  font-size:14px;
 }
 .actions{
-  display:flex;justify-content:flex-end;
-  flex-wrap:wrap;gap:10px;margin-top:22px
+  display:flex;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:22px;
 }
 .action{
-  padding:11px 16px;border-radius:10px;background:#f0e8e0
+  padding:11px 16px;
+  border-radius:10px;
+  background:#eee8df;
+  font-size:13px;
 }
-.action.primary{background:var(--accent);color:white}
-.action.danger{background:var(--danger);color:white}
+.action.primary{
+  background:var(--sage);
+  color:#fff;
+}
+.action.danger{
+  background:var(--danger);
+  color:#fff;
+}
 .toast{
-  position:fixed;left:50%;bottom:22px;z-index:40;
+  position:fixed;
+  left:50%;
+  bottom:22px;
   transform:translateX(-50%);
-  display:flex;align-items:center;gap:12px;
-  max-width:calc(100vw - 30px);padding:13px 17px;
-  border-radius:13px;background:#5b4035;color:white;
-  box-shadow:0 8px 28px #0003;font-size:13px
+  z-index:40;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  max-width:calc(100vw - 30px);
+  padding:12px 16px;
+  border-radius:12px;
+  background:#514a40;
+  color:#fff;
+  box-shadow:0 6px 28px #0003;
+  font-size:13px;
 }
-.toast button{color:#ffe0c4;font-weight:700;white-space:nowrap}
-.settings-modal{width:min(620px,100%);padding:0;overflow:hidden}
-.settings-head{
-  display:flex;align-items:center;gap:12px;
-  padding:22px 24px 16px;border-bottom:1px solid var(--line)
-}
-.settings-head h2{margin:0;font-size:20px}
-.settings-head small{
-  display:block;margin-top:4px;font-size:11px;color:var(--muted)
-}
-.settings-close{
-  width:36px;height:36px;border-radius:10px;
-  background:#f1e7df;font-size:20px
+.toast button{
+  color:#d8ebd8;
+  font-weight:700;
+  white-space:nowrap;
 }
 .settings-tabs{
-  display:flex;gap:5px;padding:11px 16px;
-  border-bottom:1px solid var(--line);overflow-x:auto
+  display:flex;
+  gap:5px;
+  overflow-x:auto;
+  padding:5px 0 13px;
+  border-bottom:1px solid var(--line);
 }
 .settings-tab{
-  flex:1;min-width:70px;padding:10px 7px;
-  border-radius:10px;color:var(--muted);font-size:12px;
-  white-space:nowrap
+  flex-shrink:0;
+  padding:9px 11px;
+  border-radius:9px;
+  color:#8a8075;
+  font-size:12px;
 }
-.settings-tab.active{background:var(--accent);color:white}
-.settings-content{
-  padding:8px 23px 18px;max-height:60dvh;overflow-y:auto
+.settings-tab.active{
+  background:var(--sage-soft);
+  color:var(--sage);
+  font-weight:700;
 }
-.settings-row{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:15px;padding:15px 0;border-bottom:1px solid #f0e8e0
+.settings-list{padding-top:7px}
+.setting-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid #eee8e0;
 }
-.settings-row:last-child{border-bottom:0}
-.settings-text{flex:1;min-width:0}
-.settings-text strong{
-  display:block;margin-bottom:5px;font-size:14px
+.setting-info{flex:1;min-width:0}
+.setting-name{
+  display:block;
+  font-size:13px;
+  font-weight:700;
 }
-.settings-text small{
-  display:block;color:var(--muted);font-size:12px;line-height:1.6
+.setting-desc{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
 }
 .switch{
-  position:relative;display:block;flex-shrink:0;
-  width:45px;height:26px;border-radius:20px;background:#d7cbc2
+  position:relative;
+  flex-shrink:0;
+  width:43px;
+  height:25px;
+  border-radius:20px;
+  background:#d4cdc3;
+  transition:background .15s;
 }
 .switch::after{
-  content:"";position:absolute;top:3px;left:3px;
-  width:20px;height:20px;border-radius:50%;background:white;
-  box-shadow:0 1px 4px #0002;transition:transform .15s
+  content:"";
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:19px;
+  height:19px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 1px 4px #0002;
+  transition:transform .15s;
 }
-.switch.on{background:var(--accent)}
-.switch.on::after{transform:translateX(19px)}
-.settings-foot{
-  padding:13px 23px;border-top:1px solid var(--line);
-  color:var(--muted);font-size:11px;line-height:1.6
+.switch.on{background:var(--sage)}
+.switch.on::after{transform:translateX(18px)}
+.settings-note{
+  margin-top:16px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.7;
 }
 .mobile{display:none}
 @media(max-width:700px){
   .app{display:block}
   .side{
-    position:fixed;inset:0;z-index:10;
+    position:fixed;
+    inset:0;
+    z-index:10;
     transform:translateX(-100%);
-    transition:transform .12s ease
+    transition:transform .12s ease;
   }
   .side.open{transform:translateX(0)}
   .editor{height:100dvh}
   .mobile{display:grid}
-  .toolbar{padding:7px 9px}
-  .btn{min-width:35px;width:35px}
-  .edit{
-    width:100%;margin:0;padding:14px 19px;
-    border:0;border-radius:0;box-shadow:none
-  }
+  .edit{padding:13px 19px}
   #title{font-size:21px}
-  .settings-content{max-height:58dvh}
-  .settings-tabs{padding:9px}
-  .settings-tab{padding:9px 5px}
+  .btn{min-width:35px;width:35px}
+  .list{padding:0 11px 15px}
+  .item{min-height:100px}
+  .item-date{width:64px}
 }
 @media(min-width:701px){
-  .item-icon:not(.on):not(.pin-on){opacity:.78}
+  .item-icon:not(.on):not(.pin-on){opacity:.6}
   .item:hover .item-icon{opacity:1}
-}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{transition:none!important}
 }
 </style>
 </head>
 <body>
+
 <div class="app">
   <aside id="side" class="side">
     <header class="toolbar">
       <button id="closeList" class="btn mobile" title="一覧を閉じる">‹</button>
-      <div class="brand">SUGU<small>YOUR LITTLE NOTEBOOK</small></div>
-      <button id="settingsSide" class="btn" title="設定">⚙</button>
+      <div class="brand">SUGU</div>
+      <button id="settings" class="btn" title="設定" aria-label="設定">⚙</button>
       <button id="import" class="btn" title="バックアップを取り込む">⇩</button>
       <button id="export" class="btn" title="JSONバックアップを保存">⇧</button>
     </header>
 
-    <div id="syncbar" class="syncbar">
+    <div class="syncbar">
       <span id="account">ログインしていません</span>
       <button id="login" class="syncbtn">Googleログイン</button>
       <button id="logout" class="syncbtn hide">ログアウト</button>
       <button id="startSync" class="syncbtn hide">同期を開始</button>
     </div>
 
-    <div class="search-wrap">
-      <input id="search" class="search" placeholder="メモを検索…" aria-label="メモを検索">
-    </div>
+    <input id="search" class="search"
+      placeholder="メモを検索" aria-label="メモを検索">
 
     <div class="filters">
       <button class="chip active" data-filter="all">すべて</button>
-      <button id="favoriteFilter" class="chip" data-filter="ear">★ お気に入り</button>
-      <button id="trashFilter" class="chip" data-filter="trash">ゴミ箱</button>
+      <button class="chip" data-filter="ear">★ お気に入り</button>
+      <button class="chip" data-filter="trash">ゴミ箱</button>
     </div>
 
     <div class="sortbar">
@@ -443,36 +708,44 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
       </select>
     </div>
 
-    <div id="list" class="list" aria-label="メモ一覧"></div>
+    <div id="list" class="list" tabindex="-1"></div>
 
     <div class="side-bottom">
-      <button id="paste" class="bottom-icon" title="コピーした文章からメモ">▣</button>
-      <button id="sideNew" class="create-button">＋ 新しいメモ</button>
-      <button id="stats" class="bottom-icon" title="どうでもいい記録">▥</button>
+      <button id="paste" class="bottom-icon"
+        title="コピーした文章からメモ">▣</button>
+      <button id="sideNew" class="create-button">＋ すぐメモ</button>
+      <button id="stats" class="bottom-icon"
+        title="どうでもいい記録">▥</button>
     </div>
   </aside>
 
   <main class="editor">
-    <header class="toolbar editor-header">
+    <header class="toolbar">
       <button id="openList" class="btn mobile" title="メモ一覧">‹</button>
       <span id="status" class="status">読み込み中</span>
       <div class="spacer"></div>
       <button id="syncMenu" class="btn" title="Googleログイン・同期">☁</button>
-      <button id="settingsMain" class="btn" title="設定">⚙</button>
       <button id="new" class="btn" title="新規メモ">＋</button>
       <button id="copy" class="btn" title="本文をコピー">□</button>
       <button id="pin" class="btn" title="ピン留め">♧</button>
       <button id="ear" class="btn" title="お気に入り">☆</button>
-      <button id="remove" class="btn danger" title="メモ削除">⌫</button>
+      <button id="remove" class="btn" title="メモ削除">×</button>
     </header>
 
     <div id="editArea" class="edit">
-      <input id="title" placeholder="タイトル" autocomplete="off" aria-label="タイトル">
+      <input id="title" placeholder="タイトル"
+        autocomplete="off" aria-label="タイトル">
+
       <div class="edit-tools">
-        <button id="mode" class="mode-button">☑ チェックリストにする</button>
+        <button id="mode" class="mode-button">
+          ☑ チェックリストにする
+        </button>
         <span id="modeHint" class="mode-hint"></span>
       </div>
-      <textarea id="body" placeholder="メモを書く…" aria-label="メモ本文" spellcheck="false"></textarea>
+
+      <textarea id="body" placeholder="メモを書く…"
+        aria-label="メモ本文" spellcheck="false"></textarea>
+
       <div id="checklist" class="checklist hide"></div>
       <div id="links" class="link-preview"></div>
     </div>
@@ -483,7 +756,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   </main>
 </div>
 
-<input id="file" type="file" accept=".json,application/json" class="hide">
+<input id="file" type="file"
+  accept=".json,application/json" class="hide">
 
 <div id="dialogs"></div>
 
@@ -496,6 +770,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 'use strict';
 
 const $ = id => document.getElementById(id);
+
 const DB = 'mimi-sync-db';
 const TABLE = 'notes';
 const META = 'syncMeta';
@@ -511,51 +786,66 @@ const firebaseConfig = {
 };
 
 const DEFAULT_SETTINGS = {
-  favorite:true,
+  favorites:true,
   pin:true,
-  checklist:true,
-  checkProgress:true,
+  checklistProgress:true,
   ghost:true,
   listDelete:true,
-  deleteKey:true,
-  sort:true,
+  checklist:true,
   links:true,
   copy:true,
   paste:true,
   stats:true,
   trash:true,
   undo:true,
-  syncUI:true
+  sort:true,
+  deleteKey:true,
+  syncControls:true
 };
 
-const SETTING_GROUPS = {
-  list:[
-    ['favorite','お気に入り','★を付けてもメモの順番は変えません。'],
-    ['pin','ピン留め','ピン留めしたメモを一覧の先頭に表示します。'],
-    ['checkProgress','チェックリストの進捗','一覧に完了数を表示します。'],
-    ['ghost','メモの亡霊','長期間開いていないメモを紹介します。'],
-    ['listDelete','一覧の削除ボタン','メモの右側に削除ボタンを表示します。'],
-    ['deleteKey','Deleteキーで削除','PCで選択中のメモを削除できます。'],
-    ['sort','並べ替え','更新順・作成順・タイトル順を選べます。']
-  ],
-  edit:[
-    ['checklist','チェックリスト編集','通常メモとチェックリストを切り替えます。'],
-    ['links','本文中のURL一覧','本文内のリンクを下部に表示します。'],
-    ['copy','本文コピー','本文をクリップボードにコピーします。']
-  ],
-  extras:[
-    ['paste','クリップボードから新規メモ','コピーした文章で新しいメモを作ります。'],
-    ['stats','どうでもいい記録','メモ数や文字数を表示します。'],
-    ['trash','ゴミ箱','削除済みメモを一覧から復元できます。'],
-    ['undo','削除の取り消し','削除直後に元に戻すボタンを表示します。']
-  ],
-  system:[
-    ['syncUI','クラウド同期の操作','Googleログインと同期操作を表示します。']
-  ]
-};
+const SETTING_GROUPS = [
+  {
+    id:'list',
+    name:'一覧',
+    items:[
+      ['favorites','お気に入り','★の表示とお気に入り絞り込み'],
+      ['pin','ピン留め','ピン留めボタンを表示'],
+      ['checklistProgress','チェックリスト進捗','一覧に完了数を表示'],
+      ['ghost','メモの亡霊','長期間開いていないメモを紹介'],
+      ['listDelete','一覧の削除ボタン','★の下に×ボタンを表示']
+    ]
+  },
+  {
+    id:'edit',
+    name:'編集',
+    items:[
+      ['checklist','チェックリスト','チェックリスト切り替えボタン'],
+      ['links','リンク一覧','本文中のURLを下部に表示'],
+      ['copy','本文コピー','コピー操作ボタン']
+    ]
+  },
+  {
+    id:'extra',
+    name:'追加機能',
+    items:[
+      ['paste','クリップボードから新規作成','コピーした文章をメモにする'],
+      ['stats','どうでもいい記録','メモ数や文字数などを表示'],
+      ['trash','ゴミ箱','ゴミ箱の一覧を表示'],
+      ['undo','削除の取り消し','削除直後に元に戻すボタンを表示']
+    ]
+  },
+  {
+    id:'system',
+    name:'システム',
+    items:[
+      ['sort','並べ替え','並べ替えメニューを表示'],
+      ['deleteKey','Deleteキーで削除','編集欄以外でDeleteキーを使う'],
+      ['syncControls','クラウド同期ボタン','ログイン・同期の操作を表示']
+    ]
+  }
+];
 
 let settings = {...DEFAULT_SETTINGS};
-let settingsTab = 'list';
 
 let db;
 let notes = [];
@@ -572,6 +862,8 @@ let version = 0;
 let toastTimer = null;
 let undoInfo = null;
 let modalOpen = false;
+let settingsTab = 'list';
+let listObserver = null;
 
 let firebase = null;
 let auth = null;
@@ -586,7 +878,6 @@ let accountGeneration = 0;
 let syncError = '';
 
 const iso = () => new Date().toISOString();
-const mobile = () => matchMedia('(max-width:700px)').matches;
 
 function localGet(key) {
   try { return localStorage.getItem(key); }
@@ -600,53 +891,44 @@ function localSet(key,value) {
 
 function loadSettings() {
   try {
-    const raw = JSON.parse(localGet('sugu-settings-v1') || '{}');
+    const stored = JSON.parse(
+      localGet('sugu-settings-v1') || '{}'
+    );
+
     for (const key of Object.keys(DEFAULT_SETTINGS)) {
-      if (typeof raw[key] === 'boolean') settings[key] = raw[key];
+      if (typeof stored[key] === 'boolean')
+        settings[key] = stored[key];
     }
-  } catch(e) {}
+  } catch(e) {
+    settings = {...DEFAULT_SETTINGS};
+  }
 }
 
 function saveSettings() {
   localSet('sugu-settings-v1',JSON.stringify(settings));
 }
 
-function enabled(key) {
-  return settings[key] !== false;
-}
-
 function dateValue(s) {
-  if (typeof s === 'number') return s < 1e11 ? s*1000 : s;
+  if (typeof s === 'number')
+    return s < 1e11 ? s*1000 : s;
+
   if (!s) return 0;
+
   const v = String(s);
   const num = Number(v);
-  if (/^\d{10,13}$/.test(v)) return num < 1e11 ? num*1000 : num;
-  const d = Date.parse(v) || Date.parse(v.replace(' ','T'));
+
+  if (/^\d{10,13}$/.test(v))
+    return num < 1e11 ? num*1000 : num;
+
+  const d = Date.parse(v) ||
+    Date.parse(v.replace(' ','T'));
+
   return Number.isFinite(d) ? d : 0;
-}
-
-function noteDate(n,inTrash=false) {
-  if (inTrash) return n.deletedAt || n.updatedAt || n.createdAt;
-  if (sortMode === 'created') return n.createdAt || n.updatedAt;
-  return n.updatedAt || n.createdAt;
-}
-
-function dateParts(value) {
-  const ms = dateValue(value);
-  if (!ms) return {year:'日付なし',month:'--',day:'--',time:'--:--'};
-  const d = new Date(ms);
-  return {
-    year:String(d.getFullYear()),
-    month:String(d.getMonth()+1).padStart(2,'0'),
-    day:String(d.getDate()).padStart(2,'0'),
-    time:
-      String(d.getHours()).padStart(2,'0')+':'+
-      String(d.getMinutes()).padStart(2,'0')
-  };
 }
 
 function dayKey() {
   const d = new Date();
+
   return [
     d.getFullYear(),
     String(d.getMonth()+1).padStart(2,'0'),
@@ -654,25 +936,49 @@ function dayKey() {
   ].join('-');
 }
 
+function dateParts(n) {
+  const raw = n.createdAt || n.updatedAt;
+  const timestamp = dateValue(raw);
+
+  if (!timestamp)
+    return {year:'日付なし',month:'--',day:'--'};
+
+  const d = new Date(timestamp);
+
+  return {
+    year:String(d.getFullYear()),
+    month:String(d.getMonth()+1).padStart(2,'0'),
+    day:String(d.getDate()).padStart(2,'0')
+  };
+}
+
 function openDB() {
   return new Promise((resolve,reject) => {
     const r = indexedDB.open(DB,2);
+
     r.onupgradeneeded = () => {
       const d = r.result;
+
       if (!d.objectStoreNames.contains(TABLE))
         d.createObjectStore(TABLE,{keyPath:'id'});
+
       if (!d.objectStoreNames.contains(META))
         d.createObjectStore(META,{keyPath:'key'});
     };
+
     r.onsuccess = () => resolve(r.result);
     r.onerror = () => reject(r.error);
-    r.onblocked = () => reject(Error('他のタブが保存領域を使用中です'));
+
+    r.onblocked = () =>
+      reject(Error('他のタブが保存領域を使用中です'));
   });
 }
 
 function getAll() {
   return new Promise((resolve,reject) => {
-    const r = db.transaction(TABLE,'readonly').objectStore(TABLE).getAll();
+    const r = db.transaction(TABLE,'readonly')
+      .objectStore(TABLE).getAll();
+
     r.onsuccess = () => resolve(r.result);
     r.onerror = () => reject(r.error);
   });
@@ -680,7 +986,9 @@ function getAll() {
 
 function getMeta(key) {
   return new Promise((resolve,reject) => {
-    const r = db.transaction(META,'readonly').objectStore(META).get(key);
+    const r = db.transaction(META,'readonly')
+      .objectStore(META).get(key);
+
     r.onsuccess = () => resolve(r.result?.value);
     r.onerror = () => reject(r.error);
   });
@@ -689,7 +997,9 @@ function getMeta(key) {
 function setMeta(key,value) {
   return new Promise((resolve,reject) => {
     const tx = db.transaction(META,'readwrite');
+
     tx.objectStore(META).put({key,value});
+
     tx.oncomplete = resolve;
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(tx.error);
@@ -700,7 +1010,10 @@ function transaction(items) {
   return new Promise((resolve,reject) => {
     const tx = db.transaction(TABLE,'readwrite');
     const store = tx.objectStore(TABLE);
-    for (const n of items) store.put({...n});
+
+    for (const n of items)
+      store.put({...n});
+
     tx.oncomplete = resolve;
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(tx.error);
@@ -709,11 +1022,13 @@ function transaction(items) {
 
 function enqueue(job) {
   const task = queue.then(job);
+
   queue = task.catch(e => {
     failed = true;
     $('status').textContent = '保存失敗';
     console.error(e);
   });
+
   return task;
 }
 
@@ -725,7 +1040,8 @@ function normalizeNote(raw,id=raw.id) {
     ear:!!raw.ear,
     pinned:!!raw.pinned,
     checklist:!!raw.checklist,
-    checks:Array.isArray(raw.checks) ? raw.checks.map(Boolean) : [],
+    checks:Array.isArray(raw.checks)
+      ? raw.checks.map(Boolean) : [],
     createdAt:String(raw.createdAt ?? ''),
     updatedAt:String(raw.updatedAt ?? ''),
     deleted:!!raw.deleted,
@@ -734,11 +1050,15 @@ function normalizeNote(raw,id=raw.id) {
 }
 
 function current() {
-  return notes.find(n => n.id === selected && !n.deleted);
+  return notes.find(n =>
+    n.id === selected && !n.deleted
+  );
 }
 
 function label(n) {
-  return n.title || n.body.split('\n').find(Boolean) || '無題';
+  return n.title ||
+    n.body.split('\n').find(Boolean) ||
+    '無題';
 }
 
 function sorted(includeDeleted=false) {
@@ -747,21 +1067,28 @@ function sorted(includeDeleted=false) {
   );
 
   arr.sort((a,b) => {
-    if (!includeDeleted && enabled('pin') &&
-        !!a.pinned !== !!b.pinned)
+    if (!includeDeleted && !!a.pinned !== !!b.pinned)
       return a.pinned ? -1 : 1;
 
-    if (includeDeleted)
+    if (includeDeleted) {
       return dateValue(b.deletedAt || b.updatedAt) -
-             dateValue(a.deletedAt || a.updatedAt);
+        dateValue(a.deletedAt || a.updatedAt);
+    }
 
     if (sortMode === 'created')
       return dateValue(b.createdAt) - dateValue(a.createdAt);
 
-    if (sortMode === 'title')
-      return label(a).localeCompare(label(b),'ja');
+    if (sortMode === 'title') {
+      const byTitle = label(a).localeCompare(label(b),'ja');
 
-    return dateValue(b.updatedAt) - dateValue(a.updatedAt);
+      if (byTitle !== 0) return byTitle;
+
+      return dateValue(b.updatedAt) -
+        dateValue(a.updatedAt);
+    }
+
+    return dateValue(b.updatedAt) -
+      dateValue(a.updatedAt);
   });
 
   return arr;
@@ -769,9 +1096,15 @@ function sorted(includeDeleted=false) {
 
 function toast(message,undo=false) {
   clearTimeout(toastTimer);
+
   $('toastText').textContent = message;
-  $('toastUndo').classList.toggle('hide',!undo || !enabled('undo'));
+
+  $('toastUndo').classList.toggle(
+    'hide',!undo || !settings.undo
+  );
+
   $('toast').classList.remove('hide');
+
   toastTimer = setTimeout(() => {
     $('toast').classList.add('hide');
     undoInfo = null;
@@ -786,34 +1119,55 @@ function resetCopy() {
 
 function showScreen(next) {
   if (screen !== next) resetCopy();
+
   screen = next;
   localSet('sugu-screen',next);
-  if (mobile()) $('side').classList.toggle('open',next === 'list');
+
+  if (matchMedia('(max-width:700px)').matches) {
+    $('side').classList.toggle(
+      'open',next === 'list'
+    );
+  }
 }
 
 function openEditorHistory() {
-  if (mobile() && history.state?.sugu !== 'edit')
-    history.pushState({sugu:'edit'},'',location.href);
+  if (
+    matchMedia('(max-width:700px)').matches &&
+    history.state?.sugu !== 'edit'
+  ) {
+    history.pushState(
+      {sugu:'edit'},'',location.href
+    );
+  }
+
   showScreen('edit');
 }
 
 function goList() {
-  if (mobile() && history.state?.sugu === 'edit')
+  if (modalOpen) return;
+
+  if (
+    matchMedia('(max-width:700px)').matches &&
+    history.state?.sugu === 'edit'
+  ) {
     history.back();
-  else
+  } else {
     showScreen('list');
+  }
 }
 
 function updateLinks() {
   const root = $('links');
   root.replaceChildren();
-  if (!enabled('links')) return;
 
-  const n = current();
-  if (!n) return;
+  if (!settings.links) return;
 
-  const matches = n.body.match(/https?:\/\/[^\s<>"'「」]+/g) || [];
+  const matches = $('body').value.match(
+    /https?:\/\/[^\s<>"'「」]+/g
+  ) || [];
+
   const urls = [...new Set(matches)].slice(0,20);
+
   if (!urls.length) return;
 
   const caption = document.createElement('small');
@@ -821,40 +1175,38 @@ function updateLinks() {
   root.append(caption);
 
   for (const raw of urls) {
-    const clean = raw.replace(/[.,。、）)\]】]+$/g,'');
+    const clean = raw.replace(
+      /[.,。、）)\]】]+$/g,''
+    );
+
     try {
       const url = new URL(clean);
-      if (!['http:','https:'].includes(url.protocol)) continue;
+
+      if (!['http:','https:'].includes(url.protocol))
+        continue;
+
       const a = document.createElement('a');
       a.href = url.href;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
       a.textContent = clean;
+
       root.append(a);
     } catch(e) {}
   }
 }
 
-function checklistLines(n) {
-  return n.body ? n.body.split('\n') : [''];
-}
-
-function checklistProgress(n) {
-  const lines = checklistLines(n);
-  const total = lines.filter(x => x.trim()).length;
-  const done = lines.reduce((count,line,i) =>
-    count + (line.trim() && n.checks?.[i] ? 1 : 0),0
-  );
-  return {done,total};
-}
-
 function renderChecklist() {
   const n = current();
   const root = $('checklist');
+
   root.replaceChildren();
+
   if (!n || !n.checklist) return;
 
-  const lines = checklistLines(n);
+  const lines = n.body
+    ? n.body.split('\n')
+    : [''];
 
   lines.forEach((line,index) => {
     const row = document.createElement('div');
@@ -863,14 +1215,19 @@ function renderChecklist() {
     const box = document.createElement('input');
     box.type = 'checkbox';
     box.checked = !!n.checks[index];
-    box.setAttribute('aria-label',`${index+1}番目を完了`);
+    box.setAttribute(
+      'aria-label',`${index+1}番目を完了`
+    );
 
     const text = document.createElement('input');
     text.type = 'text';
-    text.className = 'check-text' + (box.checked ? ' done' : '');
+    text.className =
+      'check-text' + (box.checked ? ' done' : '');
     text.value = line;
     text.placeholder = '項目を入力';
-    text.setAttribute('aria-label',`${index+1}番目の項目`);
+    text.setAttribute(
+      'aria-label',`${index+1}番目の項目`
+    );
 
     const del = document.createElement('button');
     del.className = 'check-delete';
@@ -885,12 +1242,14 @@ function renderChecklist() {
     };
 
     text.oninput = () => {
-      const updated = checklistLines(n);
+      const updated = n.body
+        ? n.body.split('\n') : [''];
+
       updated[index] = text.value;
       n.body = updated.join('\n');
       $('body').value = n.body;
+
       persist(n);
-      render();
     };
 
     text.onkeydown = e => {
@@ -900,7 +1259,20 @@ function renderChecklist() {
       }
     };
 
-    del.onclick = () => deleteChecklistRow(index);
+    del.onclick = () => {
+      const updated = n.body
+        ? n.body.split('\n') : [''];
+
+      updated.splice(index,1);
+      n.checks.splice(index,1);
+
+      n.body = updated.join('\n');
+      $('body').value = n.body;
+
+      persist(n);
+      renderChecklist();
+      render();
+    };
 
     row.append(box,text,del);
     root.append(row);
@@ -909,35 +1281,23 @@ function renderChecklist() {
   const add = document.createElement('button');
   add.className = 'check-add';
   add.textContent = '＋ 項目を追加';
+
   add.onclick = () => addChecklistRow(lines.length);
+
   root.append(add);
-}
-
-function deleteChecklistRow(index) {
-  const n = current();
-  if (!n) return;
-
-  const lines = checklistLines(n);
-  lines.splice(index,1);
-  n.checks.splice(index,1);
-  n.body = lines.join('\n');
-  $('body').value = n.body;
-
-  persist(n);
-  renderChecklist();
-  render();
-
-  $('checklist').querySelectorAll('.check-text')
-    [Math.max(0,index-1)]?.focus();
 }
 
 function addChecklistRow(index) {
   const n = current();
-  if (!n) return;
 
-  const lines = n.body ? n.body.split('\n') : [];
+  if (!n || !n.checklist) return;
+
+  const lines = n.body
+    ? n.body.split('\n') : [];
+
   lines.splice(index,0,'');
   n.checks.splice(index,0,false);
+
   n.body = lines.join('\n');
   $('body').value = n.body;
 
@@ -945,28 +1305,10 @@ function addChecklistRow(index) {
   renderChecklist();
   render();
 
-  $('checklist').querySelectorAll('.check-text')[index]?.focus();
-}
+  const inputs = $('checklist')
+    .querySelectorAll('.check-text');
 
-function applySettings() {
-  $('favoriteFilter').classList.toggle('hide',!enabled('favorite'));
-  $('trashFilter').classList.toggle('hide',!enabled('trash'));
-  $('sort').classList.toggle('hide',!enabled('sort'));
-  $('paste').classList.toggle('hide',!enabled('paste'));
-  $('stats').classList.toggle('hide',!enabled('stats'));
-  $('syncbar').classList.toggle('hide',!enabled('syncUI'));
-  $('syncMenu').classList.toggle('hide',!enabled('syncUI'));
-  $('copy').classList.toggle('hide',!enabled('copy'));
-  $('pin').classList.toggle('hide',!enabled('pin'));
-  $('ear').classList.toggle('hide',!enabled('favorite'));
-  $('mode').classList.toggle('hide',!enabled('checklist'));
-  $('modeHint').classList.toggle('hide',!enabled('checklist'));
-
-  if (!enabled('favorite') && filter === 'ear') filter = 'all';
-  if (!enabled('trash') && filter === 'trash') filter = 'all';
-
-  updateFilterUI();
-  updateEditor();
+  inputs[index]?.focus();
 }
 
 function updateEditor() {
@@ -989,14 +1331,19 @@ function updateEditor() {
 
   $('title').value = n.title;
   $('body').value = n.body;
+
   $('ear').textContent = n.ear ? '★' : '☆';
   $('pin').textContent = n.pinned ? '📌' : '♧';
+
   $('mode').textContent = n.checklist
     ? '☑ チェックリスト ON'
     : '☐ チェックリストにする';
 
   $('mode').classList.toggle('on',n.checklist);
-  $('modeHint').textContent = n.checklist ? '1行につき1項目' : '';
+
+  $('modeHint').textContent =
+    n.checklist ? '1行につき1項目' : '';
+
   $('body').classList.toggle('hide',n.checklist);
   $('checklist').classList.toggle('hide',!n.checklist);
 
@@ -1005,8 +1352,13 @@ function updateEditor() {
 }
 
 function viewedMap() {
-  try { return JSON.parse(localGet('sugu-viewed-v1') || '{}'); }
-  catch(e) { return {}; }
+  try {
+    return JSON.parse(
+      localGet('sugu-viewed-v1') || '{}'
+    );
+  } catch(e) {
+    return {};
+  }
 }
 
 function recordView(id) {
@@ -1014,18 +1366,26 @@ function recordView(id) {
   map[id] = Date.now();
 
   const entries = Object.entries(map);
+
   if (entries.length > 1000) {
     entries.sort((a,b) => b[1]-a[1]);
-    localSet('sugu-viewed-v1',JSON.stringify(
-      Object.fromEntries(entries.slice(0,1000))
-    ));
+
+    localSet(
+      'sugu-viewed-v1',
+      JSON.stringify(
+        Object.fromEntries(entries.slice(0,1000))
+      )
+    );
   } else {
-    localSet('sugu-viewed-v1',JSON.stringify(map));
+    localSet(
+      'sugu-viewed-v1',
+      JSON.stringify(map)
+    );
   }
 }
 
 function ghostCandidate(list) {
-  if (!enabled('ghost')) return null;
+  if (!settings.ghost) return null;
   if (ghostDismissedDay === dayKey()) return null;
 
   const viewed = viewedMap();
@@ -1034,210 +1394,233 @@ function ghostCandidate(list) {
   const candidates = list.filter(n => {
     const last = viewed[n.id] ||
       dateValue(n.createdAt || n.updatedAt);
+
     return last > 0 && last < cutoff;
   });
 
   if (!candidates.length) return null;
 
   return candidates[
-    Math.floor(Date.now()/86400000) % candidates.length
+    Math.floor(Date.now()/86400000) %
+    candidates.length
   ];
 }
 
 function makeGhostCard(n) {
   const card = document.createElement('div');
-  card.className = 'ghost-card';
+  card.className = 'item ghost-card';
   card.dataset.id = n.id;
+
+  const title = document.createElement('strong');
+  title.textContent = '👻 メモの亡霊';
+
+  const message = document.createElement('p');
+  message.textContent =
+    `「私のこと、覚えていますか。」 ${label(n)}`;
 
   const close = document.createElement('button');
   close.className = 'ghost-close';
   close.textContent = '×';
   close.title = '今日は表示しない';
+
   close.onclick = e => {
     e.stopPropagation();
+
     ghostDismissedDay = dayKey();
-    localSet('sugu-ghost-dismiss',ghostDismissedDay);
+
+    localSet(
+      'sugu-ghost-dismiss',
+      ghostDismissedDay
+    );
+
     render();
   };
 
-  const title = document.createElement('strong');
-  title.textContent = '👻 メモの亡霊';
+  card.append(title,message,close);
 
-  const p = document.createElement('p');
-  p.textContent = `「私のこと、覚えていますか。」 ${label(n)}`;
-
-  card.append(close,title,p);
   return card;
 }
 
-function makeItem(n,inTrash=false) {
+function makeItem(n) {
   const item = document.createElement('div');
-  item.className = 'item' + (n.id === selected ? ' active' : '');
+
+  item.className =
+    'item' + (n.id === selected ? ' active' : '');
+
   item.dataset.id = n.id;
   item.tabIndex = 0;
+  item.setAttribute('role','button');
+  item.setAttribute('aria-label',label(n));
 
-  const d = dateParts(noteDate(n,inTrash));
+  const parts = dateParts(n);
 
-  const dateCol = document.createElement('div');
-  dateCol.className = 'date-col';
-
-  const dateMain = document.createElement('div');
-  dateMain.className = 'date-main';
+  const date = document.createElement('div');
+  date.className = 'item-date';
 
   const month = document.createElement('span');
-  month.className = 'date-month';
-  month.textContent = d.month+'/';
+  month.className = 'item-month';
+  month.textContent = parts.month + ' /';
 
   const day = document.createElement('span');
-  day.className = 'date-day';
-  day.textContent = d.day;
+  day.className = 'item-day';
+  day.textContent = parts.day;
 
-  const time = document.createElement('span');
-  time.className = 'date-time';
-  time.textContent = d.time;
-
-  dateMain.append(month,day);
-  dateCol.append(dateMain,time);
+  date.append(month,day);
 
   const content = document.createElement('div');
-  content.className = 'note-content';
+  content.className = 'item-content';
 
   const title = document.createElement('strong');
   title.textContent = label(n);
 
   const preview = document.createElement('p');
-  preview.textContent = n.body.replace(/\s+/g,' ').slice(0,150);
+
+  if (n.checklist) {
+    const lines = n.body
+      ? n.body.split('\n') : [];
+
+    preview.textContent =
+      lines.filter(Boolean).slice(0,3).join(' / ') ||
+      'チェックリスト';
+  } else {
+    preview.textContent =
+      n.body.replace(/\s+/g,' ').slice(0,140);
+  }
 
   content.append(title,preview);
 
-  if (n.checklist) {
-    const progress = checklistProgress(n);
-    const tag = document.createElement('span');
-    tag.className = 'progress' +
-      (progress.total > 0 && progress.done === progress.total
-        ? ' complete' : '');
+  if (n.checklist && settings.checklistProgress) {
+    const total = n.body
+      ? n.body.split('\n').filter(Boolean).length
+      : 0;
 
-    tag.textContent = enabled('checkProgress')
-      ? `☑ ${progress.done}/${progress.total} 完了`
-      : '☑ チェックリスト';
+    const done = n.body
+      ? n.body.split('\n').filter(
+          (line,i) => line.trim() && n.checks[i]
+        ).length
+      : 0;
 
-    content.append(tag);
+    const meta = document.createElement('div');
+    meta.className = 'item-meta';
+
+    const progress = document.createElement('span');
+    progress.className = 'check-progress';
+    progress.textContent = `☑ ${done}/${total}`;
+
+    meta.append(progress);
+    content.append(meta);
   }
 
   const actions = document.createElement('div');
   actions.className = 'item-actions';
 
-  if (inTrash) {
+  if (filter === 'trash') {
     const restore = document.createElement('button');
     restore.className = 'item-icon';
     restore.textContent = '↶';
-    restore.title = '復元';
+    restore.title = 'メモを復元';
+    restore.setAttribute('aria-label','メモを復元');
+
     restore.onclick = e => {
       e.stopPropagation();
       restoreNote(n.id);
     };
+
     actions.append(restore);
   } else {
-    if (enabled('pin')) {
+    if (settings.pin) {
       const pin = document.createElement('button');
-      pin.className = 'item-icon' + (n.pinned ? ' pin-on' : '');
+
+      pin.className =
+        'item-icon' + (n.pinned ? ' pin-on' : '');
+
       pin.textContent = n.pinned ? '📌' : '♧';
-      pin.title = n.pinned ? 'ピン留め解除' : 'ピン留め';
+      pin.title = n.pinned
+        ? 'ピン留め解除' : 'ピン留め';
+
       pin.onclick = e => {
         e.stopPropagation();
         toggleField(n.id,'pinned');
       };
+
       actions.append(pin);
     }
 
-    if (enabled('favorite')) {
+    if (settings.favorites) {
       const star = document.createElement('button');
-      star.className = 'item-icon' + (n.ear ? ' on' : '');
+
+      star.className =
+        'item-icon' + (n.ear ? ' on' : '');
+
       star.textContent = n.ear ? '★' : '☆';
-      star.title = n.ear ? 'お気に入り解除' : 'お気に入り';
+      star.title = n.ear
+        ? 'お気に入り解除' : 'お気に入り';
+
       star.onclick = e => {
         e.stopPropagation();
         toggleField(n.id,'ear');
       };
+
       actions.append(star);
     }
 
-    if (enabled('listDelete')) {
+    if (settings.listDelete) {
       const del = document.createElement('button');
+
       del.className = 'item-icon delete';
-      del.textContent = '⌫';
-      del.title = '削除';
+      del.textContent = '×';
+      del.title = 'メモを削除';
+      del.setAttribute('aria-label','メモを削除');
+
       del.onclick = e => {
         e.stopPropagation();
-        removeById(n.id);
+        remove(n.id);
       };
+
       actions.append(del);
     }
   }
 
-  item.append(dateCol,content,actions);
+  item.append(date,content,actions);
+
   return item;
 }
 
-function makeYearHead(year,count,pinned=false) {
-  const head = document.createElement('div');
-  head.className = 'year-head' + (pinned ? ' pinned-head' : '');
-
-  const title = document.createElement('strong');
-  title.textContent = pinned ? '📌 ピン留め' : year;
-
-  const rule = document.createElement('div');
-  rule.className = 'rule';
-
-  const small = document.createElement('small');
-  small.textContent = `${count}件`;
-
-  head.append(title,rule,small);
-  return head;
-}
-
-function appendGroup(root,items,year,inTrash=false,pinned=false) {
-  if (!items.length) return;
-
-  root.append(makeYearHead(year,items.length,pinned));
-
-  const group = document.createElement('div');
-  group.className = 'note-group';
-
-  for (const n of items)
-    group.append(makeItem(n,inTrash));
-
-  root.append(group);
+function makeYearHeading(year) {
+  const heading = document.createElement('div');
+  heading.className = 'year-heading';
+  heading.textContent = year;
+  return heading;
 }
 
 function render() {
+  if (!db) return;
+
+  if (listObserver) {
+    listObserver.disconnect();
+    listObserver = null;
+  }
+
+  const root = $('list');
+  const oldScroll = root.scrollTop;
+
   const q = $('search').value.toLocaleLowerCase();
   const inTrash = filter === 'trash';
-
   const all = sorted(inTrash);
+
   const filtered = all.filter(n =>
     (filter !== 'ear' || n.ear) &&
-    (n.title+'\n'+n.body).toLocaleLowerCase().includes(q)
+    (n.title+'\n'+n.body)
+      .toLocaleLowerCase()
+      .includes(q)
   );
 
   $('count').textContent = `${filtered.length}件`;
 
-  const root = $('list');
   root.replaceChildren();
 
-  if (!filtered.length) {
-    const empty = document.createElement('div');
-    empty.className = 'empty-list';
-    empty.textContent = inTrash
-      ? 'ゴミ箱は空です。'
-      : 'メモがありません。\n「新しいメモ」から書き始めましょう。';
-    root.append(empty);
-    return;
-  }
-
   const ghost = !q && filter === 'all'
-    ? ghostCandidate(all)
-    : null;
+    ? ghostCandidate(all) : null;
 
   const regular = ghost
     ? filtered.filter(n => n.id !== ghost.id)
@@ -1245,71 +1628,95 @@ function render() {
 
   const shown = regular.slice(0,visibleLimit);
 
-  if (!inTrash && enabled('pin')) {
-    const pinned = shown.filter(n => n.pinned);
-    appendGroup(root,pinned,'',false,true);
-  }
+  let previousYear = null;
 
-  const remaining = !inTrash && enabled('pin')
-    ? shown.filter(n => !n.pinned)
-    : shown;
+  shown.forEach((n,i) => {
+    if (i === 3 && ghost)
+      root.append(makeGhostCard(ghost));
 
-  if (sortMode === 'title' && !inTrash) {
-    appendGroup(root,remaining,'タイトル順');
-  } else {
-    const groups = new Map();
+    const year = dateParts(n).year;
 
-    for (const n of remaining) {
-      const year = dateParts(noteDate(n,inTrash)).year;
-      if (!groups.has(year)) groups.set(year,[]);
-      groups.get(year).push(n);
+    if (year !== previousYear) {
+      root.append(makeYearHeading(year));
+      previousYear = year;
     }
 
-    for (const [year,items] of groups)
-      appendGroup(root,items,year,inTrash);
-  }
+    root.append(makeItem(n));
+  });
 
-  if (ghost) root.append(makeGhostCard(ghost));
+  if (ghost && shown.length < 4)
+    root.append(makeGhostCard(ghost));
 
   if (regular.length > visibleLimit) {
-    const more = document.createElement('button');
-    more.className = 'more-button';
-    more.textContent = 'さらに10件表示';
-    more.onclick = () => {
+    const sentinel = document.createElement('div');
+    sentinel.className = 'list-sentinel';
+    sentinel.setAttribute('aria-hidden','true');
+
+    root.append(sentinel);
+
+    listObserver = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting))
+        return;
+
+      listObserver?.disconnect();
+      listObserver = null;
+
       visibleLimit += 10;
       render();
-    };
-    root.append(more);
+    },{
+      root,
+      rootMargin:'0px 0px 180px 0px'
+    });
+
+    listObserver.observe(sentinel);
   }
+
+  root.scrollTop = oldScroll;
 }
 
 function choose(id,focus=false) {
-  const n = notes.find(x => x.id === id && !x.deleted);
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
+
   if (!n) return;
 
   selected = id;
   version++;
+
   resetCopy();
+
   localSet('mimi-last-id',id);
   recordView(id);
 
   updateEditor();
-  $('status').textContent = failed ? '保存失敗' : '保存済み';
+
+  $('status').textContent =
+    failed ? '保存失敗' : '保存済み';
+
   openEditorHistory();
   render();
 
-  if (focus) requestAnimationFrame(() => {
-    if (n.checklist)
-      $('checklist').querySelector('.check-text')?.focus();
-    else
-      $('body').focus();
-  });
+  if (focus) {
+    requestAnimationFrame(() => {
+      if (n.checklist) {
+        $('checklist')
+          .querySelector('.check-text')?.focus();
+      } else {
+        $('body').focus();
+      }
+    });
+  }
 }
 
 function scheduleSync() {
   if (!syncEnabled || !cloudUser) return;
+
   clearTimeout(syncTimer);
-  syncTimer = setTimeout(() => syncNow(),1500);
+
+  syncTimer = setTimeout(
+    () => syncNow(),1500
+  );
 }
 
 function persist(n) {
@@ -1321,15 +1728,24 @@ function persist(n) {
   };
 
   const v = ++version;
+
   failed = false;
   $('status').textContent = '保存中';
+
   resetCopy();
 
-  enqueue(() => transaction([snapshot])).then(() => {
-    if (selected === snapshot.id && version === v)
-      $('status').textContent = '保存済み';
-    scheduleSync();
-  }).catch(() => {});
+  enqueue(() => transaction([snapshot]))
+    .then(() => {
+      if (
+        selected === snapshot.id &&
+        version === v
+      ) {
+        $('status').textContent = '保存済み';
+      }
+
+      scheduleSync();
+    })
+    .catch(() => {});
 }
 
 function save() {
@@ -1337,14 +1753,16 @@ function save() {
   if (!n) return;
 
   const title = $('title').value;
-  const body = n.checklist ? n.body : $('body').value;
+  const body = n.checklist
+    ? n.body : $('body').value;
 
-  if (title === n.title && body === n.body) return;
+  if (title === n.title && body === n.body)
+    return;
 
   n.title = title;
   n.body = body;
+
   persist(n);
-  render();
 }
 
 async function create(focus=true,body='',title='') {
@@ -1352,7 +1770,8 @@ async function create(focus=true,body='',title='') {
 
   const n = {
     id:crypto.randomUUID(),
-    title,body,
+    title,
+    body,
     ear:false,
     pinned:false,
     checklist:false,
@@ -1368,7 +1787,7 @@ async function create(focus=true,body='',title='') {
   try {
     await enqueue(() => transaction([n]));
 
-    if (filter === 'trash') {
+    if (filter === 'trash' || filter === 'ear') {
       filter = 'all';
       updateFilterUI();
     }
@@ -1377,19 +1796,30 @@ async function create(focus=true,body='',title='') {
     scheduleSync();
   } catch(e) {
     notes = notes.filter(x => x.id !== n.id);
-    await dialog('保存エラー','新しいメモを保存できませんでした。');
+
+    await dialog(
+      '保存エラー',
+      '新しいメモを保存できませんでした。'
+    );
   }
 }
 
 async function toggleField(id,field) {
-  const n = notes.find(x => x.id === id && !x.deleted);
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
+
   if (!n) return;
 
   const previous = {...n};
+
   n[field] = !n[field];
   n.updatedAt = iso();
 
-  const snapshot = {...n,checks:[...(n.checks || [])]};
+  const snapshot = {
+    ...n,
+    checks:[...(n.checks || [])]
+  };
 
   if (selected === id) updateEditor();
   render();
@@ -1399,23 +1829,30 @@ async function toggleField(id,field) {
     scheduleSync();
   } catch(e) {
     Object.assign(n,previous);
-    if (selected === id) updateEditor();
+
+    updateEditor();
     render();
-    await dialog('保存エラー',String(e.message || e));
+
+    await dialog(
+      '保存エラー',
+      String(e.message || e)
+    );
   }
 }
 
 function toggleChecklist() {
-  if (!enabled('checklist')) return;
-
   const n = current();
   if (!n) return;
 
   n.checklist = !n.checklist;
 
   if (n.checklist) {
-    const lines = checklistLines(n);
-    n.checks = lines.map((_,i) => !!n.checks[i]);
+    const lines = n.body
+      ? n.body.split('\n') : [''];
+
+    n.checks = lines.map(
+      (_,i) => !!n.checks[i]
+    );
   }
 
   persist(n);
@@ -1424,8 +1861,6 @@ function toggleChecklist() {
 }
 
 async function copyBody() {
-  if (!enabled('copy')) return;
-
   const n = current();
   if (!n) return;
 
@@ -1435,48 +1870,73 @@ async function copyBody() {
   try {
     await navigator.clipboard.writeText(body);
 
-    if (selected !== id || screen !== 'edit' ||
-        current()?.body !== body) return;
+    if (
+      selected !== id ||
+      screen !== 'edit' ||
+      current()?.body !== body
+    ) return;
 
     copiedId = id;
+
     $('copy').textContent = '✓';
     $('copy').classList.add('copy-success');
+
     toast('本文をコピーしました');
   } catch(e) {
-    await dialog('コピーできません',
-      'クリップボードへの書き込みが許可されていません。');
+    await dialog(
+      'コピーできません',
+      'クリップボードへの書き込みが許可されていません。'
+    );
   }
 }
 
 async function pasteNew() {
-  if (!enabled('paste')) return;
-
   try {
     const text = await navigator.clipboard.readText();
 
     if (!text) {
-      await dialog('クリップボードが空です',
-        'コピーした文章が見つかりません。');
+      await dialog(
+        'クリップボードが空です',
+        'コピーした文章が見つかりません。'
+      );
       return;
     }
 
     await create(true,text);
   } catch(e) {
-    await dialog('読み取りエラー',
-      'クリップボードの権限を確認してください。');
+    await dialog(
+      '読み取りエラー',
+      'クリップボードの権限を確認してください。'
+    );
   }
 }
 
 async function showStats() {
-  if (!enabled('stats')) return;
-
   const all = notes.filter(n => !n.deleted);
-  const lengths = all.map(n => (n.title+n.body).length);
-  const total = lengths.reduce((a,b) => a+b,0);
-  const longest = lengths.reduce((a,b) => Math.max(a,b),0);
+
+  const lengths = all.map(
+    n => (n.title+n.body).length
+  );
+
+  const total = lengths.reduce(
+    (a,b) => a+b,0
+  );
+
+  const longest = lengths.reduce(
+    (a,b) => Math.max(a,b),0
+  );
+
   const shortest = lengths.length
-    ? lengths.reduce((a,b) => Math.min(a,b),Infinity)
+    ? lengths.reduce((a,b) => Math.min(a,b))
     : 0;
+
+  const checklists = all.filter(
+    n => n.checklist
+  ).length;
+
+  const pinned = all.filter(
+    n => n.pinned
+  ).length;
 
   await dialog(
     'どうでもいい記録',
@@ -1484,24 +1944,33 @@ async function showStats() {
     `全文字数：${total.toLocaleString()}字\n`+
     `最長メモ：${longest}字\n`+
     `最短メモ：${shortest}字\n`+
-    `チェックリスト：${all.filter(n => n.checklist).length}件\n`+
-    `ピン留め：${all.filter(n => n.pinned).length}件\n\n`+
+    `チェックリスト：${checklists}件\n`+
+    `ピン留め：${pinned}件\n\n`+
     'どうでもいい数字も、集めると少し気になります。'
   );
 }
 
-function dialog(title,message,choices=['閉じる']) {
+function dialog(
+  title,
+  message,
+  choices=['閉じる'],
+  options={}
+) {
   return new Promise(resolve => {
-    modalOpen = true;
-
     const host = $('dialogs');
     host.replaceChildren();
+
+    modalOpen = true;
+
+    const previousFocus = document.activeElement;
 
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
 
     const box = document.createElement('div');
     box.className = 'modal';
+    box.setAttribute('role','dialog');
+    box.setAttribute('aria-modal','true');
 
     const h = document.createElement('h2');
     h.textContent = title;
@@ -1512,41 +1981,121 @@ function dialog(title,message,choices=['閉じる']) {
     const actions = document.createElement('div');
     actions.className = 'actions';
 
+    const buttons = [];
+
+    function finish(index) {
+      modalOpen = false;
+      host.replaceChildren();
+
+      document.removeEventListener(
+        'keydown',handleKeys,true
+      );
+
+      if (previousFocus?.isConnected)
+        previousFocus.focus({preventScroll:true});
+
+      resolve(index);
+    }
+
+    function handleKeys(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        finish(0);
+        return;
+      }
+
+      if (e.key === 'Enter' && !e.isComposing) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const target = options.enterIndex ??
+          choices.length-1;
+
+        finish(target);
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const focusables = buttons;
+        const index = focusables.indexOf(
+          document.activeElement
+        );
+
+        if (e.shiftKey && index <= 0) {
+          e.preventDefault();
+          focusables.at(-1)?.focus();
+        } else if (
+          !e.shiftKey &&
+          index === focusables.length-1
+        ) {
+          e.preventDefault();
+          focusables[0]?.focus();
+        }
+      }
+    }
+
     choices.forEach((choice,i) => {
       const b = document.createElement('button');
-      b.className = 'action' +
-        (i === choices.length-1 ? ' primary' : '');
 
-      if (choice === 'ゴミ箱へ')
+      b.className = 'action';
+
+      if (i === choices.length-1)
+        b.classList.add('primary');
+
+      if (
+        options.danger &&
+        i === choices.length-1
+      ) {
+        b.classList.remove('primary');
         b.classList.add('danger');
+      }
 
       b.textContent = choice;
-      b.onclick = () => {
-        host.replaceChildren();
-        modalOpen = false;
-        resolve(i);
-      };
+      b.onclick = () => finish(i);
 
+      buttons.push(b);
       actions.append(b);
     });
 
     box.append(h,p,actions);
     overlay.append(box);
     host.append(overlay);
+
+    document.addEventListener(
+      'keydown',handleKeys,true
+    );
+
+    requestAnimationFrame(() => {
+      if (options.focusConfirm) {
+        buttons.at(-1)?.focus();
+      } else {
+        buttons[0]?.focus();
+      }
+    });
   });
 }
 
-async function removeById(id) {
+async function remove(id=selected) {
   if (modalOpen) return;
 
-  const n = notes.find(x => x.id === id && !x.deleted);
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
+
   if (!n) return;
 
   const choice = await dialog(
-    'メモを削除しますか？',
-    `「${label(n)}」をゴミ箱に移動します。\n`+
-    'ゴミ箱から復元できます。よろしいですか？',
-    ['キャンセル','ゴミ箱へ']
+    'メモをゴミ箱に移動しますか？',
+    `「${label(n)}」\n\n`+
+    'ゴミ箱から復元できます。\n'+
+    'Enterキーで削除、Escキーでキャンセルできます。',
+    ['キャンセル','ゴミ箱へ'],
+    {
+      enterIndex:1,
+      focusConfirm:true,
+      danger:true
+    }
   );
 
   if (choice !== 1) return;
@@ -1554,16 +2103,17 @@ async function removeById(id) {
   await queue;
 
   if (failed) {
-    await dialog('保存エラー',
-      '保存に失敗しているため削除を中止しました。');
+    await dialog(
+      '保存エラー',
+      '保存に失敗しているため削除を中止しました。'
+    );
     return;
   }
 
-  const target = notes.find(x => x.id === id && !x.deleted);
-  if (!target) return;
+  const old = {...n};
 
   const tombstone = {
-    ...target,
+    ...n,
     deleted:true,
     deletedAt:iso(),
     updatedAt:iso()
@@ -1571,31 +2121,42 @@ async function removeById(id) {
 
   try {
     await enqueue(() => transaction([tombstone]));
-    Object.assign(target,tombstone);
+
+    Object.assign(n,tombstone);
 
     if (selected === id) {
       selected = null;
-      localSet('mimi-last-id','');
       updateEditor();
+      showScreen('list');
     }
 
     render();
     scheduleSync();
 
-    undoInfo = {id};
-    toast('メモをゴミ箱に移動しました',true);
+    undoInfo = {id:n.id};
+
+    toast(
+      'メモをゴミ箱に移動しました',
+      true
+    );
   } catch(e) {
-    await dialog('削除エラー',String(e.message || e));
+    Object.assign(n,old);
+
+    await dialog(
+      '削除エラー',
+      String(e.message || e)
+    );
   }
 }
 
-async function remove() {
-  if (selected) await removeById(selected);
-}
-
 async function restoreNote(id) {
-  const n = notes.find(x => x.id === id && x.deleted);
+  const n = notes.find(x =>
+    x.id === id && x.deleted
+  );
+
   if (!n) return;
+
+  const previous = {...n};
 
   const restored = {
     ...n,
@@ -1606,12 +2167,20 @@ async function restoreNote(id) {
 
   try {
     await enqueue(() => transaction([restored]));
+
     Object.assign(n,restored);
+
     render();
     scheduleSync();
+
     toast('メモを復元しました');
   } catch(e) {
-    await dialog('復元エラー',String(e.message || e));
+    Object.assign(n,previous);
+
+    await dialog(
+      '復元エラー',
+      String(e.message || e)
+    );
   }
 }
 
@@ -1620,12 +2189,16 @@ async function exportJSON() {
   await queue;
 
   if (failed) {
-    await dialog('保存エラー',
-      'バックアップ前に保存状態を確認してください。');
+    await dialog(
+      '保存エラー',
+      'バックアップ前に保存状態を確認してください。'
+    );
     return;
   }
 
-  const all = (await getAll()).filter(n => !n.deleted);
+  const all = (await getAll()).filter(
+    n => !n.deleted
+  );
 
   const blob = new Blob([
     JSON.stringify({
@@ -1633,35 +2206,52 @@ async function exportJSON() {
       exportedAt:iso(),
       notes:all
     },null,2)
-  ],{type:'application/json'});
+  ],{
+    type:'application/json'
+  });
 
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
 
   a.href = url;
-  a.download = 'SUGUBackup_'+iso().slice(0,10)+'.json';
+  a.download =
+    'SUGUBackup_'+iso().slice(0,10)+'.json';
 
   document.body.append(a);
   a.click();
   a.remove();
 
-  setTimeout(() => URL.revokeObjectURL(url),10000);
+  setTimeout(
+    () => URL.revokeObjectURL(url),
+    10000
+  );
 }
 
 async function importJSON(file) {
   if (!file) return;
 
   try {
-    const data = JSON.parse(await file.text());
+    const data = JSON.parse(
+      await file.text()
+    );
 
-    if (data.format !== 'mimi-sync-v1' ||
-        !Array.isArray(data.notes))
-      throw Error('対応していないJSONバックアップです');
+    if (
+      data.format !== 'mimi-sync-v1' ||
+      !Array.isArray(data.notes)
+    ) {
+      throw Error(
+        '対応していないJSONバックアップです'
+      );
+    }
 
     const incoming = new Map();
 
     for (const raw of data.notes) {
-      if (!raw || typeof raw.id !== 'string' || !raw.id) continue;
+      if (
+        !raw ||
+        typeof raw.id !== 'string' ||
+        !raw.id
+      ) continue;
 
       incoming.set(raw.id,{
         ...normalizeNote(raw),
@@ -1670,7 +2260,10 @@ async function importJSON(file) {
       });
     }
 
-    const known = new Set(notes.map(n => n.id));
+    const known = new Set(
+      notes.map(n => n.id)
+    );
+
     const add = [...incoming.values()]
       .filter(n => !known.has(n.id));
 
@@ -1694,12 +2287,19 @@ async function importJSON(file) {
       await enqueue(() => transaction(add));
 
     notes = await getAll();
+
     render();
     scheduleSync();
 
-    await dialog('取り込み完了',`${add.length}件追加しました。`);
+    await dialog(
+      '取り込み完了',
+      `${add.length}件追加しました。`
+    );
   } catch(e) {
-    await dialog('取り込みエラー',String(e.message || e));
+    await dialog(
+      '取り込みエラー',
+      String(e.message || e)
+    );
   }
 }
 
@@ -1713,76 +2313,109 @@ function updateAccountUI() {
     : 'ログインしていません';
 
   $('account').textContent =
-    cloudUser && syncEnabled ? name+' ・ 同期有効' : name;
+    cloudUser && syncEnabled
+      ? name+' ・ 同期有効'
+      : name;
 
-  $('login').classList.toggle('hide',!!cloudUser);
-  $('logout').classList.toggle('hide',!cloudUser);
-  $('startSync').classList.toggle('hide',!cloudUser || syncEnabled);
+  $('login').classList.toggle(
+    'hide',!!cloudUser
+  );
+
+  $('logout').classList.toggle(
+    'hide',!cloudUser
+  );
+
+  $('startSync').classList.toggle(
+    'hide',!cloudUser || syncEnabled
+  );
 }
 
 async function loadFirebase() {
-  const base = 'https://www.gstatic.com/firebasejs/13.3.0/';
+  const base =
+    'https://www.gstatic.com/firebasejs/13.3.0/';
 
-  const [appMod,authMod,dbMod] = await Promise.all([
-    import(base+'firebase-app.js'),
-    import(base+'firebase-auth.js'),
-    import(base+'firebase-firestore.js')
-  ]);
+  const [appMod,authMod,dbMod] =
+    await Promise.all([
+      import(base+'firebase-app.js'),
+      import(base+'firebase-auth.js'),
+      import(base+'firebase-firestore.js')
+    ]);
 
-  const app = appMod.initializeApp(firebaseConfig);
+  const app = appMod.initializeApp(
+    firebaseConfig
+  );
+
   auth = authMod.getAuth(app);
   firestore = dbMod.getFirestore(app);
   firebase = {authMod,dbMod};
 
-  authMod.onAuthStateChanged(auth,async user => {
-    const generation = ++accountGeneration;
+  authMod.onAuthStateChanged(
+    auth,
+    async user => {
+      const generation = ++accountGeneration;
 
-    clearTimeout(syncTimer);
-    clearInterval(syncInterval);
+      clearTimeout(syncTimer);
+      clearInterval(syncInterval);
 
-    syncEnabled = false;
-    cloudUser = user;
-    syncError = '';
+      syncEnabled = false;
+      cloudUser = user;
+      syncError = '';
 
-    if (user) {
-      try {
-        syncEnabled =
-          (await getMeta(syncKey(user.uid))) === true;
-      } catch(e) {
-        console.error(e);
+      if (user) {
+        try {
+          syncEnabled =
+            (await getMeta(syncKey(user.uid))) === true;
+        } catch(e) {
+          console.error(e);
+        }
       }
+
+      if (generation !== accountGeneration)
+        return;
+
+      updateAccountUI();
+
+      if (syncEnabled && user) {
+        syncNow();
+
+        syncInterval = setInterval(() => {
+          if (
+            !document.hidden &&
+            navigator.onLine
+          ) syncNow();
+        },15000);
+      }
+    },
+    error => {
+      console.error(error);
+      $('account').textContent = '認証エラー';
     }
-
-    if (generation !== accountGeneration) return;
-
-    updateAccountUI();
-
-    if (syncEnabled && user) {
-      syncNow();
-      syncInterval = setInterval(() => {
-        if (!document.hidden && navigator.onLine)
-          syncNow();
-      },15000);
-    }
-  },error => {
-    console.error(error);
-    $('account').textContent = '認証エラー';
-  });
+  );
 }
 
 async function login() {
   if (!firebase) {
-    await dialog('準備中',
-      'Firebaseを読み込んでいます。少し待ってから試してください。');
+    await dialog(
+      '準備中',
+      'Firebaseを読み込んでいます。少し待ってから試してください。'
+    );
     return;
   }
 
   try {
-    const provider = new firebase.authMod.GoogleAuthProvider();
-    provider.setCustomParameters({prompt:'select_account'});
-    await firebase.authMod.signInWithPopup(auth,provider);
+    const provider =
+      new firebase.authMod.GoogleAuthProvider();
+
+    provider.setCustomParameters({
+      prompt:'select_account'
+    });
+
+    await firebase.authMod.signInWithPopup(
+      auth,provider
+    );
   } catch(e) {
     console.error(e);
+
     await dialog(
       'Googleログインに失敗しました',
       String(e.code || e.message || e)+
@@ -1805,7 +2438,10 @@ async function logout() {
   try {
     await firebase.authMod.signOut(auth);
   } catch(e) {
-    await dialog('ログアウトエラー',String(e.message || e));
+    await dialog(
+      'ログアウトエラー',
+      String(e.message || e)
+    );
   }
 }
 
@@ -1823,39 +2459,59 @@ async function startSync() {
     ['キャンセル','同期を開始']
   );
 
-  if (choice !== 1 || cloudUser?.uid !== user.uid) return;
+  if (
+    choice !== 1 ||
+    cloudUser?.uid !== user.uid
+  ) return;
 
   save();
   await queue;
 
   if (failed) {
-    await dialog('同期を中止',
-      '端末内への保存に失敗しています。');
+    await dialog(
+      '同期を中止',
+      '端末内への保存に失敗しています。'
+    );
     return;
   }
 
   try {
     await setMeta(syncKey(user.uid),true);
+
     syncEnabled = true;
     updateAccountUI();
 
     syncInterval = setInterval(() => {
-      if (!document.hidden && navigator.onLine)
-        syncNow();
+      if (
+        !document.hidden &&
+        navigator.onLine
+      ) syncNow();
     },15000);
 
     await syncNow();
   } catch(e) {
     syncEnabled = false;
-    await setMeta(syncKey(user.uid),false).catch(console.error);
+
+    await setMeta(
+      syncKey(user.uid),false
+    ).catch(console.error);
+
     updateAccountUI();
-    await dialog('同期開始エラー',String(e.message || e));
+
+    await dialog(
+      '同期開始エラー',
+      String(e.message || e)
+    );
   }
 }
 
 async function syncNow() {
-  if (!syncEnabled || !cloudUser ||
-      !firebase || !navigator.onLine) return;
+  if (
+    !syncEnabled ||
+    !cloudUser ||
+    !firebase ||
+    !navigator.onLine
+  ) return;
 
   if (syncing) {
     syncAgain = true;
@@ -1867,8 +2523,10 @@ async function syncNow() {
   const uid = cloudUser.uid;
   const generation = accountGeneration;
   const {dbMod} = firebase;
-  const collection =
-    dbMod.collection(firestore,'users',uid,'notes');
+
+  const collection = dbMod.collection(
+    firestore,'users',uid,'notes'
+  );
 
   try {
     save();
@@ -1879,18 +2537,28 @@ async function syncNow() {
 
     $('status').textContent = '同期中';
 
-    const remoteSnap = await dbMod.getDocs(collection);
+    const remoteSnap =
+      await dbMod.getDocs(collection);
 
-    if (generation !== accountGeneration ||
-        cloudUser?.uid !== uid || !syncEnabled) return;
+    if (
+      generation !== accountGeneration ||
+      cloudUser?.uid !== uid ||
+      !syncEnabled
+    ) return;
 
     const remote = new Map();
+
     remoteSnap.forEach(d =>
-      remote.set(d.id,normalizeNote(d.data(),d.id))
+      remote.set(
+        d.id,
+        normalizeNote(d.data(),d.id)
+      )
     );
 
     const local = new Map(
-      (await getAll()).map(n => [n.id,normalizeNote(n)])
+      (await getAll()).map(
+        n => [n.id,normalizeNote(n)]
+      )
     );
 
     const download = [];
@@ -1899,24 +2567,39 @@ async function syncNow() {
     for (const [id,r] of remote) {
       const l = local.get(id);
 
-      if (!l || dateValue(r.updatedAt) > dateValue(l.updatedAt))
+      if (
+        !l ||
+        dateValue(r.updatedAt) >
+        dateValue(l.updatedAt)
+      ) {
         download.push(r);
+      }
     }
 
     for (const [id,l] of local) {
       const r = remote.get(id);
 
-      if (!r || dateValue(l.updatedAt) > dateValue(r.updatedAt))
+      if (
+        !r ||
+        dateValue(l.updatedAt) >
+        dateValue(r.updatedAt)
+      ) {
         upload.push(l);
+      }
     }
 
-    if (generation !== accountGeneration ||
-        cloudUser?.uid !== uid || !syncEnabled) return;
+    if (
+      generation !== accountGeneration ||
+      cloudUser?.uid !== uid ||
+      !syncEnabled
+    ) return;
 
     await queue;
 
     const latest = new Map(
-      (await getAll()).map(n => [n.id,n])
+      (await getAll()).map(
+        n => [n.id,n]
+      )
     );
 
     const safeDownload = download.filter(r => {
@@ -1927,11 +2610,14 @@ async function syncNow() {
       if (!old) return false;
 
       return dateValue(now.updatedAt) <=
-             dateValue(old.updatedAt);
+        dateValue(old.updatedAt);
     });
 
     if (safeDownload.length) {
-      await enqueue(() => transaction(safeDownload));
+      await enqueue(
+        () => transaction(safeDownload)
+      );
+
       notes = await getAll();
 
       if (!current() && selected) {
@@ -1942,7 +2628,8 @@ async function syncNow() {
         safeDownload.some(n => n.id === selected) &&
         document.activeElement !== $('title') &&
         document.activeElement !== $('body') &&
-        !document.activeElement?.classList.contains('check-text')
+        !document.activeElement?.classList
+          .contains('check-text')
       ) {
         updateEditor();
       }
@@ -1951,8 +2638,11 @@ async function syncNow() {
     }
 
     for (const n of upload) {
-      if (generation !== accountGeneration ||
-          cloudUser?.uid !== uid || !syncEnabled) return;
+      if (
+        generation !== accountGeneration ||
+        cloudUser?.uid !== uid ||
+        !syncEnabled
+      ) return;
 
       const newest = (await getAll())
         .find(x => x.id === n.id);
@@ -1961,9 +2651,11 @@ async function syncNow() {
 
       const latestRemote = remote.get(n.id);
 
-      if (latestRemote &&
-          dateValue(latestRemote.updatedAt) >=
-          dateValue(newest.updatedAt)) continue;
+      if (
+        latestRemote &&
+        dateValue(latestRemote.updatedAt) >=
+        dateValue(newest.updatedAt)
+      ) continue;
 
       await dbMod.setDoc(
         dbMod.doc(collection,n.id),
@@ -1972,11 +2664,17 @@ async function syncNow() {
     }
 
     syncError = '';
-    $('status').textContent = '保存済み・同期済み';
+    $('status').textContent =
+      '保存済み・同期済み';
   } catch(e) {
     console.error('SUGU sync:',e);
-    syncError = String(e.code || e.message || e);
-    $('status').textContent = '端末保存済み・同期失敗';
+
+    syncError = String(
+      e.code || e.message || e
+    );
+
+    $('status').textContent =
+      '端末保存済み・同期失敗';
   } finally {
     syncing = false;
 
@@ -1990,11 +2688,14 @@ async function syncNow() {
 async function syncMenu() {
   if (!cloudUser) {
     if (!firebase) {
-      await dialog('Googleログイン',
-        'Firebaseの読み込みが完了していません。');
+      await dialog(
+        'Googleログイン',
+        'Firebaseの読み込みが完了していません。'
+      );
     } else {
       await login();
     }
+
     return;
   }
 
@@ -2006,48 +2707,125 @@ async function syncMenu() {
   const choice = await dialog(
     'SUGU 自動同期',
     `アカウント：${cloudUser.email || ''}\n`+
-    `状態：${syncError ? '同期エラー：'+syncError : '同期有効'}`,
+    `状態：${syncError
+      ? '同期エラー：'+syncError
+      : '同期有効'}`,
     ['閉じる','今すぐ同期','ログアウト']
   );
 
-  if (choice === 1) await syncNow();
-  if (choice === 2) await logout();
+  if (choice === 1)
+    await syncNow();
+
+  if (choice === 2)
+    await logout();
 }
 
 async function receivePendingShare() {
-  const id = await getMeta('sugu-pending-share')
-    .catch(() => null);
+  const id = await getMeta(
+    'sugu-pending-share'
+  ).catch(() => null);
 
   if (!id) return false;
 
   await queue;
   notes = await getAll();
 
-  const n = notes.find(x => x.id === id && !x.deleted);
+  const n = notes.find(x =>
+    x.id === id && !x.deleted
+  );
 
   if (n) {
     choose(n.id,false);
     scheduleSync();
   }
 
-  await setMeta('sugu-pending-share',null)
-    .catch(console.error);
+  await setMeta(
+    'sugu-pending-share',null
+  ).catch(console.error);
 
   return !!n;
 }
 
 function updateFilterUI() {
-  document.querySelectorAll('.chip').forEach(b =>
-    b.classList.toggle('active',b.dataset.filter === filter)
-  );
+  document.querySelectorAll('.chip').forEach(b => {
+    b.classList.toggle(
+      'active',
+      b.dataset.filter === filter
+    );
+  });
+
   render();
+}
+
+function applySettings() {
+  $('ear').classList.toggle(
+    'hide',!settings.favorites
+  );
+
+  $('pin').classList.toggle(
+    'hide',!settings.pin
+  );
+
+  $('copy').classList.toggle(
+    'hide',!settings.copy
+  );
+
+  $('mode').classList.toggle(
+    'hide',!settings.checklist
+  );
+
+  $('modeHint').classList.toggle(
+    'hide',!settings.checklist
+  );
+
+  $('paste').classList.toggle(
+    'hide',!settings.paste
+  );
+
+  $('stats').classList.toggle(
+    'hide',!settings.stats
+  );
+
+  $('sort').classList.toggle(
+    'hide',!settings.sort
+  );
+
+  $('syncMenu').classList.toggle(
+    'hide',!settings.syncControls
+  );
+
+  $('side').querySelector('.syncbar')
+    .classList.toggle(
+      'hide',!settings.syncControls
+    );
+
+  document.querySelector(
+    '[data-filter="ear"]'
+  ).classList.toggle(
+    'hide',!settings.favorites
+  );
+
+  document.querySelector(
+    '[data-filter="trash"]'
+  ).classList.toggle(
+    'hide',!settings.trash
+  );
+
+  if (
+    (filter === 'ear' && !settings.favorites) ||
+    (filter === 'trash' && !settings.trash)
+  ) {
+    filter = 'all';
+  }
+
+  updateFilterUI();
+  updateLinks();
 }
 
 function openSettings() {
   if (modalOpen) return;
 
   modalOpen = true;
-  settingsTab = 'list';
 
   const host = $('dialogs');
   host.replaceChildren();
@@ -2056,107 +2834,169 @@ function openSettings() {
   overlay.className = 'overlay';
 
   const box = document.createElement('div');
-  box.className = 'modal settings-modal';
+  box.className = 'modal';
+  box.setAttribute('role','dialog');
+  box.setAttribute('aria-modal','true');
 
-  const head = document.createElement('div');
-  head.className = 'settings-head';
-
-  const titleBox = document.createElement('div');
-  titleBox.style.flex = '1';
-
-  const title = document.createElement('h2');
-  title.textContent = 'SUGU 設定';
-
-  const subtitle = document.createElement('small');
-  subtitle.textContent = '自分にちょうどいいメモ帳に';
-
-  titleBox.append(title,subtitle);
-
-  const close = document.createElement('button');
-  close.className = 'settings-close';
-  close.textContent = '×';
-  close.title = '設定を閉じる';
-  close.onclick = () => {
-    host.replaceChildren();
-    modalOpen = false;
-  };
-
-  head.append(titleBox,close);
+  const heading = document.createElement('h2');
+  heading.textContent = 'SUGU の設定';
 
   const tabs = document.createElement('div');
   tabs.className = 'settings-tabs';
 
-  const content = document.createElement('div');
-  content.className = 'settings-content';
+  const list = document.createElement('div');
+  list.className = 'settings-list';
 
-  const foot = document.createElement('div');
-  foot.className = 'settings-foot';
-  foot.textContent =
-    '設定はこの端末に保存されます。機能をOFFにしても、保存済みのメモやチェック状態は削除されません。';
+  const note = document.createElement('div');
+  note.className = 'settings-note';
+  note.textContent =
+    '設定はこの端末に保存されます。'+
+    '機能をオフにしても、メモやお気に入りなどのデータは削除されません。'+
+    '端末保存・バックアップ機能は常に有効です。';
 
-  const tabNames = [
-    ['list','一覧'],
-    ['edit','編集'],
-    ['extras','便利機能'],
-    ['system','同期']
-  ];
+  const actions = document.createElement('div');
+  actions.className = 'actions';
 
-  function drawSettings() {
-    tabs.replaceChildren();
-    content.replaceChildren();
+  const close = document.createElement('button');
+  close.className = 'action primary';
+  close.textContent = '閉じる';
 
-    for (const [key,name] of tabNames) {
-      const b = document.createElement('button');
-      b.className = 'settings-tab' +
-        (settingsTab === key ? ' active' : '');
-      b.textContent = name;
-      b.onclick = () => {
-        settingsTab = key;
-        drawSettings();
-      };
-      tabs.append(b);
-    }
+  function finish() {
+    modalOpen = false;
+    host.replaceChildren();
 
-    for (const [key,name,description] of SETTING_GROUPS[settingsTab]) {
-      const row = document.createElement('div');
-      row.className = 'settings-row';
+    document.removeEventListener(
+      'keydown',handleKey,true
+    );
 
-      const text = document.createElement('div');
-      text.className = 'settings-text';
+    $('settings').focus();
+  }
 
-      const strong = document.createElement('strong');
-      strong.textContent = name;
-
-      const small = document.createElement('small');
-      small.textContent = description;
-
-      text.append(strong,small);
-
-      const toggle = document.createElement('button');
-      toggle.className = 'switch' +
-        (enabled(key) ? ' on' : '');
-
-      toggle.setAttribute('role','switch');
-      toggle.setAttribute('aria-label',name);
-      toggle.setAttribute('aria-checked',String(enabled(key)));
-
-      toggle.onclick = () => {
-        settings[key] = !enabled(key);
-        saveSettings();
-        applySettings();
-        drawSettings();
-      };
-
-      row.append(text,toggle);
-      content.append(row);
+  function handleKey(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      finish();
     }
   }
 
-  box.append(head,tabs,content,foot);
+  close.onclick = finish;
+
+  actions.append(close);
+
+  function renderSettings() {
+    tabs.replaceChildren();
+    list.replaceChildren();
+
+    for (const group of SETTING_GROUPS) {
+      const tab = document.createElement('button');
+
+      tab.className =
+        'settings-tab' +
+        (group.id === settingsTab ? ' active' : '');
+
+      tab.textContent = group.name;
+
+      tab.onclick = () => {
+        settingsTab = group.id;
+        renderSettings();
+      };
+
+      tabs.append(tab);
+    }
+
+    const group = SETTING_GROUPS.find(
+      g => g.id === settingsTab
+    );
+
+    if (!group) return;
+
+    for (const [key,name,desc] of group.items) {
+      const row = document.createElement('div');
+      row.className = 'setting-row';
+
+      const info = document.createElement('div');
+      info.className = 'setting-info';
+
+      const title = document.createElement('span');
+      title.className = 'setting-name';
+      title.textContent = name;
+
+      const description = document.createElement('span');
+      description.className = 'setting-desc';
+      description.textContent = desc;
+
+      info.append(title,description);
+
+      const toggle = document.createElement('button');
+
+      toggle.className =
+        'switch' + (settings[key] ? ' on' : '');
+
+      toggle.setAttribute('role','switch');
+      toggle.setAttribute('aria-label',name);
+      toggle.setAttribute(
+        'aria-checked',String(settings[key])
+      );
+
+      toggle.onclick = () => {
+        settings[key] = !settings[key];
+
+        saveSettings();
+        applySettings();
+        renderSettings();
+      };
+
+      row.append(info,toggle);
+      list.append(row);
+    }
+  }
+
+  box.append(
+    heading,tabs,list,note,actions
+  );
+
   overlay.append(box);
   host.append(overlay);
 
-  drawSettings();
+  document.addEventListener(
+    'keydown',handleKey,true
+  );
+
+  renderSettings();
+
+  requestAnimationFrame(
+    () => tabs.querySelector('button')?.focus()
+  );
+}
+
+function isEditableTarget(target) {
+  if (!(target instanceof Element))
+    return false;
+
+  return !!target.closest(
+    'input,textarea,select,[contenteditable="true"],[role="textbox"]'
+  );
+}
+
+function isListFocused() {
+  const active = document.activeElement;
+
+  if (active?.closest?.('#list'))
+    return true;
+
+  if (
+    matchMedia('(max-width:700px)').matches &&
+    screen === 'list'
+  ) return true;
+
+  if (
+    active === document.body ||
+    active === document.documentElement ||
+    active === $('list')
+  ) return true;
+
+  return false;
 }
 
 async function init() {
@@ -2170,34 +3010,51 @@ async function init() {
       localGet('sugu-ghost-dismiss') || '';
 
     sortMode = localGet('sugu-sort') || 'updated';
+
+    if (
+      !['updated','created','title'].includes(sortMode)
+    ) sortMode = 'updated';
+
     $('sort').value = sortMode;
 
     const last = localGet('mimi-last-id');
 
-    selected = last &&
-      notes.some(n => n.id === last && !n.deleted)
-      ? last : null;
+    selected = last && notes.some(
+      n => n.id === last && !n.deleted
+    ) ? last : null;
 
+    updateEditor();
     applySettings();
 
-    const previous = localGet('sugu-screen') || 'list';
+    const previous =
+      localGet('sugu-screen') || 'list';
 
-    history.replaceState({sugu:'list'},'',location.href);
+    history.replaceState(
+      {sugu:'list'},'',location.href
+    );
+
     showScreen('list');
 
-    if (previous === 'edit' && current())
-      openEditorHistory();
+    if (
+      previous === 'edit' &&
+      current()
+    ) openEditorHistory();
 
     $('status').textContent = '保存済み';
 
-    if (new URL(location.href).searchParams.has('shared')) {
+    if (
+      new URL(location.href)
+        .searchParams.has('shared')
+    ) {
       await receivePendingShare();
 
       const url = new URL(location.href);
       url.searchParams.delete('shared');
 
       history.replaceState(
-        history.state,'',url.pathname+url.search+url.hash
+        history.state,
+        '',
+        url.pathname+url.search+url.hash
       );
     }
   } catch(e) {
@@ -2215,63 +3072,79 @@ async function init() {
 
   $('new').onclick = () => create();
   $('sideNew').onclick = () => create();
+
   $('paste').onclick = pasteNew;
   $('stats').onclick = showStats;
   $('copy').onclick = copyBody;
   $('mode').onclick = toggleChecklist;
 
   $('pin').onclick = () => {
-    if (selected) toggleField(selected,'pinned');
+    if (selected)
+      toggleField(selected,'pinned');
   };
 
   $('ear').onclick = () => {
-    if (selected) toggleField(selected,'ear');
+    if (selected)
+      toggleField(selected,'ear');
   };
 
-  $('remove').onclick = remove;
+  $('remove').onclick = () => remove();
 
-  $('settingsSide').onclick = openSettings;
-  $('settingsMain').onclick = openSettings;
+  $('settings').onclick = openSettings;
 
   $('openList').onclick = goList;
-  $('closeList').onclick = goList;
 
-  $('list').onclick = e => {
-    if (e.target.closest('button')) return;
-
-    const item = e.target.closest('.item,.ghost-card');
-    if (!item?.dataset.id) return;
-
-    if (filter === 'trash')
-      restoreNote(item.dataset.id);
-    else
-      choose(item.dataset.id,false);
+  $('closeList').onclick = () => {
+    showScreen('edit');
   };
 
-  $('list').addEventListener('keydown',e => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    if (e.target.closest('button')) return;
+  $('list').onclick = e => {
+    if (e.target.closest('button'))
+      return;
 
     const item = e.target.closest('.item');
-    if (!item?.dataset.id) return;
 
-    e.preventDefault();
+    if (!item?.dataset.id)
+      return;
 
-    if (filter === 'trash')
+    if (filter === 'trash') {
       restoreNote(item.dataset.id);
-    else
+    } else {
       choose(item.dataset.id,false);
-  });
+    }
+  };
+
+  $('list').onkeydown = e => {
+    const item = e.target.closest('.item');
+
+    if (
+      item &&
+      e.key === 'Enter' &&
+      !e.target.closest('button')
+    ) {
+      e.preventDefault();
+
+      if (filter === 'trash')
+        restoreNote(item.dataset.id);
+      else
+        choose(item.dataset.id,false);
+    }
+  };
 
   $('search').oninput = () => {
     visibleLimit = 10;
+    $('list').scrollTop = 0;
     render();
   };
 
   $('sort').onchange = e => {
     sortMode = e.target.value;
+
     localSet('sugu-sort',sortMode);
+
     visibleLimit = 10;
+    $('list').scrollTop = 0;
+
     render();
   };
 
@@ -2279,6 +3152,8 @@ async function init() {
     b.onclick = () => {
       filter = b.dataset.filter;
       visibleLimit = 10;
+      $('list').scrollTop = 0;
+
       updateFilterUI();
     };
   });
@@ -2290,11 +3165,14 @@ async function init() {
     undoInfo = null;
 
     $('toast').classList.add('hide');
+
     await restoreNote(id);
   };
 
   $('export').onclick = exportJSON;
-  $('import').onclick = () => $('file').click();
+
+  $('import').onclick = () =>
+    $('file').click();
 
   $('file').onchange = async e => {
     await importJSON(e.target.files[0]);
@@ -2309,84 +3187,107 @@ async function init() {
   document.addEventListener('keydown',e => {
     if (modalOpen) return;
 
-    if (e.ctrlKey && e.key.toLowerCase() === 'n') {
+    if (
+      e.ctrlKey &&
+      e.key.toLowerCase() === 'n'
+    ) {
       e.preventDefault();
       create();
       return;
     }
 
-    if (e.key === 'Escape') {
-      goList();
+    if (
+      e.key === 'Delete' &&
+      settings.deleteKey &&
+      !e.repeat &&
+      !e.isComposing &&
+      !e.ctrlKey &&
+      !e.altKey &&
+      !e.metaKey &&
+      !isEditableTarget(e.target) &&
+      isListFocused() &&
+      selected &&
+      current()
+    ) {
+      e.preventDefault();
+      remove(selected);
       return;
     }
 
-    if (e.key !== 'Delete' || !enabled('deleteKey')) return;
-    if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) return;
-    if (mobile() || filter === 'trash' || !selected) return;
-
-    const target = e.target;
-
-    // 編集中はメモ自体を削除しない。
-    if (target instanceof Element) {
-      if (target.closest(
-        'input,textarea,select,[contenteditable="true"]'
-      )) return;
-
-      if (target.closest('button')) return;
-    }
-
-    // PCでは選択中のメモがあれば削除確認を開く。
-    // 一覧へのフォーカスを必須にしない。
-    e.preventDefault();
-    removeById(selected);
+    if (e.key === 'Escape')
+      goList();
   });
 
   window.addEventListener('popstate',e => {
-    if (e.state?.sugu === 'edit' && current())
+    if (
+      e.state?.sugu === 'edit' &&
+      current()
+    ) {
       showScreen('edit');
-    else
+    } else {
       showScreen('list');
+    }
   });
 
-  document.addEventListener('visibilitychange',() => {
-    if (document.hidden) save();
-    else if (syncEnabled) syncNow();
-  });
+  document.addEventListener(
+    'visibilitychange',
+    () => {
+      if (document.hidden) {
+        save();
+      } else if (syncEnabled) {
+        syncNow();
+      }
+    }
+  );
 
   window.addEventListener('online',() => {
-    if (syncEnabled) syncNow();
+    if (syncEnabled)
+      syncNow();
   });
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message',async e => {
-      if (e.data?.type !== 'SUGU_SHARED') return;
+    navigator.serviceWorker.addEventListener(
+      'message',
+      async e => {
+        if (
+          e.data?.type !== 'SUGU_SHARED'
+        ) return;
 
-      await queue;
-      notes = await getAll();
+        await queue;
+        notes = await getAll();
 
-      const n = notes.find(x =>
-        x.id === e.data.id && !x.deleted
-      );
+        const n = notes.find(x =>
+          x.id === e.data.id && !x.deleted
+        );
 
-      if (n) {
-        choose(n.id,false);
-        scheduleSync();
+        if (n) {
+          choose(n.id,false);
+          scheduleSync();
+        }
+
+        render();
       }
-
-      render();
-    });
+    );
   }
 
-  if ('serviceWorker' in navigator &&
-      location.protocol === 'https:') {
-    navigator.serviceWorker.register('./sw.js')
+  if (
+    'serviceWorker' in navigator &&
+    location.protocol === 'https:'
+  ) {
+    navigator.serviceWorker
+      .register('./sw.js')
       .catch(console.warn);
   }
 
-  // ローカルメモを先に表示し、Firebaseは後から読み込む。
+  // 端末内のメモを先に表示する。
+  // Firebaseは起動後に読み込む。
   loadFirebase().catch(e => {
-    console.error('Firebase initialization:',e);
-    $('account').textContent = 'クラウド接続不可';
+    console.error(
+      'Firebase initialization:',e
+    );
+
+    $('account').textContent =
+      'クラウド接続不可';
   });
 }
 
